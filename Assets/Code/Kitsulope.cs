@@ -4,20 +4,20 @@ using UnityEngine;
 public class Kitsulope : MonoBehaviour
 {
     [SerializeField]
-    private float xMin = -30F;
+    private float xMin = -0.9F;
 
     [SerializeField]
-    private float xMax = 30F;
+    private float xMax = 0.9F;
 
     [SerializeField]
-    float speed;
+    float speed = 30F;
 
     int direction = 1;
     float counter = 0;
 
     private void Start()
     {
-        Debug.Log("Current time is: " + DateTime.Now);
+        //Debug.Log("Current time is: " + DateTime.Now);
     }
 
     /* public String getCurrentTime(){

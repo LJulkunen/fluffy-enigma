@@ -8,24 +8,27 @@ public class SaveSerial : MonoBehaviour
     int intToSave;
     float floatToSave;
     bool boolToSave;
+    String timeToSave;
 
     void OnGUI()
     {
         if (GUI.Button(new Rect(0, 0, 125, 50), "Raise Integer"))
             intToSave++;
-
-        // Sth like this could be used with feeding & petting and increasing hunger and affection stats.
         if (GUI.Button(new Rect(0, 100, 125, 50), "Raise Float"))
             floatToSave += 0.1f;
         if (GUI.Button(new Rect(0, 200, 125, 50), "Change Bool"))
             boolToSave = boolToSave ? boolToSave
                            = false : boolToSave = true;
+        if (GUI.Button(new Rect(0, 300, 125, 50), "Save System Time"))
+            timeToSave = DateTime.Now.ToLongTimeString();
         GUI.Label(new Rect(375, 0, 125, 50), "Integer value is "
                     + intToSave);
         GUI.Label(new Rect(375, 100, 125, 50), "Float value is "
                     + floatToSave.ToString("F1"));
         GUI.Label(new Rect(375, 200, 125, 50), "Bool value is "
                     + boolToSave);
+        GUI.Label(new Rect(375, 300, 125, 50), "Time value is "
+                    + timeToSave);
         if (GUI.Button(new Rect(750, 0, 125, 50), "Save Your Game"))
             SaveGame();
         if (GUI.Button(new Rect(750, 100, 125, 50),
@@ -44,6 +47,7 @@ public class SaveSerial : MonoBehaviour
         data.savedInt = intToSave;
         data.savedFloat = floatToSave;
         data.savedBool = boolToSave;
+        data.savedTime = timeToSave;
         bf.Serialize(file, data);
         file.Close();
         Debug.Log("Game data saved!");
@@ -62,7 +66,10 @@ public class SaveSerial : MonoBehaviour
             intToSave = data.savedInt;
             floatToSave = data.savedFloat;
             boolToSave = data.savedBool;
+            timeToSave = data.savedTime;
             Debug.Log("Game data loaded!");
+            Debug.Log("Comparing earlier saved time to current time...");
+            Debug.Log(DateTime.Now - Convert.ToDateTime(timeToSave));
         }
         else
             Debug.LogError("There is no save data!");
@@ -77,6 +84,7 @@ public class SaveSerial : MonoBehaviour
             intToSave = 0;
             floatToSave = 0.0f;
             boolToSave = false;
+            timeToSave = "";
             Debug.Log("Data reset complete!");
         }
         else
@@ -90,4 +98,5 @@ class SaveData
     public int savedInt;
     public float savedFloat;
     public bool savedBool;
+    public String savedTime;
 }
