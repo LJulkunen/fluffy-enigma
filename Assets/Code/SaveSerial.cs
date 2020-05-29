@@ -5,53 +5,56 @@ using System.IO;
 
 public class SaveSerial : MonoBehaviour
 {
-    int intToSave;
-    float floatToSave;
-    bool boolToSave;
+    [SerializeField]
+    int maxHungerLvl = 4;
+
+    int hungerLvlToSave;
     String timeToSave;
 
+    private void Start()
+    {
+        LoadGame();
+    }
     void OnGUI()
     {
-        if (GUI.Button(new Rect(0, 0, 125, 50), "Raise Integer"))
-            intToSave++;
-        if (GUI.Button(new Rect(0, 100, 125, 50), "Raise Float"))
-            floatToSave += 0.1f;
-        if (GUI.Button(new Rect(0, 200, 125, 50), "Change Bool"))
-            boolToSave = boolToSave ? boolToSave
-                           = false : boolToSave = true;
-        if (GUI.Button(new Rect(0, 300, 125, 50), "Save System Time"))
+
+        if (GUI.Button(new Rect(0, 0, 125, 50), "Feed the pet one meal.") && hungerLvlToSave < maxHungerLvl)
+        {
+            hungerLvlToSave++;
             timeToSave = DateTime.Now.ToLongTimeString();
-        GUI.Label(new Rect(375, 0, 125, 50), "Integer value is "
-                    + intToSave);
-        GUI.Label(new Rect(375, 100, 125, 50), "Float value is "
-                    + floatToSave.ToString("F1"));
-        GUI.Label(new Rect(375, 200, 125, 50), "Bool value is "
-                    + boolToSave);
-        GUI.Label(new Rect(375, 300, 125, 50), "Time value is "
-                    + timeToSave);
-        if (GUI.Button(new Rect(750, 0, 125, 50), "Save Your Game"))
             SaveGame();
-        if (GUI.Button(new Rect(750, 100, 125, 50),
+        } else if (hungerLvlToSave >= maxHungerLvl)
+        {
+            hungerLvlToSave = maxHungerLvl;
+        } else { }
+
+        GUI.Label(new Rect(375, 0, 125, 50), "Hunger level is "
+                    + hungerLvlToSave);
+
+        // v Not used separately.
+        /*if (GUI.Button(new Rect(750, 0, 125, 50), "Save Your Game"))
+            SaveGame();*/
+        /*if (GUI.Button(new Rect(750, 100, 125, 50),
                     "Load Your Game"))
-            LoadGame();
+            LoadGame();*/
         if (GUI.Button(new Rect(750, 200, 125, 50),
                     "Reset Save Data"))
             ResetData();
     }
+
     void SaveGame()
     {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath
                      + "/MySaveData.dat");
         SaveData data = new SaveData();
-        data.savedInt = intToSave;
-        data.savedFloat = floatToSave;
-        data.savedBool = boolToSave;
+        data.savedHungerLvl = hungerLvlToSave;
         data.savedTime = timeToSave;
         bf.Serialize(file, data);
         file.Close();
-        Debug.Log("Game data saved!");
+        Debug.Log("Game data (hunger level) saved!");
     }
+
     void LoadGame()
     {
         if (File.Exists(Application.persistentDataPath
@@ -63,16 +66,36 @@ public class SaveSerial : MonoBehaviour
                        + "/MySaveData.dat", FileMode.Open);
             SaveData data = (SaveData)bf.Deserialize(file);
             file.Close();
-            intToSave = data.savedInt;
-            floatToSave = data.savedFloat;
-            boolToSave = data.savedBool;
+            hungerLvlToSave = data.savedHungerLvl;
             timeToSave = data.savedTime;
             Debug.Log("Game data loaded!");
-            Debug.Log("Comparing earlier saved time to current time...");
-            Debug.Log(DateTime.Now - Convert.ToDateTime(timeToSave));
+            UpdateHungerLvl();
+            data.savedHungerLvl = hungerLvlToSave;
         }
         else
             Debug.LogError("There is no save data!");
+    }
+
+    void UpdateHungerLvl()
+    {
+        TimeSpan timeSpan = DateTime.Now - Convert.ToDateTime(timeToSave);
+        Debug.Log("This much time has passed since last offering..." + timeSpan);
+        if (hungerLvlToSave > 0)
+        {
+            hungerLvlToSave -= timeSpan.Minutes;
+            if (hungerLvlToSave == maxHungerLvl)
+            {
+                Debug.Log("Your fluffy overlord is pleased, good job!");
+            }
+            else
+            {
+                Debug.Log("Hunger level has decreased to: " + hungerLvlToSave);
+            }
+            if (hungerLvlToSave < 0)
+            {
+                hungerLvlToSave = 0;
+            }
+        }
     }
     void ResetData()
     {
@@ -81,9 +104,7 @@ public class SaveSerial : MonoBehaviour
         {
             File.Delete(Application.persistentDataPath
                               + "/MySaveData.dat");
-            intToSave = 0;
-            floatToSave = 0.0f;
-            boolToSave = false;
+            hungerLvlToSave = 0;
             timeToSave = "";
             Debug.Log("Data reset complete!");
         }
@@ -95,8 +116,6 @@ public class SaveSerial : MonoBehaviour
 [Serializable]
 class SaveData
 {
-    public int savedInt;
-    public float savedFloat;
-    public bool savedBool;
+    public int savedHungerLvl;
     public String savedTime;
 }
