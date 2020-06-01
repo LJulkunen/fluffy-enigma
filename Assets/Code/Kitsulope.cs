@@ -1,5 +1,7 @@
 ﻿using System;
 using UnityEngine;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class Kitsulope : MonoBehaviour
 {
@@ -15,17 +17,7 @@ public class Kitsulope : MonoBehaviour
     int direction = 1;
     float counter = 0;
 
-    private void Start()
-    {
-        //Debug.Log("Current time is: " + DateTime.Now);
-    }
-
-    /* public String getCurrentTime(){
-        Time dtNow = new Time();
-        dtNow.setToNow();
-        return dtNow.format("%H:%M");    // YYYYMMDDTHHMMSS
-    }
-     */
+    String timeToSave;
 
     void Update()
     {
@@ -57,6 +49,7 @@ public class Kitsulope : MonoBehaviour
         //TimeSpan ts = GetTimeSpan();
     }
 }
+
 
 /* // Updated affection not saved, fix that.
 // Find out how to save a changed value.

@@ -2,6 +2,7 @@
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using UnityEngine.UI;
 
 public class SaveSerial : MonoBehaviour
 {
@@ -11,25 +12,50 @@ public class SaveSerial : MonoBehaviour
     int hungerLvlToSave;
     String timeToSave;
 
+    [SerializeField]
+    public Button button;
+
+    private Touch theTouch;
+
+    public GameObject hungerText;
+
     private void Start()
     {
         LoadGame();
+        //hungerText.GetComponent<Text>().text = "" + hungerLvlToSave.ToString();
     }
-    void OnGUI()
-    {
 
-        if (GUI.Button(new Rect(0, 0, 125, 50), "Feed the pet one meal.") && hungerLvlToSave < maxHungerLvl)
+    private void OnGUI()
+    {
+        if (button)
         {
-            hungerLvlToSave++;
-            timeToSave = DateTime.Now.ToLongTimeString();
-            SaveGame();
-        } else if (hungerLvlToSave >= maxHungerLvl)
+            if (Input.touchCount > 0)
+            {
+                theTouch = Input.GetTouch(0);
+                if (theTouch.phase == TouchPhase.Ended)
+                {
+                } else
+                {
+                    Feed();
+                }
+            }
+        }
+    }
+
+    public void Feed()
+    {
+        if (hungerLvlToSave >= maxHungerLvl)
         {
             hungerLvlToSave = maxHungerLvl;
-        } else { }
-
-        GUI.Label(new Rect(375, 0, 125, 50), "Hunger level is "
-                    + hungerLvlToSave);
+        }
+        else
+        {
+            hungerLvlToSave++;
+            Debug.Log("Hunger level is: " + hungerLvlToSave);
+            timeToSave = DateTime.Now.ToLongTimeString();
+            SaveGame();
+        }
+    }
 
         // v Not used separately.
         /*if (GUI.Button(new Rect(750, 0, 125, 50), "Save Your Game"))
@@ -37,10 +63,9 @@ public class SaveSerial : MonoBehaviour
         /*if (GUI.Button(new Rect(750, 100, 125, 50),
                     "Load Your Game"))
             LoadGame();*/
-        if (GUI.Button(new Rect(750, 200, 125, 50),
+        /*if (GUI.Button(new Rect(750, 200, 125, 50),
                     "Reset Save Data"))
-            ResetData();
-    }
+            ResetData();*/
 
     void SaveGame()
     {
@@ -82,7 +107,7 @@ public class SaveSerial : MonoBehaviour
         Debug.Log("This much time has passed since last offering..." + timeSpan);
         if (hungerLvlToSave > 0)
         {
-            hungerLvlToSave -= timeSpan.Minutes;
+            hungerLvlToSave -= timeSpan.Seconds;
             if (hungerLvlToSave == maxHungerLvl)
             {
                 Debug.Log("Your fluffy overlord is pleased, good job!");
@@ -119,3 +144,6 @@ class SaveData
     public int savedHungerLvl;
     public String savedTime;
 }
+
+
+
