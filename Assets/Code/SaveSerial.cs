@@ -9,37 +9,12 @@ public class SaveSerial : MonoBehaviour
     [SerializeField]
     int maxHungerLvl = 4;
 
-    int hungerLvlToSave;
+    public int hungerLvlToSave;
     String timeToSave;
-
-    [SerializeField]
-    public Button button;
-
-    private Touch theTouch;
-
-    public GameObject hungerText;
 
     private void Start()
     {
         LoadGame();
-        //hungerText.GetComponent<Text>().text = "" + hungerLvlToSave.ToString();
-    }
-
-    private void OnGUI()
-    {
-        if (button)
-        {
-            if (Input.touchCount > 0)
-            {
-                theTouch = Input.GetTouch(0);
-                if (theTouch.phase == TouchPhase.Ended)
-                {
-                } else
-                {
-                    Feed();
-                }
-            }
-        }
     }
 
     public void Feed()

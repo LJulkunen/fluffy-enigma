@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
+[RequireComponent(typeof(SaveSerial))]
 public class Kitsulope : MonoBehaviour
 {
     [SerializeField]
@@ -18,6 +19,12 @@ public class Kitsulope : MonoBehaviour
     float counter = 0;
 
     String timeToSave;
+
+    public SaveSerial SaveSerial
+    {
+        get;
+        private set;
+    }
 
     void Update()
     {

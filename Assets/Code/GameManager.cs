@@ -5,14 +5,13 @@ public class GameManager : MonoBehaviour
 {
     public GameObject affectionText;
     public GameObject hungerText;
-    //public GameObject kitsulope;
-    public GameObject saveSerial;
-    
+    public GameObject kitsulope;
+    //public GameObject saveSerial; 
 
     void Start()
     {
         //affectionText.GetComponent<Text>().text = "" + kitsulope.GetComponent<SaveSerial>().affection.ToString();
-        //hungerText.GetComponent<Text>().text = "" + kitsulope.GetComponent<SaveSerial>().hungerLvlToSave.ToString();
+        hungerText.GetComponent<Text>().text = "" + kitsulope.GetComponent<SaveSerial>().hungerLvlToSave.ToString();
         //saveSerial = saveSerial.GetComponent<SaveSerial>();
     }
 
@@ -28,7 +27,7 @@ public class GameManager : MonoBehaviour
         {
             case (0):
             default:
-                //saveSerial.Feed();
+                kitsulope.GetComponent<SaveSerial>().Feed();
                 break;
 
             case (1):
