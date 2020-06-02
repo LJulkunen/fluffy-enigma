@@ -4,29 +4,19 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject affectionText;
-    //public GameObject hungerText;
-    public GameObject kitsulope;
-    //public GameObject saveSerial; 
 
-    public TextMeshProUGUI text;
-    public string textPrefix = "Hunger: ";
-    //IEnumerator hungerloop;
+    public GameObject kitsulope;
+
+    public TextMeshProUGUI hungerText;
+
+    public TextMeshProUGUI affectionText;
+
+    public string textPrefix = "";
 
     void Start()
     {
-        //StartCoroutine(hungerloop);
-        text.text = textPrefix + kitsulope.GetComponent<SaveSerial>().hungerLvlToSave.ToString();
-        //text.text = textPrefix + textValue.ToString();
-        //affectionText.GetComponent<Text>().text = "" + kitsulope.GetComponent<SaveSerial>().affection.ToString();
-        //hungerText.GetComponent<TextMesh>().text = "" + kitsulope.GetComponent<SaveSerial>().hungerLvlToSave.ToString();
-        //saveSerial = saveSerial.GetComponent<SaveSerial>();
-    }
-
-    // TODO: This.
-    void Update()
-    {
-        
+        hungerText.text = textPrefix + kitsulope.GetComponent<SaveSerial>().hungerLvlToSave.ToString();
+        affectionText.text = textPrefix + kitsulope.GetComponent<SaveSerial>().affectionLvlToSave.ToString();
     }
 
     public void ButtonBehaviour(int i)
@@ -36,16 +26,16 @@ public class GameManager : MonoBehaviour
             case (0):
             default:
                 kitsulope.GetComponent<SaveSerial>().Feed();
-                text.text = textPrefix + kitsulope.GetComponent<SaveSerial>().hungerLvlToSave.ToString();
+                hungerText.text = textPrefix + kitsulope.GetComponent<SaveSerial>().hungerLvlToSave.ToString();
                 break;
 
             case (1):
+                kitsulope.GetComponent<SaveSerial>().Pet();
+                affectionText.text = textPrefix + kitsulope.GetComponent<SaveSerial>().affectionLvlToSave.ToString();
                 break;
 
-            /*case (2):
-                kitsulope.GetComponent<Kitsulope>().SaveKitsulope();
-                Application.Quit();
-                break;*/
+            case (2):
+                break;
         }
     }
 }

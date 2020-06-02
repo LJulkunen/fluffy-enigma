@@ -8,9 +8,14 @@ public class SaveSerial : MonoBehaviour
 {
     [SerializeField]
     int maxHungerLvl = 4;
-
     public int hungerLvlToSave;
     String timeToSave;
+
+    [SerializeField]
+    int maxAffectionLvl = 4;
+    public int affectionLvlToSave;
+    String affectionTimeToSave;
+    
 
     private void Start()
     {
@@ -22,6 +27,8 @@ public class SaveSerial : MonoBehaviour
         if (hungerLvlToSave >= maxHungerLvl)
         {
             hungerLvlToSave = maxHungerLvl;
+            timeToSave = DateTime.Now.ToLongTimeString();
+            SaveGame();
         }
         else
         {
@@ -32,15 +39,27 @@ public class SaveSerial : MonoBehaviour
         }
     }
 
-        // v Not used separately.
-        /*if (GUI.Button(new Rect(750, 0, 125, 50), "Save Your Game"))
-            SaveGame();*/
-        /*if (GUI.Button(new Rect(750, 100, 125, 50),
-                    "Load Your Game"))
-            LoadGame();*/
-        /*if (GUI.Button(new Rect(750, 200, 125, 50),
-                    "Reset Save Data"))
-            ResetData();*/
+    public void Pet()
+    {
+        if (affectionLvlToSave >= maxAffectionLvl)
+        {
+            affectionLvlToSave = maxAffectionLvl;
+            affectionTimeToSave = DateTime.Now.ToLongTimeString();
+            SaveGame();
+        }
+        else
+        {
+            affectionLvlToSave++;
+            Debug.Log("Affection level is: " + affectionLvlToSave);
+            affectionTimeToSave = DateTime.Now.ToLongTimeString();
+            SaveGame();
+        }
+    }
+
+    // v Not used separately.
+    /*if (GUI.Button(new Rect(750, 200, 125, 50),
+                "Reset Save Data"))
+        ResetData();*/
 
     void SaveGame()
     {
@@ -49,10 +68,12 @@ public class SaveSerial : MonoBehaviour
                      + "/MySaveData.dat");
         SaveData data = new SaveData();
         data.savedHungerLvl = hungerLvlToSave;
+        data.savedAffectionLvl = affectionLvlToSave;
         data.savedTime = timeToSave;
+        data.savedAffectionTime = affectionTimeToSave;
         bf.Serialize(file, data);
         file.Close();
-        Debug.Log("Game data (hunger level) saved!");
+        Debug.Log("Game data (hunger & affection level) saved!");
     }
 
     void LoadGame()
@@ -67,13 +88,45 @@ public class SaveSerial : MonoBehaviour
             SaveData data = (SaveData)bf.Deserialize(file);
             file.Close();
             hungerLvlToSave = data.savedHungerLvl;
+            affectionLvlToSave = data.savedAffectionLvl;
             timeToSave = data.savedTime;
+            affectionTimeToSave = data.savedAffectionTime;
             Debug.Log("Game data loaded!");
             UpdateHungerLvl();
+            UpdateAffectionLvl();
             data.savedHungerLvl = hungerLvlToSave;
+            data.savedAffectionTime = affectionTimeToSave;
         }
         else
             Debug.LogError("There is no save data!");
+    }
+
+    void UpdateAffectionLvl()
+    {
+        TimeSpan timeSpan = DateTime.Now - Convert.ToDateTime(affectionTimeToSave);
+        Debug.Log("Time now: " + DateTime.Now + "Saved affectionTime: " + Convert.ToDateTime(affectionTimeToSave));
+        Debug.Log("It's been this long since last petting: " + timeSpan);
+        if (affectionLvlToSave > 0)
+        {
+            affectionLvlToSave -= timeSpan.Minutes;
+            if (affectionLvlToSave >= maxAffectionLvl)
+            {
+                affectionLvlToSave = maxAffectionLvl;
+                Debug.Log("Your fluffy overlord is pleased, good job!");
+            }
+            else if (affectionLvlToSave > 0)
+            {
+                Debug.Log("Affection level has decreased to: " + affectionLvlToSave);
+            }
+            else
+            {
+                affectionLvlToSave = 0;
+            }
+        }
+        else
+        {
+            affectionLvlToSave = 0;
+        }
     }
 
     void UpdateHungerLvl()
@@ -82,19 +135,22 @@ public class SaveSerial : MonoBehaviour
         Debug.Log("This much time has passed since last offering..." + timeSpan);
         if (hungerLvlToSave > 0)
         {
-            hungerLvlToSave -= timeSpan.Seconds;
-            if (hungerLvlToSave == maxHungerLvl)
+            hungerLvlToSave -= timeSpan.Minutes;
+            if (hungerLvlToSave >= maxHungerLvl)
             {
+                hungerLvlToSave = maxHungerLvl;
                 Debug.Log("Your fluffy overlord is pleased, good job!");
             }
-            else
+            else if (hungerLvlToSave > 0)
             {
                 Debug.Log("Hunger level has decreased to: " + hungerLvlToSave);
-            }
-            if (hungerLvlToSave < 0)
+            } else
             {
                 hungerLvlToSave = 0;
             }
+        } else
+        {
+            hungerLvlToSave = 0;
         }
     }
     void ResetData()
@@ -105,7 +161,9 @@ public class SaveSerial : MonoBehaviour
             File.Delete(Application.persistentDataPath
                               + "/MySaveData.dat");
             hungerLvlToSave = 0;
+            affectionLvlToSave = 0;
             timeToSave = "";
+            affectionTimeToSave = "";
             Debug.Log("Data reset complete!");
         }
         else
@@ -118,6 +176,9 @@ class SaveData
 {
     public int savedHungerLvl;
     public String savedTime;
+
+    public int savedAffectionLvl;
+    public String savedAffectionTime;
 }
 
 
