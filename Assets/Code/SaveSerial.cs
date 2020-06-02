@@ -185,9 +185,26 @@ public class SaveSerial : MonoBehaviour
         } else if (pleasedLvlToSave == 1)
         {
             Debug.Log("Your fluffy overlord is getting impatient...");
-        } else
+        } else if (pleasedLvlToSave == 0)
         {
             Debug.Log("Your fluffy overlord says fuck off!");
+        }
+    }
+
+    // TODO: This would also be an appropriate plase for the timer later.
+    void Update()
+    {
+        // Make sure user is on Android platform
+        if (Application.platform == RuntimePlatform.Android)
+        {
+
+            // Check if Back was pressed this frame
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+
+                // Quit the application
+                Application.Quit();
+            }
         }
     }
 

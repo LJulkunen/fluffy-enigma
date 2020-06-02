@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 299115865}
   - component: {fileID: 299115867}
   - component: {fileID: 299115868}
+  - component: {fileID: 299115869}
   m_Layer: 0
   m_Name: Kitsulope
   m_TagString: Untagged
@@ -235,6 +236,24 @@ MonoBehaviour:
   hungerLvlToSave: 0
   maxAffectionLvl: 4
   affectionLvlToSave: 0
+  maxPleasedLvl: 4
+  pleasedLvlToSave: 0
+--- !u!70 &299115869
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 299115864}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 1
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.05}
+  m_Size: {x: 0.22, y: 0.3}
+  m_Direction: 0
 --- !u!1 &494275697
 GameObject:
   m_ObjectHideFlags: 0

@@ -28,6 +28,15 @@ public class Kitsulope : MonoBehaviour
 
     void Update()
     {
+        if (Input.touchCount == 1)
+        {
+            Vector3 touchPos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+            if (GetComponent<Collider2D>().OverlapPoint(touchPos) && Input.GetTouch(0).phase == TouchPhase.Began) {
+
+                Debug.Log("Should show up when pet is touched in the collider (what a weird sentence tho).");
+            }
+        }
+        #region movement
         Vector3 position = transform.position;
 
         if (direction == 1 && position.x > xMax)
@@ -52,8 +61,7 @@ public class Kitsulope : MonoBehaviour
             transform.Translate(movement * speed);
             counter = 0;
         }
-
-        //TimeSpan ts = GetTimeSpan();
+        #endregion
     }
 }
 
