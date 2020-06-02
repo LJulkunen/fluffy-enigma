@@ -2,6 +2,8 @@
 using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(SaveSerial))]
 public class Kitsulope : MonoBehaviour
@@ -18,22 +20,44 @@ public class Kitsulope : MonoBehaviour
     int direction = 1;
     float counter = 0;
 
-    String timeToSave;
+    SaveSerial save;
 
-    public SaveSerial SaveSerial
+    private void Start()
     {
-        get;
-        private set;
+        save = GetComponent<SaveSerial>();
     }
+
+    /*public Text phaseDisplayText;
+    private Touch theTouch;
+    private float timeTouchEnded;
+    private float displayTime = .5f;*/
 
     void Update()
     {
-        if (Input.touchCount == 1)
+        /*if (Input.touchCount > 0)
+        {
+            theTouch = Input.GetTouch(0);
+            phaseDisplayText.text = theTouch.phase.ToString();
+
+            if (theTouch.phase == TouchPhase.Ended)
+            {
+                timeTouchEnded = Time.time;
+                Debug.Log("Should show up when pet is pet.");
+                save.Pet();
+            }
+
+            else if (Time.time - timeTouchEnded > displayTime)
+            {
+                phaseDisplayText.text = "";
+            }
+        }*/
+
+        if (Input.touchCount > 0)
         {
             Vector3 touchPos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
             if (GetComponent<Collider2D>().OverlapPoint(touchPos) && Input.GetTouch(0).phase == TouchPhase.Began) {
-
-                Debug.Log("Should show up when pet is touched in the collider (what a weird sentence tho).");
+                save.Pet();
+                direction = -1;
             }
         }
         #region movement

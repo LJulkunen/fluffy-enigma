@@ -58,10 +58,13 @@ public class SaveSerial : MonoBehaviour
         }
     }
 
-    // v Not used separately.
-    /*if (GUI.Button(new Rect(750, 200, 125, 50),
+    // Might be useful with testing. Hide when you give a build tho.
+    private void OnGUI()
+    {
+        if (GUI.Button(new Rect(100, 50, 125, 50),
                 "Reset Save Data"))
-        ResetData();*/
+            ResetData();
+    }
 
     void SaveGame()
     {
@@ -109,7 +112,7 @@ public class SaveSerial : MonoBehaviour
     void UpdateAffectionLvl()
     {
         TimeSpan timeSpan = DateTime.Now - Convert.ToDateTime(affectionTimeToSave);
-        Debug.Log("Time now: " + DateTime.Now + "Saved affectionTime: " + Convert.ToDateTime(affectionTimeToSave));
+        //Debug.Log("Time now: " + DateTime.Now + "Saved affectionTime: " + Convert.ToDateTime(affectionTimeToSave));
         Debug.Log("It's been this long since last petting: " + timeSpan);
         if (affectionLvlToSave > 0)
         {
@@ -156,7 +159,6 @@ public class SaveSerial : MonoBehaviour
             hungerLvlToSave = 0;
         }
     }
-    // TODO: Replace witch switch case later.
     private void UpdatePleasedLvl()
     {
         if (hungerLvlToSave == maxHungerLvl && affectionLvlToSave == maxAffectionLvl)
