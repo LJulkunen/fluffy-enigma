@@ -15,7 +15,10 @@ public class SaveSerial : MonoBehaviour
     int maxAffectionLvl = 4;
     public int affectionLvlToSave;
     String affectionTimeToSave;
-    
+
+    [SerializeField]
+    int maxPleasedLvl = 4;
+    public int pleasedLvlToSave;
 
     private void Start()
     {
@@ -38,7 +41,6 @@ public class SaveSerial : MonoBehaviour
             SaveGame();
         }
     }
-
     public void Pet()
     {
         if (affectionLvlToSave >= maxAffectionLvl)
@@ -69,13 +71,13 @@ public class SaveSerial : MonoBehaviour
         SaveData data = new SaveData();
         data.savedHungerLvl = hungerLvlToSave;
         data.savedAffectionLvl = affectionLvlToSave;
+        data.savedPleasedLvl = pleasedLvlToSave;
         data.savedTime = timeToSave;
         data.savedAffectionTime = affectionTimeToSave;
         bf.Serialize(file, data);
         file.Close();
         Debug.Log("Game data (hunger & affection level) saved!");
     }
-
     void LoadGame()
     {
         if (File.Exists(Application.persistentDataPath
@@ -89,13 +91,16 @@ public class SaveSerial : MonoBehaviour
             file.Close();
             hungerLvlToSave = data.savedHungerLvl;
             affectionLvlToSave = data.savedAffectionLvl;
+            pleasedLvlToSave = data.savedPleasedLvl;
             timeToSave = data.savedTime;
             affectionTimeToSave = data.savedAffectionTime;
             Debug.Log("Game data loaded!");
             UpdateHungerLvl();
             UpdateAffectionLvl();
+            UpdatePleasedLvl();
             data.savedHungerLvl = hungerLvlToSave;
             data.savedAffectionTime = affectionTimeToSave;
+            data.savedPleasedLvl = pleasedLvlToSave;
         }
         else
             Debug.LogError("There is no save data!");
@@ -112,7 +117,6 @@ public class SaveSerial : MonoBehaviour
             if (affectionLvlToSave >= maxAffectionLvl)
             {
                 affectionLvlToSave = maxAffectionLvl;
-                Debug.Log("Your fluffy overlord is pleased, good job!");
             }
             else if (affectionLvlToSave > 0)
             {
@@ -128,7 +132,6 @@ public class SaveSerial : MonoBehaviour
             affectionLvlToSave = 0;
         }
     }
-
     void UpdateHungerLvl()
     {
         TimeSpan timeSpan = DateTime.Now - Convert.ToDateTime(timeToSave);
@@ -139,7 +142,7 @@ public class SaveSerial : MonoBehaviour
             if (hungerLvlToSave >= maxHungerLvl)
             {
                 hungerLvlToSave = maxHungerLvl;
-                Debug.Log("Your fluffy overlord is pleased, good job!");
+                
             }
             else if (hungerLvlToSave > 0)
             {
@@ -153,6 +156,41 @@ public class SaveSerial : MonoBehaviour
             hungerLvlToSave = 0;
         }
     }
+    // TODO: Replace witch switch case later.
+    private void UpdatePleasedLvl()
+    {
+        if (hungerLvlToSave == maxHungerLvl && affectionLvlToSave == maxAffectionLvl)
+        {
+            pleasedLvlToSave = maxPleasedLvl;
+            Debug.Log("Your fluffy overlord is pleased, good job!");
+        }
+        else if (hungerLvlToSave > affectionLvlToSave)
+        {
+            pleasedLvlToSave = affectionLvlToSave;
+        }
+        else if (hungerLvlToSave < affectionLvlToSave)
+        {
+            pleasedLvlToSave = hungerLvlToSave;
+        } else
+        {
+            pleasedLvlToSave = hungerLvlToSave;
+        }
+
+        if (pleasedLvlToSave == 3)
+        {
+            Debug.Log("Your fluffy overlord is mostly pleased, keep it up!");
+        } else if (pleasedLvlToSave == 2)
+        {
+            Debug.Log("Your fluffy overlord is okay...");
+        } else if (pleasedLvlToSave == 1)
+        {
+            Debug.Log("Your fluffy overlord is getting impatient...");
+        } else
+        {
+            Debug.Log("Your fluffy overlord says fuck off!");
+        }
+    }
+
     void ResetData()
     {
         if (File.Exists(Application.persistentDataPath
@@ -179,6 +217,8 @@ class SaveData
 
     public int savedAffectionLvl;
     public String savedAffectionTime;
+
+    public int savedPleasedLvl;
 }
 
 
