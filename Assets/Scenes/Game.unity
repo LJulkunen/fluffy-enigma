@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 299115867}
   - component: {fileID: 299115868}
   - component: {fileID: 299115869}
+  - component: {fileID: 299115870}
   m_Layer: 0
   m_Name: Kitsulope
   m_TagString: Untagged
@@ -255,6 +256,25 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0.05}
   m_Size: {x: 0.22, y: 0.3}
   m_Direction: 0
+--- !u!95 &299115870
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 299115864}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 74cca922046db0b43a8ec6002e5d397b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &494275697
 GameObject:
   m_ObjectHideFlags: 0
