@@ -20,22 +20,36 @@ public class SaveSerial : MonoBehaviour
     public int maxSatisfiedLvl = 4;
     public int satisfiedLvlToSave;
 
+    [SerializeField]
+    public float maxCounter = 28800;
+    public float hungerCounter;
+    public float affectionCounter;
+
+    public float timer = 0.0f;
+
     private void Start()
     {
+        hungerCounter = maxCounter;
+        affectionCounter = maxCounter;
         LoadGame();
     }
 
     public void Feed()
     {
-        if (hungerLvlToSave >= maxHungerLvl)
+        if (hungerLvlToSave < 0)
         {
-            hungerLvlToSave = maxHungerLvl;
-            timeToSave = DateTime.Now.ToLongTimeString();
+            hungerLvlToSave = 0;
             SaveGame();
         }
-        else
+        else if (hungerLvlToSave >= maxHungerLvl)
+        {
+            hungerLvlToSave = maxHungerLvl;
+            SaveGame();
+        }
+        else if (hungerLvlToSave < maxHungerLvl)
         {
             hungerLvlToSave++;
+            hungerCounter = maxCounter;
             Debug.Log("Hunger level is: " + hungerLvlToSave);
             timeToSave = DateTime.Now.ToLongTimeString();
             SaveGame();
@@ -43,15 +57,20 @@ public class SaveSerial : MonoBehaviour
     }
     public void Pet()
     {
-        if (affectionLvlToSave >= maxAffectionLvl)
+        if (affectionLvlToSave < 0)
+        {
+            affectionLvlToSave = 0;
+            SaveGame();
+        }
+        else if (affectionLvlToSave >= maxAffectionLvl)
         {
             affectionLvlToSave = maxAffectionLvl;
-            affectionTimeToSave = DateTime.Now.ToLongTimeString();
             SaveGame();
         }
         else
         {
             affectionLvlToSave++;
+            affectionCounter = maxCounter;
             Debug.Log("Affection level is: " + affectionLvlToSave);
             affectionTimeToSave = DateTime.Now.ToLongTimeString();
             SaveGame();
@@ -66,7 +85,7 @@ public class SaveSerial : MonoBehaviour
             ResetData();
     }
 
-    void SaveGame()
+    public void SaveGame()
     {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath
@@ -116,7 +135,7 @@ public class SaveSerial : MonoBehaviour
         Debug.Log("It's been this long since last petting: " + timeSpan);
         if (affectionLvlToSave > 0)
         {
-            affectionLvlToSave -= timeSpan.Minutes;
+            //affectionLvlToSave -= timeSpan.Minutes;
             if (affectionLvlToSave >= maxAffectionLvl)
             {
                 affectionLvlToSave = maxAffectionLvl;
@@ -141,7 +160,7 @@ public class SaveSerial : MonoBehaviour
         Debug.Log("This much time has passed since last offering..." + timeSpan);
         if (hungerLvlToSave > 0)
         {
-            hungerLvlToSave -= timeSpan.Minutes;
+            //hungerLvlToSave -= timeSpan.Minutes;
             if (hungerLvlToSave >= maxHungerLvl)
             {
                 hungerLvlToSave = maxHungerLvl;
@@ -190,12 +209,42 @@ public class SaveSerial : MonoBehaviour
         } else if (satisfiedLvlToSave == 0)
         {
             Debug.Log("Your fluffy overlord says fuck off!");
+        } else if (satisfiedLvlToSave < 0)
+        {
+            satisfiedLvlToSave = 0;
         }
     }
 
     // TODO: This would also be an appropriate plase for the timer later.
     void Update()
     {
+        timer += Time.deltaTime;
+        float seconds = timer % 60;
+
+        if (seconds >= 1)
+        {
+            hungerCounter--;
+            affectionCounter--;
+            timer = 0;
+        }
+
+        if (hungerCounter <= 0)
+        {
+            hungerCounter = 0;
+            hungerLvlToSave--;
+            satisfiedLvlToSave--;
+            SaveGame();
+        }
+        if (affectionCounter <= 0)
+        {
+            affectionCounter = 0;
+            affectionLvlToSave--;
+            satisfiedLvlToSave--;
+            SaveGame();
+        }
+        UpdateHungerLvl();
+        UpdateAffectionLvl();
+        UpdateSatisfiedLvl();
         // Make sure user is on Android platform
         if (Application.platform == RuntimePlatform.Android)
         {

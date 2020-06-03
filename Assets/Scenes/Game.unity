@@ -235,11 +235,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHungerLvl: 4
-  hungerLvlToSave: 4
+  hungerLvlToSave: 3
   maxAffectionLvl: 4
-  affectionLvlToSave: 4
+  affectionLvlToSave: 3
   maxSatisfiedLvl: 4
   satisfiedLvlToSave: 0
+  maxCounter: 28800
+  hungerCounter: 10
+  affectionCounter: 10
+  timer: 0
 --- !u!70 &299115869
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

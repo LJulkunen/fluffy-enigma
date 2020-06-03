@@ -31,14 +31,7 @@ public class Kitsulope : MonoBehaviour
 
     void Update()
     {
-        if (save.satisfiedLvlToSave == 4 || save.satisfiedLvlToSave == 0)
-        {
-            //animator.SetInteger("Satisfaction", save.satisfiedLvlToSave);
-        } else
-        {
-            animator.SetInteger("Direction", direction);
-        }
-
+        animator.SetInteger("Satisfaction", save.satisfiedLvlToSave);
         animator.SetInteger("Direction", direction);
 
         if (Input.touchCount > 0)
@@ -52,7 +45,7 @@ public class Kitsulope : MonoBehaviour
         #region movement
         Vector3 position = transform.position;
 
-        if (direction == 1 && position.x > xMax)
+        /*if (direction == 1 && position.x > xMax)
         {
             direction = -1;
             //animator.SetInteger("Direction", direction);
@@ -61,6 +54,17 @@ public class Kitsulope : MonoBehaviour
         {
             direction = 1;
             //animator.SetInteger("Direction", direction);
+        }*/
+
+        if (save.satisfiedLvlToSave == 0 || save.satisfiedLvlToSave == 4)
+        {
+            direction = 0;
+        } else if (direction == 0 || (direction == -1 && position.x < xMin))
+        {
+            direction = 1;
+        } else if (direction == 0 || (direction == 1 && position.x > xMax))
+        {
+            direction = -1;
         }
 
         Vector3 movement = Vector3.right * direction * Time.deltaTime;
