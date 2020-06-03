@@ -181,8 +181,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: -6926946788898363809, guid: 184ed91ade5f0734091297bb86f34278,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5149c1e13dc0d8b478cf35c66cc0f051, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -222,6 +221,7 @@ MonoBehaviour:
   xMin: -0.9
   xMax: 0.9
   speed: 10
+  animator: {fileID: 299115870}
 --- !u!114 &299115868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,11 +235,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHungerLvl: 4
-  hungerLvlToSave: 0
+  hungerLvlToSave: 4
   maxAffectionLvl: 4
-  affectionLvlToSave: 0
-  maxPleasedLvl: 4
-  pleasedLvlToSave: 0
+  affectionLvlToSave: 4
+  maxSatisfiedLvl: 4
+  satisfiedLvlToSave: 0
 --- !u!70 &299115869
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -266,7 +266,7 @@ Animator:
   m_GameObject: {fileID: 299115864}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 74cca922046db0b43a8ec6002e5d397b, type: 2}
+  m_Controller: {fileID: 9100000, guid: a5309ef2bfff39048927e66bb1ba5de2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

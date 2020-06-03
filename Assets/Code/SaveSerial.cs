@@ -7,18 +7,18 @@ using UnityEngine.UI;
 public class SaveSerial : MonoBehaviour
 {
     [SerializeField]
-    int maxHungerLvl = 4;
+    public int maxHungerLvl = 4;
     public int hungerLvlToSave;
     String timeToSave;
 
     [SerializeField]
-    int maxAffectionLvl = 4;
+    public int maxAffectionLvl = 4;
     public int affectionLvlToSave;
     String affectionTimeToSave;
 
     [SerializeField]
-    int maxPleasedLvl = 4;
-    public int pleasedLvlToSave;
+    public int maxSatisfiedLvl = 4;
+    public int satisfiedLvlToSave;
 
     private void Start()
     {
@@ -74,7 +74,7 @@ public class SaveSerial : MonoBehaviour
         SaveData data = new SaveData();
         data.savedHungerLvl = hungerLvlToSave;
         data.savedAffectionLvl = affectionLvlToSave;
-        data.savedPleasedLvl = pleasedLvlToSave;
+        data.savedSatisfiedLvl = satisfiedLvlToSave;
         data.savedTime = timeToSave;
         data.savedAffectionTime = affectionTimeToSave;
         bf.Serialize(file, data);
@@ -94,16 +94,16 @@ public class SaveSerial : MonoBehaviour
             file.Close();
             hungerLvlToSave = data.savedHungerLvl;
             affectionLvlToSave = data.savedAffectionLvl;
-            pleasedLvlToSave = data.savedPleasedLvl;
+            satisfiedLvlToSave = data.savedSatisfiedLvl;
             timeToSave = data.savedTime;
             affectionTimeToSave = data.savedAffectionTime;
             Debug.Log("Game data loaded!");
             UpdateHungerLvl();
             UpdateAffectionLvl();
-            UpdatePleasedLvl();
+            UpdateSatisfiedLvl();
             data.savedHungerLvl = hungerLvlToSave;
             data.savedAffectionTime = affectionTimeToSave;
-            data.savedPleasedLvl = pleasedLvlToSave;
+            data.savedSatisfiedLvl = satisfiedLvlToSave;
         }
         else
             Debug.LogError("There is no save data!");
@@ -159,35 +159,35 @@ public class SaveSerial : MonoBehaviour
             hungerLvlToSave = 0;
         }
     }
-    private void UpdatePleasedLvl()
+    private void UpdateSatisfiedLvl()
     {
         if (hungerLvlToSave == maxHungerLvl && affectionLvlToSave == maxAffectionLvl)
         {
-            pleasedLvlToSave = maxPleasedLvl;
-            Debug.Log("Your fluffy overlord is pleased, good job!");
+            satisfiedLvlToSave = maxSatisfiedLvl;
+            Debug.Log("Your fluffy overlord is satisfied, good job!");
         }
         else if (hungerLvlToSave > affectionLvlToSave)
         {
-            pleasedLvlToSave = affectionLvlToSave;
+            satisfiedLvlToSave = affectionLvlToSave;
         }
         else if (hungerLvlToSave < affectionLvlToSave)
         {
-            pleasedLvlToSave = hungerLvlToSave;
+            satisfiedLvlToSave = hungerLvlToSave;
         } else
         {
-            pleasedLvlToSave = hungerLvlToSave;
+            satisfiedLvlToSave = hungerLvlToSave;
         }
 
-        if (pleasedLvlToSave == 3)
+        if (satisfiedLvlToSave == 3)
         {
-            Debug.Log("Your fluffy overlord is mostly pleased, keep it up!");
-        } else if (pleasedLvlToSave == 2)
+            Debug.Log("Your fluffy overlord is mostly satisfied, keep it up!");
+        } else if (satisfiedLvlToSave == 2)
         {
             Debug.Log("Your fluffy overlord is okay...");
-        } else if (pleasedLvlToSave == 1)
+        } else if (satisfiedLvlToSave == 1)
         {
             Debug.Log("Your fluffy overlord is getting impatient...");
-        } else if (pleasedLvlToSave == 0)
+        } else if (satisfiedLvlToSave == 0)
         {
             Debug.Log("Your fluffy overlord says fuck off!");
         }
@@ -237,7 +237,7 @@ class SaveData
     public int savedAffectionLvl;
     public String savedAffectionTime;
 
-    public int savedPleasedLvl;
+    public int savedSatisfiedLvl;
 }
 
 

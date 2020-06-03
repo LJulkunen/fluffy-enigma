@@ -22,35 +22,24 @@ public class Kitsulope : MonoBehaviour
 
     SaveSerial save;
 
+    public Animator animator;
+
     private void Start()
     {
         save = GetComponent<SaveSerial>();
     }
 
-    /*public Text phaseDisplayText;
-    private Touch theTouch;
-    private float timeTouchEnded;
-    private float displayTime = .5f;*/
-
     void Update()
     {
-        /*if (Input.touchCount > 0)
+        if (save.satisfiedLvlToSave == 4 || save.satisfiedLvlToSave == 0)
         {
-            theTouch = Input.GetTouch(0);
-            phaseDisplayText.text = theTouch.phase.ToString();
+            //animator.SetInteger("Satisfaction", save.satisfiedLvlToSave);
+        } else
+        {
+            animator.SetInteger("Direction", direction);
+        }
 
-            if (theTouch.phase == TouchPhase.Ended)
-            {
-                timeTouchEnded = Time.time;
-                Debug.Log("Should show up when pet is pet.");
-                save.Pet();
-            }
-
-            else if (Time.time - timeTouchEnded > displayTime)
-            {
-                phaseDisplayText.text = "";
-            }
-        }*/
+        animator.SetInteger("Direction", direction);
 
         if (Input.touchCount > 0)
         {
@@ -65,18 +54,18 @@ public class Kitsulope : MonoBehaviour
 
         if (direction == 1 && position.x > xMax)
         {
-
             direction = -1;
+            //animator.SetInteger("Direction", direction);
         }
         else if (direction == -1 && position.x < xMin)
         {
-
             direction = 1;
+            //animator.SetInteger("Direction", direction);
         }
 
         Vector3 movement = Vector3.right * direction * Time.deltaTime;
 
-        if (counter < 1)
+        if (counter < 0.1)
         {
             counter += Time.deltaTime;
         }
