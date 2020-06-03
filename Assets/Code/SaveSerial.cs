@@ -8,17 +8,17 @@ public class SaveSerial : MonoBehaviour
 {
     [SerializeField]
     public int maxHungerLvl = 4;
-    public int hungerLvlToSave;
+    public int hungerLvlToSave = 0;
     String timeToSave;
 
     [SerializeField]
     public int maxAffectionLvl = 4;
-    public int affectionLvlToSave;
+    public int affectionLvlToSave = 0;
     String affectionTimeToSave;
 
     [SerializeField]
     public int maxSatisfiedLvl = 4;
-    public int satisfiedLvlToSave;
+    public int satisfiedLvlToSave = 0;
 
     [SerializeField]
     public float maxCounter = 28800;

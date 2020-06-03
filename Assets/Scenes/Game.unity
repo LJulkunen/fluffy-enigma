@@ -235,9 +235,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHungerLvl: 4
-  hungerLvlToSave: 3
+  hungerLvlToSave: 0
   maxAffectionLvl: 4
-  affectionLvlToSave: 3
+  affectionLvlToSave: 0
   maxSatisfiedLvl: 4
   satisfiedLvlToSave: 0
   maxCounter: 28800
@@ -530,7 +530,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &585091044
 RectTransform:
   m_ObjectHideFlags: 0
