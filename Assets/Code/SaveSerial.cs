@@ -78,12 +78,12 @@ public class SaveSerial : MonoBehaviour
     }
 
     // Might be useful with testing. Hide when you give a build tho.
-    private void OnGUI()
+    /*private void OnGUI()
     {
         if (GUI.Button(new Rect(100, 50, 125, 50),
                 "Reset Save Data"))
             ResetData();
-    }
+    }*/
 
     public void SaveGame()
     {
@@ -230,20 +230,21 @@ public class SaveSerial : MonoBehaviour
 
         if (hungerCounter <= 0)
         {
-            hungerCounter = 0;
+            hungerCounter = maxCounter;
             hungerLvlToSave--;
             satisfiedLvlToSave--;
+            UpdateHungerLvl();
             SaveGame();
         }
         if (affectionCounter <= 0)
         {
-            affectionCounter = 0;
+            affectionCounter = maxCounter;
             affectionLvlToSave--;
             satisfiedLvlToSave--;
+            UpdateAffectionLvl();
             SaveGame();
         }
-        UpdateHungerLvl();
-        UpdateAffectionLvl();
+        
         UpdateSatisfiedLvl();
         // Make sure user is on Android platform
         if (Application.platform == RuntimePlatform.Android)
