@@ -220,7 +220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xMin: -0.9
   xMax: 0.9
-  speed: 10
+  speed: 3
   animator: {fileID: 299115870}
 --- !u!114 &299115868
 MonoBehaviour:
@@ -235,11 +235,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHungerLvl: 4
-  hungerLvlToSave: 0
+  hungerLvlToSave: 3
   maxAffectionLvl: 4
-  affectionLvlToSave: 0
+  affectionLvlToSave: 3
   maxSatisfiedLvl: 4
-  satisfiedLvlToSave: 0
+  satisfiedLvlToSave: 3
+  howManyHours: 8
   maxCounter: 28800
   hungerCounter: 10
   affectionCounter: 10

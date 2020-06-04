@@ -15,7 +15,7 @@ public class Kitsulope : MonoBehaviour
     private float xMax = 0.9F;
 
     [SerializeField]
-    float speed = 30F;
+    float speed = 3F;
 
     int direction = 1;
     float counter = 0;

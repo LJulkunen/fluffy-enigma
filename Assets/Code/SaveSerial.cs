@@ -20,15 +20,21 @@ public class SaveSerial : MonoBehaviour
     public int maxSatisfiedLvl = 4;
     public int satisfiedLvlToSave = 0;
 
+
+    [SerializeField]
+    public int howManyHours = 8;
+
     [SerializeField]
     public float maxCounter = 28800;
     public float hungerCounter;
     public float affectionCounter;
 
     public float timer = 0.0f;
+    
 
     private void Start()
     {
+        maxCounter = howManyHours * 3600;
         hungerCounter = maxCounter;
         affectionCounter = maxCounter;
         LoadGame();
@@ -54,6 +60,8 @@ public class SaveSerial : MonoBehaviour
             timeToSave = DateTime.Now.ToLongTimeString();
             SaveGame();
         }
+
+        UpdateSatisfiedLvl();
     }
     public void Pet()
     {
@@ -75,6 +83,8 @@ public class SaveSerial : MonoBehaviour
             affectionTimeToSave = DateTime.Now.ToLongTimeString();
             SaveGame();
         }
+
+        UpdateSatisfiedLvl();
     }
 
     // Might be useful with testing. Hide when you give a build tho.
@@ -98,7 +108,7 @@ public class SaveSerial : MonoBehaviour
         data.savedAffectionTime = affectionTimeToSave;
         bf.Serialize(file, data);
         file.Close();
-        Debug.Log("Game data (hunger & affection level) saved!");
+        Debug.Log("Game data (hunger & affection & satisfaction levels & related times) saved!");
     }
     void LoadGame()
     {
@@ -135,7 +145,7 @@ public class SaveSerial : MonoBehaviour
         Debug.Log("It's been this long since last petting: " + timeSpan);
         if (affectionLvlToSave > 0)
         {
-            //affectionLvlToSave -= timeSpan.Minutes;
+            affectionLvlToSave -= timeSpan.Hours/howManyHours;
             if (affectionLvlToSave >= maxAffectionLvl)
             {
                 affectionLvlToSave = maxAffectionLvl;
@@ -160,7 +170,7 @@ public class SaveSerial : MonoBehaviour
         Debug.Log("This much time has passed since last offering..." + timeSpan);
         if (hungerLvlToSave > 0)
         {
-            //hungerLvlToSave -= timeSpan.Minutes;
+            hungerLvlToSave -= timeSpan.Hours/howManyHours;
             if (hungerLvlToSave >= maxHungerLvl)
             {
                 hungerLvlToSave = maxHungerLvl;
@@ -183,7 +193,7 @@ public class SaveSerial : MonoBehaviour
         if (hungerLvlToSave == maxHungerLvl && affectionLvlToSave == maxAffectionLvl)
         {
             satisfiedLvlToSave = maxSatisfiedLvl;
-            Debug.Log("Your fluffy overlord is satisfied, good job!");
+            //Debug.Log("Your fluffy overlord is satisfied, good job!");
         }
         else if (hungerLvlToSave > affectionLvlToSave)
         {
@@ -199,16 +209,16 @@ public class SaveSerial : MonoBehaviour
 
         if (satisfiedLvlToSave == 3)
         {
-            Debug.Log("Your fluffy overlord is mostly satisfied, keep it up!");
+            //Debug.Log("Your fluffy overlord is mostly satisfied, keep it up!");
         } else if (satisfiedLvlToSave == 2)
         {
-            Debug.Log("Your fluffy overlord is okay...");
+            //Debug.Log("Your fluffy overlord is okay...");
         } else if (satisfiedLvlToSave == 1)
         {
-            Debug.Log("Your fluffy overlord is getting impatient...");
+            //Debug.Log("Your fluffy overlord is getting impatient...");
         } else if (satisfiedLvlToSave == 0)
         {
-            Debug.Log("Your fluffy overlord says fuck off!");
+            //Debug.Log("Your fluffy overlord says fuck off!");
         } else if (satisfiedLvlToSave < 0)
         {
             satisfiedLvlToSave = 0;
@@ -233,7 +243,7 @@ public class SaveSerial : MonoBehaviour
             hungerCounter = maxCounter;
             hungerLvlToSave--;
             satisfiedLvlToSave--;
-            UpdateHungerLvl();
+            UpdateSatisfiedLvl();
             SaveGame();
         }
         if (affectionCounter <= 0)
@@ -241,11 +251,10 @@ public class SaveSerial : MonoBehaviour
             affectionCounter = maxCounter;
             affectionLvlToSave--;
             satisfiedLvlToSave--;
-            UpdateAffectionLvl();
+            UpdateSatisfiedLvl();
             SaveGame();
         }
-        
-        UpdateSatisfiedLvl();
+
         // Make sure user is on Android platform
         if (Application.platform == RuntimePlatform.Android)
         {
