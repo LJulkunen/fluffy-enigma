@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(SaveSerial))]
-public class Kitsulope : MonoBehaviour
+public class Kitsulope : ObjectType
 {
     [SerializeField]
     private float xMin = -0.9F;
@@ -38,35 +38,12 @@ public class Kitsulope : MonoBehaviour
 
         if (Input.touchCount > 0)
         {
-            Vector3 touchPos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-            if (GetComponent<Collider2D>().OverlapPoint(touchPos) && Input.GetTouch(0).phase == TouchPhase.Began) {
-                save.Pet();
-            }
+            DoTouch(Input.GetTouch(0).position);
         }
-
-        #region forPCbuild
-        if (Input.GetMouseButtonUp(0))
+        else if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Affection level: " + save.affectionLvlToSave);
-            Vector2 v = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(v), Vector2.zero);
-
-            if (hit)
-            {
-                Debug.Log(hit.transform.gameObject.name);
-                if (hit.transform.gameObject.tag == "Kitsulope")
-                {
-                    clickCount++;
-
-                    save.Pet();
-                    if (clickCount >= 1)
-                    {
-                        
-                    }
-                }
-            }
-        } 
-        #endregion
+            DoTouch(Input.mousePosition);
+        }
 
         #region movement
         Vector3 position = transform.position;
@@ -105,6 +82,26 @@ public class Kitsulope : MonoBehaviour
             counter = 0;
         }
         #endregion
+    }
+
+    void DoTouch(Vector2 point)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(point), Vector2.zero);
+        Object hitType = hit.transform.GetComponent<ObjectType>().type;
+
+        Debug.Log(hitType);
+        switch (hitType)
+        {
+            case Object.Kitsulope:
+                clickCount++;
+                save.Pet();
+                break;
+            case Object.Fridge:
+                break;
+            default:
+                Debug.Log("Add case here ^^");
+                break;
+        }
     }
 }
 
