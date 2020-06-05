@@ -5,7 +5,8 @@ public class ObjectType : MonoBehaviour
     public enum Object
     {
         Kitsulope,
-        Fridge
+        Fridge,
+        Shelf
     }
     public Object type;
 }

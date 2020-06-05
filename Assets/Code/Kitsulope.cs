@@ -38,7 +38,10 @@ public class Kitsulope : ObjectType
 
         if (Input.touchCount > 0)
         {
-            DoTouch(Input.GetTouch(0).position);
+            if (Input.GetTouch(0).phase == TouchPhase.Began)
+            {
+                DoTouch(Input.GetTouch(0).position);
+            }
         }
         else if (Input.GetMouseButtonDown(0))
         {
@@ -93,13 +96,13 @@ public class Kitsulope : ObjectType
         switch (hitType)
         {
             case Object.Kitsulope:
-                clickCount++;
                 save.Pet();
                 break;
             case Object.Fridge:
+                save.Feed();
                 break;
             default:
-                Debug.Log("Add case here ^^");
+                Debug.LogError("Add case here ^^");
                 break;
         }
     }

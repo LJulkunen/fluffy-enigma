@@ -8,22 +8,30 @@ public class MenuManager : MonoBehaviour
 
     void Start()
     {
-        InvokeRepeating("flashTheText", 0f, 0.5f);
+        InvokeRepeating("FlashTheText", 0f, 0.5f);
     }
-
+    
     void Update()
     {
         if (Input.touchCount > 0)
         {
-            theTouch = Input.GetTouch(0);
-            if (theTouch.phase == TouchPhase.Ended)
+            if (Input.GetTouch(0).phase == TouchPhase.Began)
             {
-                SceneManager.LoadScene("Game");
+                LoadGameScene();
             }
+        }
+        else if (Input.GetMouseButtonDown(0))
+        {
+            LoadGameScene();
         }
     }
 
-    void flashTheText()
+    void LoadGameScene()
+    {
+        SceneManager.LoadScene("Game");
+    }
+
+    void FlashTheText()
     {
         if (flashText.activeInHierarchy)
         {
