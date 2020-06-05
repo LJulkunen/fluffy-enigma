@@ -89,12 +89,12 @@ public class SaveSerial : MonoBehaviour
     }
 
     // Might be useful with testing. Hide when you give a build tho.
-    private void OnGUI()
+    /*private void OnGUI()
     {
         if (GUI.Button(new Rect(100, 50, 125, 50),
                 "Reset Save Data"))
             ResetData();
-    }
+    }*/
 
     public void SaveGame()
     {
