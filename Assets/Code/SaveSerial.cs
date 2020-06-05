@@ -22,7 +22,7 @@ public class SaveSerial : MonoBehaviour
 
 
     [SerializeField]
-    public int howManyHours = 8;
+    public int howManyHours = 4;
 
     [SerializeField]
     public float maxCounter = 28800;
@@ -38,6 +38,7 @@ public class SaveSerial : MonoBehaviour
         hungerCounter = maxCounter;
         affectionCounter = maxCounter;
         LoadGame();
+        UpdateSatisfiedLvl();
     }
 
     public void Feed()
@@ -145,14 +146,14 @@ public class SaveSerial : MonoBehaviour
         Debug.Log("It's been this long since last petting: " + timeSpan);
         if (affectionLvlToSave > 0)
         {
-            affectionLvlToSave -= timeSpan.Hours/howManyHours;
+            affectionLvlToSave -= timeSpan.Minutes/howManyHours;
             if (affectionLvlToSave >= maxAffectionLvl)
             {
                 affectionLvlToSave = maxAffectionLvl;
             }
             else if (affectionLvlToSave > 0)
             {
-                Debug.Log("Affection level has decreased to: " + affectionLvlToSave);
+                //Debug.Log("Affection level has decreased to: " + affectionLvlToSave);
             }
             else
             {
@@ -163,14 +164,21 @@ public class SaveSerial : MonoBehaviour
         {
             affectionLvlToSave = 0;
         }
+
+        Debug.Log("Affection level is: " + affectionLvlToSave);
     }
     void UpdateHungerLvl()
     {
         TimeSpan timeSpan = DateTime.Now - Convert.ToDateTime(timeToSave);
+        Debug.Log("Time was: " + Convert.ToDateTime(timeToSave) + " and time is: " + DateTime.Now);
         Debug.Log("This much time has passed since last offering..." + timeSpan);
+
+        Debug.Log("Hunger level was: " + hungerLvlToSave);
+
         if (hungerLvlToSave > 0)
         {
-            hungerLvlToSave -= timeSpan.Hours/howManyHours;
+            // TODO: Figure this shit out.
+            hungerLvlToSave -= timeSpan.Minutes / howManyHours;
             if (hungerLvlToSave >= maxHungerLvl)
             {
                 hungerLvlToSave = maxHungerLvl;
@@ -178,7 +186,7 @@ public class SaveSerial : MonoBehaviour
             }
             else if (hungerLvlToSave > 0)
             {
-                Debug.Log("Hunger level has decreased to: " + hungerLvlToSave);
+
             } else
             {
                 hungerLvlToSave = 0;
@@ -187,6 +195,8 @@ public class SaveSerial : MonoBehaviour
         {
             hungerLvlToSave = 0;
         }
+        Debug.Log("Amount decreased should be: " + timeSpan.Minutes / howManyHours);
+        Debug.Log("Hunger level is: " + hungerLvlToSave);
     }
     private void UpdateSatisfiedLvl()
     {
@@ -278,6 +288,7 @@ public class SaveSerial : MonoBehaviour
                               + "/MySaveData.dat");
             hungerLvlToSave = 0;
             affectionLvlToSave = 0;
+            satisfiedLvlToSave = 0;
             timeToSave = "";
             affectionTimeToSave = "";
             Debug.Log("Data reset complete!");

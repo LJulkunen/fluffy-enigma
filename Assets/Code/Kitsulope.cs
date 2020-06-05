@@ -29,6 +29,8 @@ public class Kitsulope : MonoBehaviour
         save = GetComponent<SaveSerial>();
     }
 
+    private int clickCount;
+
     void Update()
     {
         animator.SetInteger("Satisfaction", save.satisfiedLvlToSave);
@@ -39,9 +41,33 @@ public class Kitsulope : MonoBehaviour
             Vector3 touchPos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
             if (GetComponent<Collider2D>().OverlapPoint(touchPos) && Input.GetTouch(0).phase == TouchPhase.Began) {
                 save.Pet();
-                direction = -1;
             }
         }
+
+        #region forPCbuild
+        if (Input.GetMouseButtonUp(0))
+        {
+            Debug.Log("Affection level: " + save.affectionLvlToSave);
+            Vector2 v = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(v), Vector2.zero);
+
+            if (hit)
+            {
+                Debug.Log(hit.transform.gameObject.name);
+                if (hit.transform.gameObject.tag == "Kitsulope")
+                {
+                    clickCount++;
+
+                    save.Pet();
+                    if (clickCount >= 1)
+                    {
+                        
+                    }
+                }
+            }
+        } 
+        #endregion
+
         #region movement
         Vector3 position = transform.position;
 
