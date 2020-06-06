@@ -6,7 +6,8 @@ public class ObjectType : MonoBehaviour
     {
         Kitsulope,
         Fridge,
-        Shelf
+        Shelf,
+        Window
     }
     public Object type;
 }

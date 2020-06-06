@@ -142,7 +142,7 @@ public class SaveSerial : MonoBehaviour
     void UpdateAffectionLvl()
     {
         TimeSpan timeSpan = DateTime.Now - Convert.ToDateTime(affectionTimeToSave);
-        //Debug.Log("Time now: " + DateTime.Now + "Saved affectionTime: " + Convert.ToDateTime(affectionTimeToSave));
+        Debug.Log("Time was: " + Convert.ToDateTime(affectionTimeToSave) + " and time is: " + DateTime.Now);
         Debug.Log("It's been this long since last petting: " + timeSpan);
         if (affectionLvlToSave > 0)
         {
@@ -153,7 +153,7 @@ public class SaveSerial : MonoBehaviour
             }
             else if (affectionLvlToSave > 0)
             {
-                //Debug.Log("Affection level has decreased to: " + affectionLvlToSave);
+
             }
             else
             {
@@ -164,7 +164,7 @@ public class SaveSerial : MonoBehaviour
         {
             affectionLvlToSave = 0;
         }
-
+        Debug.Log("Amount decreased should be: " + timeSpan.Minutes / howManyHours);
         Debug.Log("Affection level is: " + affectionLvlToSave);
     }
     void UpdateHungerLvl()
@@ -277,6 +277,11 @@ public class SaveSerial : MonoBehaviour
                 Application.Quit();
             }
         }
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
     }
 
     void ResetData()

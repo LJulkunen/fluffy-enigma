@@ -51,17 +51,6 @@ public class Kitsulope : ObjectType
         #region movement
         Vector3 position = transform.position;
 
-        /*if (direction == 1 && position.x > xMax)
-        {
-            direction = -1;
-            //animator.SetInteger("Direction", direction);
-        }
-        else if (direction == -1 && position.x < xMin)
-        {
-            direction = 1;
-            //animator.SetInteger("Direction", direction);
-        }*/
-
         if (save.satisfiedLvlToSave == 0 || save.satisfiedLvlToSave == 4)
         {
             direction = 0;
@@ -100,6 +89,12 @@ public class Kitsulope : ObjectType
                 break;
             case Object.Fridge:
                 save.Feed();
+                break;
+            case Object.Window:
+                if (Input.touchCount > 1)
+                {
+                    save.Exit();
+                }
                 break;
             default:
                 Debug.LogError("Add case here ^^");
