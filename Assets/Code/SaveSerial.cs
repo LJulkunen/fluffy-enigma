@@ -30,7 +30,9 @@ public class SaveSerial : MonoBehaviour
     public float affectionCounter;
 
     public float timer = 0.0f;
-    
+
+    [SerializeField]
+    public bool isThisForJustMyTesting;
 
     private void Start()
     {
@@ -89,12 +91,15 @@ public class SaveSerial : MonoBehaviour
     }
 
     // Might be useful with testing. Hide when you give a build tho.
-    /*private void OnGUI()
+    private void OnGUI()
     {
-        if (GUI.Button(new Rect(100, 50, 125, 50),
-                "Reset Save Data"))
-            ResetData();
-    }*/
+        if (isThisForJustMyTesting == true)
+        {
+            if (GUI.Button(new Rect(100, 50, 125, 50),
+                    "Reset Save Data"))
+                ResetData();
+        }
+    }
 
     public void SaveGame()
     {
@@ -142,11 +147,38 @@ public class SaveSerial : MonoBehaviour
     void UpdateAffectionLvl()
     {
         TimeSpan timeSpan = DateTime.Now - Convert.ToDateTime(affectionTimeToSave);
+        
         Debug.Log("Time was: " + Convert.ToDateTime(affectionTimeToSave) + " and time is: " + DateTime.Now);
         Debug.Log("It's been this long since last petting: " + timeSpan);
         if (affectionLvlToSave > 0)
         {
-            affectionLvlToSave -= timeSpan.Minutes/howManyHours;
+            if (timeSpan.Hours < 0)
+            {
+                if (isThisForJustMyTesting)
+                {
+
+                    affectionLvlToSave += timeSpan.Minutes / howManyHours;
+                    Debug.Log("Amount decreased should be: " + timeSpan.Minutes / howManyHours);
+                }
+                else
+                {
+                    affectionLvlToSave += timeSpan.Hours / howManyHours;
+                }
+            }
+            else
+            {
+                if (isThisForJustMyTesting)
+                {
+
+                    affectionLvlToSave -= timeSpan.Minutes / howManyHours;
+                    Debug.Log("Amount decreased should be: " + timeSpan.Minutes / howManyHours);
+                }
+                else
+                {
+                    affectionLvlToSave -= timeSpan.Hours / howManyHours;
+                }
+            }
+
             if (affectionLvlToSave >= maxAffectionLvl)
             {
                 affectionLvlToSave = maxAffectionLvl;
@@ -164,7 +196,8 @@ public class SaveSerial : MonoBehaviour
         {
             affectionLvlToSave = 0;
         }
-        Debug.Log("Amount decreased should be: " + timeSpan.Minutes / howManyHours);
+
+        Debug.Log("Amount decreased should be: " + timeSpan.Hours / howManyHours);
         Debug.Log("Affection level is: " + affectionLvlToSave);
     }
     void UpdateHungerLvl()
@@ -177,8 +210,15 @@ public class SaveSerial : MonoBehaviour
 
         if (hungerLvlToSave > 0)
         {
-            // TODO: Figure this shit out.
-            hungerLvlToSave -= timeSpan.Minutes / howManyHours;
+            if (timeSpan.Hours < 0)
+            {
+                hungerLvlToSave += timeSpan.Hours / howManyHours;
+            }
+            else
+            {
+                hungerLvlToSave -= timeSpan.Hours / howManyHours;
+            }
+            hungerLvlToSave -= timeSpan.Hours / howManyHours;
             if (hungerLvlToSave >= maxHungerLvl)
             {
                 hungerLvlToSave = maxHungerLvl;
@@ -195,7 +235,7 @@ public class SaveSerial : MonoBehaviour
         {
             hungerLvlToSave = 0;
         }
-        Debug.Log("Amount decreased should be: " + timeSpan.Minutes / howManyHours);
+        Debug.Log("Amount decreased should be: " + timeSpan.Hours / howManyHours);
         Debug.Log("Hunger level is: " + hungerLvlToSave);
     }
     private void UpdateSatisfiedLvl()
@@ -291,9 +331,9 @@ public class SaveSerial : MonoBehaviour
         {
             File.Delete(Application.persistentDataPath
                               + "/MySaveData.dat");
-            hungerLvlToSave = 0;
-            affectionLvlToSave = 0;
-            satisfiedLvlToSave = 0;
+            hungerLvlToSave = 3;
+            affectionLvlToSave = 3;
+            satisfiedLvlToSave = 3;
             timeToSave = "";
             affectionTimeToSave = "";
             Debug.Log("Data reset complete!");
