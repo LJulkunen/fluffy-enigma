@@ -40,6 +40,8 @@ public class SaveSerial : MonoBehaviour
         hungerCounter = maxCounter;
         affectionCounter = maxCounter;
         LoadGame();
+        UpdateHungerLvl();
+        UpdateAffectionLvl();
         UpdateSatisfiedLvl();
     }
 

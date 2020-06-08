@@ -22,11 +22,18 @@ public class Kitsulope : ObjectType
 
     SaveSerial save;
 
+    Dialogue dialogue;
+    DialogueManager dialogueManager;
+
     public Animator animator;
+
+    public GameObject fridgeBubble;
 
     private void Start()
     {
         save = GetComponent<SaveSerial>();
+        dialogue = GetComponent<Dialogue>();
+        dialogueManager = GetComponent<DialogueManager>();
     }
 
     private int clickCount;
@@ -81,6 +88,12 @@ public class Kitsulope : ObjectType
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(point), Vector2.zero);
         Object hitType = hit.transform.GetComponent<ObjectType>().type;
 
+        // Find out how to do this with touching anything BUT the fridge.
+        if(hitType != Object.Fridge)
+        {
+            fridgeBubble.SetActive(!fridgeBubble);
+        }
+
         Debug.Log(hitType);
         switch (hitType)
         {
@@ -88,16 +101,22 @@ public class Kitsulope : ObjectType
                 save.Pet();
                 break;
             case Object.Fridge:
-                save.Feed();
+                dialogueManager.StartDialogue(dialogue);
+                if (fridgeBubble.activeInHierarchy)
+                {
+                        save.Feed();
+                }
                 break;
             case Object.Window:
-                if (Input.touchCount > 1)
+                break;
+            case Object.ExitButton:
+                if (Input.touchCount == 1)
                 {
                     save.Exit();
                 }
                 break;
             default:
-                Debug.LogError("Add case here ^^");
+                Debug.LogWarning("Blep");
                 break;
         }
     }

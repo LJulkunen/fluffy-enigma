@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
 
     public string textPrefix = "";
 
+    public GameObject fridgeBubble;
+    public GameObject fridgeBubbleText;
+
     void Start()
     {
         hungerText.text = textPrefix + kitsulope.GetComponent<SaveSerial>().hungerLvlToSave.ToString();
@@ -35,6 +38,8 @@ public class GameManager : MonoBehaviour
                 break;
 
             case (2):
+                fridgeBubble.SetActive(!fridgeBubble.activeInHierarchy);
+                fridgeBubbleText.SetActive(!fridgeBubbleText.activeInHierarchy);
                 break;
         }
     }

@@ -7,7 +7,8 @@ public class ObjectType : MonoBehaviour
         Kitsulope,
         Fridge,
         Shelf,
-        Window
+        Window,
+        ExitButton
     }
     public Object type;
 }
