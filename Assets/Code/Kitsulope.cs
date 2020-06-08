@@ -94,7 +94,7 @@ public class Kitsulope : ObjectType
         #region movement
         Vector3 position = transform.position;
 
-        if (save.satisfiedLvlToSave == 0 || save.satisfiedLvlToSave == 4 || save.isPetting)
+        if (save.isPetting || save.isFeeding)
         {
             direction = 0;
         } else if (direction == 0 || (direction == -1 && position.x < xMin))
