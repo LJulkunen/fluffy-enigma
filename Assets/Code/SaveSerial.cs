@@ -34,6 +34,9 @@ public class SaveSerial : MonoBehaviour
     [SerializeField]
     public bool isThisForJustMyTesting;
 
+    public bool isPetting;
+    public bool isFeeding;
+
     private void Start()
     {
         maxCounter = howManyHours * 3600;
@@ -47,6 +50,7 @@ public class SaveSerial : MonoBehaviour
 
     public void Feed()
     {
+        isFeeding = true;
         if (hungerLvlToSave < 0)
         {
             hungerLvlToSave = 0;
@@ -70,6 +74,7 @@ public class SaveSerial : MonoBehaviour
     }
     public void Pet()
     {
+        isPetting = true;
         if (affectionLvlToSave < 0)
         {
             affectionLvlToSave = 0;

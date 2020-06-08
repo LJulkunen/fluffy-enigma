@@ -4,6 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
 
 [RequireComponent(typeof(SaveSerial))]
 public class Kitsulope : ObjectType
@@ -30,19 +31,53 @@ public class Kitsulope : ObjectType
     public GameObject fridgeBubble;
     public GameObject fridgeBubbleText;
 
+    [SerializeField]
+    public float pettingAnimationLength = 2.5f;
+    public float maxPettingAnimationLength = 2.5f;
+
+    [SerializeField]
+    public float feedingAnimationLength = 2.5f;
+    public float maxFeedingAnimationLength = 2.5f;
+
     private void Start()
     {
         save = GetComponent<SaveSerial>();
         dialogue = GetComponent<Dialogue>();
         dialogueManager = GetComponent<DialogueManager>();
+        maxPettingAnimationLength = pettingAnimationLength;
+        maxFeedingAnimationLength = feedingAnimationLength;
     }
 
     private int clickCount;
 
+    
+
     void Update()
     {
         animator.SetInteger("Satisfaction", save.satisfiedLvlToSave);
+        animator.SetBool("IsPetting", save.isPetting);
+        animator.SetBool("IsFeeding", save.isFeeding);
         animator.SetInteger("Direction", direction);
+
+        if (save.isPetting)
+        {
+            pettingAnimationLength -= Time.deltaTime;
+            if (pettingAnimationLength <= 0)
+            {
+                save.isPetting = false;
+                pettingAnimationLength = maxPettingAnimationLength;
+            }
+        }
+
+        if (save.isFeeding)
+        {
+            feedingAnimationLength -= Time.deltaTime;
+            if (feedingAnimationLength <= 0)
+            {
+                save.isFeeding = false;
+                feedingAnimationLength = maxFeedingAnimationLength;
+            }
+        }
 
         if (Input.touchCount > 0)
         {
@@ -59,7 +94,7 @@ public class Kitsulope : ObjectType
         #region movement
         Vector3 position = transform.position;
 
-        if (save.satisfiedLvlToSave == 0 || save.satisfiedLvlToSave == 4)
+        if (save.satisfiedLvlToSave == 0 || save.satisfiedLvlToSave == 4 || save.isPetting)
         {
             direction = 0;
         } else if (direction == 0 || (direction == -1 && position.x < xMin))
