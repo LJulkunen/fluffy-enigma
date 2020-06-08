@@ -403,6 +403,7 @@ MonoBehaviour:
   speed: 2.6
   animator: {fileID: 299115870}
   fridgeBubble: {fileID: 1569686619}
+  fridgeBubbleText: {fileID: 1625694126}
 --- !u!114 &299115868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -488,8 +489,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - Should I feed my pet?
-  - Tap fridge again to confrim.
+  - 'Should I feed my pet?
+
+    Tap fridge again to confrim.'
+  - 
   - 
   - 
 --- !u!1 &494275697

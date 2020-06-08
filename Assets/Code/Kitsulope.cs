@@ -28,6 +28,7 @@ public class Kitsulope : ObjectType
     public Animator animator;
 
     public GameObject fridgeBubble;
+    public GameObject fridgeBubbleText;
 
     private void Start()
     {
@@ -92,6 +93,7 @@ public class Kitsulope : ObjectType
         if(hitType != Object.Fridge)
         {
             fridgeBubble.SetActive(!fridgeBubble);
+            fridgeBubbleText.SetActive(!fridgeBubbleText);
         }
 
         Debug.Log(hitType);
