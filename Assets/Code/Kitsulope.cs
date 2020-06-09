@@ -5,6 +5,7 @@ using System.IO;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(SaveSerial))]
 public class Kitsulope : ObjectType
@@ -39,6 +40,12 @@ public class Kitsulope : ObjectType
     public float feedingAnimationLength = 2.5f;
     public float maxFeedingAnimationLength = 2.5f;
 
+    [SerializeField]
+    public float chillingAnimationLength = 2.5f;
+    public float maxChillingAnimationLength = 2.5f;
+
+    public bool isChilling;
+
     private void Start()
     {
         save = GetComponent<SaveSerial>();
@@ -46,18 +53,28 @@ public class Kitsulope : ObjectType
         dialogueManager = GetComponent<DialogueManager>();
         maxPettingAnimationLength = pettingAnimationLength;
         maxFeedingAnimationLength = feedingAnimationLength;
+        maxChillingAnimationLength = chillingAnimationLength;
     }
 
     private int clickCount;
 
-    
+
+    public float rand;
 
     void Update()
     {
+        rand = Random.Range(0.0f, 100.0f);
+
+        if (rand > 99.9f)
+        {
+            isChilling = true;
+        }
+        
         animator.SetInteger("Satisfaction", save.satisfiedLvlToSave);
         animator.SetBool("IsPetting", save.isPetting);
         animator.SetBool("IsFeeding", save.isFeeding);
         animator.SetInteger("Direction", direction);
+        animator.SetBool("IsChilling", isChilling);
 
         if (save.isPetting)
         {
@@ -66,6 +83,16 @@ public class Kitsulope : ObjectType
             {
                 save.isPetting = false;
                 pettingAnimationLength = maxPettingAnimationLength;
+            }
+        }
+
+        if (isChilling)
+        {
+            chillingAnimationLength -= Time.deltaTime;
+            if (chillingAnimationLength <= 0)
+            {
+                isChilling = false;
+                chillingAnimationLength = maxChillingAnimationLength;
             }
         }
 
@@ -94,7 +121,7 @@ public class Kitsulope : ObjectType
         #region movement
         Vector3 position = transform.position;
 
-        if (save.isPetting || save.isFeeding)
+        if (isChilling || save.isPetting || save.isFeeding || save.satisfiedLvlToSave == 0)
         {
             direction = 0;
         } else if (direction == 0 || (direction == -1 && position.x < xMin))
