@@ -38,8 +38,8 @@ public class GameManager : MonoBehaviour
                 break;
 
             case (2):
-                fridgeBubble.SetActive(!fridgeBubble.activeInHierarchy);
-                fridgeBubbleText.SetActive(!fridgeBubbleText.activeInHierarchy);
+                //fridgeBubble.SetActive(!fridgeBubble.activeInHierarchy);
+                //fridgeBubbleText.SetActive(!fridgeBubbleText.activeInHierarchy);
                 break;
         }
     }

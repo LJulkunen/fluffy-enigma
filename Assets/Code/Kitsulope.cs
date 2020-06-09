@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
 using Random = UnityEngine.Random;
+using TMPro;
 
 [RequireComponent(typeof(SaveSerial))]
 public class Kitsulope : ObjectType
@@ -32,6 +33,10 @@ public class Kitsulope : ObjectType
     public GameObject fridgeBubble;
     public GameObject fridgeBubbleText;
 
+    public TextMeshProUGUI bubbleText;
+
+    public SpriteRenderer fridgeSprite;
+
     [SerializeField]
     public float pettingAnimationLength = 2.5f;
     public float maxPettingAnimationLength = 2.5f;
@@ -46,6 +51,12 @@ public class Kitsulope : ObjectType
 
     public bool isChilling;
 
+    public Color color;
+    
+    [SerializeField]
+    public float maxBubbleCounter = 10f;
+    public float bubbleCounter = 0f;
+
     private void Start()
     {
         save = GetComponent<SaveSerial>();
@@ -54,6 +65,8 @@ public class Kitsulope : ObjectType
         maxPettingAnimationLength = pettingAnimationLength;
         maxFeedingAnimationLength = feedingAnimationLength;
         maxChillingAnimationLength = chillingAnimationLength;
+        color = fridgeSprite.color;
+        bubbleText = fridgeBubbleText.GetComponent<TextMeshProUGUI>();
     }
 
     private int clickCount;
@@ -63,6 +76,7 @@ public class Kitsulope : ObjectType
 
     void Update()
     {
+        FridgeBubbleCounter();
         rand = Random.Range(0.0f, 100.0f);
 
         if (rand > 99.9f)
@@ -144,19 +158,45 @@ public class Kitsulope : ObjectType
             counter = 0;
         }
         #endregion
-    }
+    } 
 
+    void FridgeBubbleCounter()
+    {
+        if (fridgeBubble.activeInHierarchy)
+        {
+            bubbleCounter += Time.deltaTime;
+        }
+
+        if (bubbleCounter >= maxBubbleCounter)
+        {
+            bubbleCounter = maxBubbleCounter;
+            color.a = color.a - 0.01f;
+            if (color.a <= 0)
+            {
+                color.a = 0;
+                bubbleCounter = 0;
+                fridgeBubble.SetActive(!fridgeBubble);
+                fridgeBubbleText.SetActive(!fridgeBubbleText);
+            }
+        } else
+        {
+            color.a = 1f;
+        }
+
+        fridgeSprite.color = new Color(fridgeSprite.color.r, fridgeSprite.color.g, fridgeSprite.color.b, color.a);
+        bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, color.a);
+    }
     void DoTouch(Vector2 point)
     {
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(point), Vector2.zero);
         Object hitType = hit.transform.GetComponent<ObjectType>().type;
 
         // Find out how to do this with touching anything BUT the fridge.
-        if(hitType != Object.Fridge)
+        /*if(hitType != Object.Fridge)
         {
             fridgeBubble.SetActive(!fridgeBubble);
             fridgeBubbleText.SetActive(!fridgeBubbleText);
-        }
+        }*/
 
         Debug.Log(hitType);
         switch (hitType)
@@ -165,10 +205,20 @@ public class Kitsulope : ObjectType
                 save.Pet();
                 break;
             case Object.Fridge:
-                dialogueManager.StartDialogue(dialogue);
-                if (fridgeBubble.activeInHierarchy)
+                if (!fridgeBubble.activeInHierarchy)
+                {
+                    fridgeBubble.SetActive(fridgeBubble);
+                    fridgeBubbleText.SetActive(fridgeBubbleText);
+                    dialogueManager.StartDialogue(dialogue);
+                    color.a = 1;
+                } else if (fridgeBubble.activeInHierarchy && fridgeSprite.color.a == 1f)
                 {
                         save.Feed();
+                } else if(fridgeSprite.color.a < 1f && fridgeSprite.color.a > 0)
+                {
+                    fridgeSprite.color = new Color(fridgeSprite.color.r, fridgeSprite.color.g, fridgeSprite.color.b, 1f);
+                    bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
+                    bubbleCounter = 0;
                 }
                 break;
             case Object.Window:
