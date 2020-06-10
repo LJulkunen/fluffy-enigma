@@ -225,7 +225,7 @@ public class SaveSerial : MonoBehaviour
             {
                 hungerLvlToSave -= timeSpan.Hours / howManyHours;
             }
-            hungerLvlToSave -= timeSpan.Hours / howManyHours;
+            //hungerLvlToSave -= timeSpan.Hours / howManyHours;
             if (hungerLvlToSave >= maxHungerLvl)
             {
                 hungerLvlToSave = maxHungerLvl;

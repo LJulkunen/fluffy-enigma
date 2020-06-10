@@ -410,9 +410,10 @@ MonoBehaviour:
   maxPettingAnimationLength: 2.5
   feedingAnimationLength: 2.5
   maxFeedingAnimationLength: 2.5
-  chillingAnimationLength: 2.5
+  chillingAnimationLength: 5.7
   maxChillingAnimationLength: 2.5
   isChilling: 0
+  color: {r: 0, g: 0, b: 0, a: 0}
   maxBubbleCounter: 5
   bubbleCounter: 0
   rand: 0

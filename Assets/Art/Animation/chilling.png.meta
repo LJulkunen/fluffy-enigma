@@ -17,6 +17,27 @@ TextureImporter:
   - first:
       213: 7105836823179687252
     second: chilling_4
+  - first:
+      213: -836176295364260676
+    second: chilling_0
+  - first:
+      213: 8049531934006810392
+    second: chilling_1
+  - first:
+      213: 2249707151370508199
+    second: chilling_2
+  - first:
+      213: 2973928042848566655
+    second: chilling_3
+  - first:
+      213: -1188299523868167406
+    second: chilling_4
+  - first:
+      213: -4724846001713742403
+    second: chilling_5
+  - first:
+      213: 8819783042824298157
+    second: chilling_6
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -128,8 +149,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5f332897f6f3c3580800000000000000
-      internalID: -8846125820050000907
+      spriteID: cbc0631f61e4564f0800000000000000
+      internalID: -836176295364260676
       vertices: []
       indices: 
       edges: []
@@ -149,8 +170,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d51af93befc7a4f50800000000000000
-      internalID: 6866438015256863069
+      spriteID: 81793ae45aea5bf60800000000000000
+      internalID: 8049531934006810392
       vertices: []
       indices: 
       edges: []
@@ -170,8 +191,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 857eae6618b9cc6d0800000000000000
-      internalID: -2968827074264242344
+      spriteID: 7a758161cb0983f10800000000000000
+      internalID: 2249707151370508199
       vertices: []
       indices: 
       edges: []
@@ -191,8 +212,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 558210f1e553e0b20800000000000000
-      internalID: 3102475871668217941
+      spriteID: f7dbf856cc3854920800000000000000
+      internalID: 2973928042848566655
       vertices: []
       indices: 
       edges: []
@@ -212,8 +233,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 455f38d31f00d9260800000000000000
-      internalID: 7105836823179687252
+      spriteID: 213721101ef428fe0800000000000000
+      internalID: -1188299523868167406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chilling_5
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dbd7d614899fd6eb0800000000000000
+      internalID: -4724846001713742403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chilling_6
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dae5e8fb2f9266a70800000000000000
+      internalID: 8819783042824298157
       vertices: []
       indices: 
       edges: []
