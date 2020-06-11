@@ -79,7 +79,7 @@ public class Kitsulope : ObjectType
         FridgeBubbleCounter();
         rand = Random.Range(0.0f, 100.0f);
 
-        if (rand > 99.9f)
+        if (rand > 99.6f)
         {
             isChilling = true;
         }
@@ -89,6 +89,7 @@ public class Kitsulope : ObjectType
         animator.SetBool("IsFeeding", save.isFeeding);
         animator.SetInteger("Direction", direction);
         animator.SetBool("IsChilling", isChilling);
+        animator.SetFloat("Rand", rand);
 
         if (save.isPetting)
         {
