@@ -282,7 +282,6 @@ public class SaveSerial : MonoBehaviour
         }
     }
 
-    // TODO: This would also be an appropriate plase for the timer later.
     void Update()
     {
         timer += Time.deltaTime;

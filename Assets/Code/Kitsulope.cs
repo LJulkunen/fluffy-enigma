@@ -11,32 +11,48 @@ using TMPro;
 [RequireComponent(typeof(SaveSerial))]
 public class Kitsulope : ObjectType
 {
-    [SerializeField]
-    private float xMin = -0.9F;
-
-    [SerializeField]
-    private float xMax = 0.9F;
-
-    [SerializeField]
-    float speed = 3F;
-
-    int direction = 1;
-    float counter = 0;
 
     SaveSerial save;
 
+    #region MovementVariables
+    [SerializeField]
+    private float xMin = -0.9F;
+    [SerializeField]
+    private float xMax = 0.9F;
+    [SerializeField]
+    float speed = 3F;
+    int direction = 1;
+    float counter = 0;
+    #endregion
+    // TODO: Copypaste & modify these for Exit button.
+    #region FridgeBubble
     Dialogue dialogue;
     DialogueManager dialogueManager;
-
-    public Animator animator;
-
     public GameObject fridgeBubble;
     public GameObject fridgeBubbleText;
-
+    public Color color;
     public TextMeshProUGUI bubbleText;
-
     public SpriteRenderer fridgeSprite;
+    [SerializeField]
+    public float maxBubbleCounter = 10f;
+    public float bubbleCounter = 0f;
+    #endregion
 
+    #region ExitBubble
+    ExitDialogue exitDialogue;
+    ExitDialogueManager exitDialogueManager;
+    public GameObject exitBubble;
+    public GameObject exitBubbleTextObject;
+    public Color exitColor;
+    public TextMeshProUGUI exitBubbleText;
+    public SpriteRenderer exitSprite;
+    [SerializeField]
+    public float maxExitBubbleCounter = 10f;
+    public float exitBubbleCounter = 0f;
+    #endregion
+
+    #region Animation
+    public Animator animator;
     [SerializeField]
     public float pettingAnimationLength = 2.5f;
     public float maxPettingAnimationLength = 2.5f;
@@ -50,38 +66,43 @@ public class Kitsulope : ObjectType
     public float maxChillingAnimationLength = 2.5f;
 
     public bool isChilling;
+    #endregion
 
-    public Color color;
-    
-    [SerializeField]
-    public float maxBubbleCounter = 10f;
-    public float bubbleCounter = 0f;
+    private int clickCount;
+    public float rand;
 
     private void Start()
     {
         save = GetComponent<SaveSerial>();
         dialogue = GetComponent<Dialogue>();
         dialogueManager = GetComponent<DialogueManager>();
+        exitDialogue = GetComponent<ExitDialogue>();
+        exitDialogueManager = GetComponent<ExitDialogueManager>();
         maxPettingAnimationLength = pettingAnimationLength;
         maxFeedingAnimationLength = feedingAnimationLength;
         maxChillingAnimationLength = chillingAnimationLength;
         color = fridgeSprite.color;
+        exitColor = exitSprite.color;
         bubbleText = fridgeBubbleText.GetComponent<TextMeshProUGUI>();
+        exitBubbleText = exitBubbleText.GetComponent<TextMeshProUGUI>();
     }
-
-    private int clickCount;
-
-
-    public float rand;
 
     void Update()
     {
         FridgeBubbleCounter();
-        rand = Random.Range(0.0f, 100.0f);
+        ExitBubbleCounter();
 
-        if (rand > 99.6f)
+        if (!save.isFeeding || !save.isPetting)
         {
-            isChilling = true;
+            rand = Random.Range(0.0f, 100.0f);
+
+            if (rand > 99.6f)
+            {
+                isChilling = true;
+            }
+        } else
+        {
+            isChilling = false;
         }
         
         animator.SetInteger("Satisfaction", save.satisfiedLvlToSave);
@@ -187,18 +208,51 @@ public class Kitsulope : ObjectType
         fridgeSprite.color = new Color(fridgeSprite.color.r, fridgeSprite.color.g, fridgeSprite.color.b, color.a);
         bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, color.a);
     }
+
+    void ExitBubbleCounter()
+    {
+        if (exitBubble.activeInHierarchy)
+        {
+            exitBubbleCounter += Time.deltaTime;
+        }
+
+        if (exitBubbleCounter >= maxExitBubbleCounter)
+        {
+            exitBubbleCounter = maxExitBubbleCounter;
+            exitColor.a = exitColor.a - 0.01f;
+            if (exitColor.a <= 0)
+            {
+                exitColor.a = 0;
+                exitBubbleCounter = 0;
+                exitBubble.SetActive(!exitBubble);
+                exitBubbleTextObject.SetActive(!exitBubbleTextObject);
+            }
+        }
+        else
+        {
+            exitColor.a = 1f;
+        }
+
+        exitSprite.color = new Color(exitSprite.color.r, exitSprite.color.g, exitSprite.color.b, exitColor.a);
+        exitBubbleText.color = new Color(exitBubbleText.color.r, exitBubbleText.color.g, exitBubbleText.color.b, exitColor.a);
+    }
     void DoTouch(Vector2 point)
     {
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(point), Vector2.zero);
         Object hitType = hit.transform.GetComponent<ObjectType>().type;
 
-        // Find out how to do this with touching anything BUT the fridge.
-        /*if(hitType != Object.Fridge)
+        // TODO: Probably useful when adding other bubbles. :D Use later.
+        if (hitType != Object.Fridge)
         {
             fridgeBubble.SetActive(!fridgeBubble);
             fridgeBubbleText.SetActive(!fridgeBubbleText);
-        }*/
+        } else if (hitType != Object.ExitButton)
+        {
+            exitBubble.SetActive(!exitBubble);
+            exitBubbleTextObject.SetActive(!exitBubbleTextObject);
+        }
 
+        // TODO: Copypaste & modify bubbles for Exit button.
         Debug.Log(hitType);
         switch (hitType)
         {
@@ -225,9 +279,22 @@ public class Kitsulope : ObjectType
             case Object.Window:
                 break;
             case Object.ExitButton:
-                if (Input.touchCount == 1)
+                if (!exitBubble.activeInHierarchy)
+                {
+                    exitBubble.SetActive(exitBubble);
+                    exitBubbleTextObject.SetActive(exitBubbleTextObject);
+                    exitDialogueManager.StartDialogue(exitDialogue);
+                    exitColor.a = 1;
+                }
+                else if (exitBubble.activeInHierarchy && exitSprite.color.a == 1f)
                 {
                     save.Exit();
+                }
+                else if (exitSprite.color.a < 1f && exitSprite.color.a > 0)
+                {
+                    exitSprite.color = new Color(exitSprite.color.r, exitSprite.color.g, exitSprite.color.b, 1f);
+                    exitBubbleText.color = new Color(exitBubbleText.color.r, exitBubbleText.color.g, exitBubbleText.color.b, 1f);
+                    exitBubbleCounter = 0;
                 }
                 break;
             default:
