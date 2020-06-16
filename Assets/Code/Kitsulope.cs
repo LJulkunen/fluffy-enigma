@@ -8,7 +8,6 @@ using System.Collections;
 using Random = UnityEngine.Random;
 using TMPro;
 
-[RequireComponent(typeof(SaveSerial))]
 public class Kitsulope : ObjectType
 {
 
@@ -73,7 +72,7 @@ public class Kitsulope : ObjectType
 
     private void Start()
     {
-        save = GetComponent<SaveSerial>();
+        save = FindObjectOfType<SaveSerial>();
         dialogue = GetComponent<Dialogue>();
         dialogueManager = GetComponent<DialogueManager>();
         exitDialogue = GetComponent<ExitDialogue>();
@@ -277,6 +276,7 @@ public class Kitsulope : ObjectType
                 }
                 break;
             case Object.Window:
+                save.ResetSave();
                 break;
             case Object.ExitButton:
                 if (!exitBubble.activeInHierarchy)

@@ -3,6 +3,7 @@ using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SaveSerial : MonoBehaviour
 {
@@ -37,16 +38,173 @@ public class SaveSerial : MonoBehaviour
     public bool isPetting;
     public bool isFeeding;
 
-    private void Start()
+    int daysReduction = 0;
+
+    private static SaveSerial save;
+
+    void Awake()
+    {
+        if (save != null && save != this)
+        {
+            Debug.LogError("Destroyed newer save");
+            Destroy(this);
+        } else
+        {
+            save = this;
+            DontDestroyOnLoad(save);
+        }
+    }
+
+    void Start()
     {
         maxCounter = howManyHours * 3600;
         hungerCounter = maxCounter;
         affectionCounter = maxCounter;
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            ResetSave();
+        }
+
         LoadGame();
         /*UpdateHungerLvl();
         UpdateAffectionLvl();
         UpdateSatisfiedLvl();*/
-        //Debug.Log(DateTime.Now);
+        //Debug.Log(DateTime.UtcNow);
+    }
+    void Update()
+    {
+        timer += Time.deltaTime;
+        float seconds = timer % 60;
+
+        if (seconds >= 1)
+        {
+            hungerCounter--;
+            affectionCounter--;
+            timer = 0;
+        }
+
+        if (hungerCounter <= 0)
+        {
+            hungerCounter = maxCounter;
+            hungerLvlToSave--;
+            satisfiedLvlToSave--;
+            UpdateSatisfiedLvl();
+            SaveGame();
+        }
+        if (affectionCounter <= 0)
+        {
+            affectionCounter = maxCounter;
+            affectionLvlToSave--;
+            satisfiedLvlToSave--;
+            UpdateSatisfiedLvl();
+            SaveGame();
+        }
+
+        // Make sure user is on Android platform
+        if (Application.platform == RuntimePlatform.Android)
+        {
+
+            // Check if Back was pressed this frame
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+
+                // Quit the application
+                Application.Quit();
+            }
+        }
+    }
+    // Might be useful with testing. Hide when you give a build tho.
+    void OnGUI()
+    {
+        if (isThisForJustMyTesting == true)
+        {
+            if (GUI.Button(new Rect(100, 50, 125, 50),
+                    "Reset Save Data"))
+                ResetSave();
+        }
+    }
+
+    public void CreateSave()
+    {
+        hungerLvlToSave = 3;
+        affectionLvlToSave = 3;
+        satisfiedLvlToSave = 3;
+        hungerTimeToSave = DateTime.UtcNow;
+        affectionTimeToSave = DateTime.UtcNow;
+        SaveGame();
+    }
+    public void DeleteSave()
+    {
+        if (File.Exists(Application.persistentDataPath
+                       + "/MySaveData.dat"))
+        {
+            File.Delete(Application.persistentDataPath
+                       + "/MySaveData.dat");
+        }
+    }
+    public void ResetSave()
+    {
+        DeleteSave();
+        CreateSave();
+        /*if (File.Exists(Application.persistentDataPath
+                      + "/MySaveData.dat"))
+        {
+            File.Delete(Application.persistentDataPath
+                              + "/MySaveData.dat");
+            hungerLvlToSave = 3;
+            affectionLvlToSave = 3;
+            satisfiedLvlToSave = 3;
+            hungerTimeToSave = DateTime.Now;
+            affectionTimeToSave = DateTime.Now;
+            Debug.Log("Data reset complete!");
+        }
+        else
+            Debug.LogError("No save data to delete.");*/
+    }
+    public void SaveGame()
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(Application.persistentDataPath
+                     + "/MySaveData.dat");
+        SaveData data = new SaveData();
+        data.savedHungerLvl = hungerLvlToSave;
+        data.savedAffectionLvl = affectionLvlToSave;
+        data.savedSatisfiedLvl = satisfiedLvlToSave;
+        data.savedHungerTime = hungerTimeToSave.Ticks;
+        data.savedAffectionTime = affectionTimeToSave.Ticks;
+        bf.Serialize(file, data);
+        file.Close();
+        Debug.Log("Game data (hunger & affection & satisfaction levels & related times) saved!");
+    }
+    void LoadGame()
+    {
+        if (File.Exists(Application.persistentDataPath
+                       + "/MySaveData.dat"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file =
+                       File.Open(Application.persistentDataPath
+                       + "/MySaveData.dat", FileMode.Open);
+            SaveData data = (SaveData)bf.Deserialize(file);
+            file.Close();
+            hungerLvlToSave = data.savedHungerLvl;
+            affectionLvlToSave = data.savedAffectionLvl;
+            satisfiedLvlToSave = data.savedSatisfiedLvl;
+            hungerTimeToSave = DateTime.FromBinary(data.savedHungerTime);
+            affectionTimeToSave = DateTime.FromBinary(data.savedAffectionTime);
+            Debug.Log("Game data loaded!");
+            UpdateHungerLvl();
+            UpdateAffectionLvl();
+            UpdateSatisfiedLvl();
+            data.savedHungerLvl = hungerLvlToSave;
+            data.savedAffectionTime = affectionTimeToSave.Ticks;
+            data.savedHungerTime = hungerTimeToSave.Ticks;
+            data.savedSatisfiedLvl = satisfiedLvlToSave;
+        }
+        else
+        {
+            //Debug.LogError("There is no save data!");
+        }
     }
 
     public void Feed()
@@ -98,66 +256,11 @@ public class SaveSerial : MonoBehaviour
         UpdateSatisfiedLvl();
     }
 
-    // Might be useful with testing. Hide when you give a build tho.
-    private void OnGUI()
-    {
-        if (isThisForJustMyTesting == true)
-        {
-            if (GUI.Button(new Rect(100, 50, 125, 50),
-                    "Reset Save Data"))
-                ResetData();
-        }
-    }
-
-    public void SaveGame()
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath
-                     + "/MySaveData.dat");
-        SaveData data = new SaveData();
-        data.savedHungerLvl = hungerLvlToSave;
-        data.savedAffectionLvl = affectionLvlToSave;
-        data.savedSatisfiedLvl = satisfiedLvlToSave;
-        data.savedHungerTime = hungerTimeToSave;
-        data.savedAffectionTime = affectionTimeToSave;
-        bf.Serialize(file, data);
-        file.Close();
-        Debug.Log("Game data (hunger & affection & satisfaction levels & related times) saved!");
-    }
-    void LoadGame()
-    {
-        if (File.Exists(Application.persistentDataPath
-                       + "/MySaveData.dat"))
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file =
-                       File.Open(Application.persistentDataPath
-                       + "/MySaveData.dat", FileMode.Open);
-            SaveData data = (SaveData)bf.Deserialize(file);
-            file.Close();
-            hungerLvlToSave = data.savedHungerLvl;
-            affectionLvlToSave = data.savedAffectionLvl;
-            satisfiedLvlToSave = data.savedSatisfiedLvl;
-            hungerTimeToSave = data.savedHungerTime;
-            affectionTimeToSave = data.savedAffectionTime;
-            Debug.Log("Game data loaded!");
-            UpdateHungerLvl();
-            UpdateAffectionLvl();
-            UpdateSatisfiedLvl();
-            data.savedHungerLvl = hungerLvlToSave;
-            data.savedAffectionTime = affectionTimeToSave;
-            data.savedSatisfiedLvl = satisfiedLvlToSave;
-        }
-        else
-            Debug.LogError("There is no save data!");
-    }
-
-    int daysReduction = 0;
     void UpdateAffectionLvl()
     {
-        TimeSpan timeSpan = DateTime.Now - Convert.ToDateTime(affectionTimeToSave);
+        TimeSpan timeSpan = DateTime.UtcNow - Convert.ToDateTime(affectionTimeToSave);
         
-        Debug.Log("Time was: " + Convert.ToDateTime(affectionTimeToSave) + " and time is: " + DateTime.Now);
+        Debug.Log("Time was: " + Convert.ToDateTime(affectionTimeToSave) + " and time is: " + DateTime.UtcNow);
         Debug.Log("It's been this long since last petting: " + timeSpan);
         Debug.Log("Affection level was: " + affectionLvlToSave);
         if (affectionLvlToSave > 0)
@@ -219,8 +322,8 @@ public class SaveSerial : MonoBehaviour
     }
     void UpdateHungerLvl()
     {
-        TimeSpan timeSpan = DateTime.Now - Convert.ToDateTime(hungerTimeToSave);
-        Debug.Log("Time was: " + Convert.ToDateTime(hungerTimeToSave) + " and time is: " + DateTime.Now);
+        TimeSpan timeSpan = DateTime.UtcNow - Convert.ToDateTime(hungerTimeToSave);
+        Debug.Log("Time was: " + Convert.ToDateTime(hungerTimeToSave) + " and time is: " + DateTime.UtcNow);
         Debug.Log("This much time has passed since last offering..." + timeSpan);
         Debug.Log("Hunger level was: " + hungerLvlToSave); 
 
@@ -262,8 +365,7 @@ public class SaveSerial : MonoBehaviour
         }
         Debug.Log("Hunger level is: " + hungerLvlToSave);
     }
-
-    private void UpdateSatisfiedLvl()
+    void UpdateSatisfiedLvl()
     {
         if (hungerLvlToSave == maxHungerLvl && affectionLvlToSave == maxAffectionLvl)
         {
@@ -300,81 +402,22 @@ public class SaveSerial : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        timer += Time.deltaTime;
-        float seconds = timer % 60;
-
-        if (seconds >= 1)
-        {
-            hungerCounter--;
-            affectionCounter--;
-            timer = 0;
-        }
-
-        if (hungerCounter <= 0)
-        {
-            hungerCounter = maxCounter;
-            hungerLvlToSave--;
-            satisfiedLvlToSave--;
-            UpdateSatisfiedLvl();
-            SaveGame();
-        }
-        if (affectionCounter <= 0)
-        {
-            affectionCounter = maxCounter;
-            affectionLvlToSave--;
-            satisfiedLvlToSave--;
-            UpdateSatisfiedLvl();
-            SaveGame();
-        }
-
-        // Make sure user is on Android platform
-        if (Application.platform == RuntimePlatform.Android)
-        {
-
-            // Check if Back was pressed this frame
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-
-                // Quit the application
-                Application.Quit();
-            }
-        }
-    }
-
     public void Exit()
     {
+        SaveGame();
         Application.Quit();
-    }
-
-    void ResetData()
-    {
-        if (File.Exists(Application.persistentDataPath
-                      + "/MySaveData.dat"))
-        {
-            File.Delete(Application.persistentDataPath
-                              + "/MySaveData.dat");
-            hungerLvlToSave = 3;
-            affectionLvlToSave = 3;
-            satisfiedLvlToSave = 3;
-            hungerTimeToSave = DateTime.Now;
-            affectionTimeToSave = DateTime.Now;
-            Debug.Log("Data reset complete!");
-        }
-        else
-            Debug.LogError("No save data to delete.");
     }
 }
 
 [Serializable]
 class SaveData
 {
+
     public int savedHungerLvl;
-    public DateTime savedHungerTime;
+    public long savedHungerTime;
 
     public int savedAffectionLvl;
-    public DateTime savedAffectionTime;
+    public long savedAffectionTime;
 
     public int savedSatisfiedLvl;
 }
