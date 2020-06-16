@@ -9,12 +9,12 @@ public class SaveSerial : MonoBehaviour
     [SerializeField]
     public int maxHungerLvl = 4;
     public int hungerLvlToSave = 0;
-    String timeToSave;
+    DateTime hungerTimeToSave;
 
     [SerializeField]
     public int maxAffectionLvl = 4;
     public int affectionLvlToSave = 0;
-    String affectionTimeToSave;
+    DateTime affectionTimeToSave;
 
     [SerializeField]
     public int maxSatisfiedLvl = 4;
@@ -67,7 +67,7 @@ public class SaveSerial : MonoBehaviour
             hungerLvlToSave++;
             hungerCounter = maxCounter;
             Debug.Log("Hunger level is: " + hungerLvlToSave);
-            timeToSave = DateTime.Now.ToLongDateString();
+            hungerTimeToSave = DateTime.Now;
             SaveGame();
         }
 
@@ -91,7 +91,7 @@ public class SaveSerial : MonoBehaviour
             affectionLvlToSave++;
             affectionCounter = maxCounter;
             Debug.Log("Affection level is: " + affectionLvlToSave);
-            affectionTimeToSave = DateTime.Now.ToLongDateString();
+            affectionTimeToSave = DateTime.Now;
             SaveGame();
         }
 
@@ -118,7 +118,7 @@ public class SaveSerial : MonoBehaviour
         data.savedHungerLvl = hungerLvlToSave;
         data.savedAffectionLvl = affectionLvlToSave;
         data.savedSatisfiedLvl = satisfiedLvlToSave;
-        data.savedTime = timeToSave;
+        data.savedHungerTime = hungerTimeToSave;
         data.savedAffectionTime = affectionTimeToSave;
         bf.Serialize(file, data);
         file.Close();
@@ -138,7 +138,7 @@ public class SaveSerial : MonoBehaviour
             hungerLvlToSave = data.savedHungerLvl;
             affectionLvlToSave = data.savedAffectionLvl;
             satisfiedLvlToSave = data.savedSatisfiedLvl;
-            timeToSave = data.savedTime;
+            hungerTimeToSave = data.savedHungerTime;
             affectionTimeToSave = data.savedAffectionTime;
             Debug.Log("Game data loaded!");
             UpdateHungerLvl();
@@ -219,8 +219,8 @@ public class SaveSerial : MonoBehaviour
     }
     void UpdateHungerLvl()
     {
-        TimeSpan timeSpan = DateTime.Now - Convert.ToDateTime(timeToSave);
-        Debug.Log("Time was: " + Convert.ToDateTime(timeToSave) + " and time is: " + DateTime.Now);
+        TimeSpan timeSpan = DateTime.Now - Convert.ToDateTime(hungerTimeToSave);
+        Debug.Log("Time was: " + Convert.ToDateTime(hungerTimeToSave) + " and time is: " + DateTime.Now);
         Debug.Log("This much time has passed since last offering..." + timeSpan);
         Debug.Log("Hunger level was: " + hungerLvlToSave); 
 
@@ -358,8 +358,8 @@ public class SaveSerial : MonoBehaviour
             hungerLvlToSave = 3;
             affectionLvlToSave = 3;
             satisfiedLvlToSave = 3;
-            timeToSave = "";
-            affectionTimeToSave = "";
+            hungerTimeToSave = DateTime.Now;
+            affectionTimeToSave = DateTime.Now;
             Debug.Log("Data reset complete!");
         }
         else
@@ -371,10 +371,10 @@ public class SaveSerial : MonoBehaviour
 class SaveData
 {
     public int savedHungerLvl;
-    public String savedTime;
+    public DateTime savedHungerTime;
 
     public int savedAffectionLvl;
-    public String savedAffectionTime;
+    public DateTime savedAffectionTime;
 
     public int savedSatisfiedLvl;
 }
