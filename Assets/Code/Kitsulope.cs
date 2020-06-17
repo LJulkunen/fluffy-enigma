@@ -12,6 +12,8 @@ public class Kitsulope : ObjectType
 {
 
     SaveSerial save;
+    public GameObject fridge;
+    public GameObject exitButton;
 
     #region MovementVariables
     [SerializeField]
@@ -23,11 +25,9 @@ public class Kitsulope : ObjectType
     int direction = 1;
     float counter = 0;
     #endregion
-    // TODO: Copypaste & modify these for Exit button.
-    #region FridgeBubble
-    public GameObject fridge;
+
     public Dialogue dialogue;
-    public DialogueManager dialogueManager;
+    DialogueManager dialogueManager;
     public GameObject fridgeBubbleObject;
     public GameObject fridgeBubbleText;
     public Color color;
@@ -36,8 +36,8 @@ public class Kitsulope : ObjectType
     [SerializeField]
     public float maxBubbleCounter = 10f;
     public float bubbleCounter = 0f;
-    #endregion
 
+    
     #region ExitBubble
     /*ExitDialogue exitDialogue;
     ExitDialogueManager exitDialogueManager;
@@ -75,9 +75,8 @@ public class Kitsulope : ObjectType
     {
         save = FindObjectOfType<SaveSerial>();
         dialogue = fridge.GetComponent<Dialogue>();
-        dialogueManager = fridge.GetComponent<DialogueManager>();
-        //exitDialogue = GetComponent<ExitDialogue>();
-        //exitDialogueManager = GetComponent<ExitDialogueManager>();
+        dialogueManager = GetComponent<DialogueManager>();
+
         maxPettingAnimationLength = pettingAnimationLength;
         maxFeedingAnimationLength = feedingAnimationLength;
         maxChillingAnimationLength = chillingAnimationLength;
@@ -242,7 +241,6 @@ public class Kitsulope : ObjectType
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(point), Vector2.zero);
         Object hitType = hit.transform.GetComponent<ObjectType>().type;
 
-        // TODO: Probably useful when adding other bubbles. :D Use later.
         if (hitType != Object.Fridge)
         {
             fridgeBubbleObject.SetActive(!fridgeBubbleObject);
@@ -253,7 +251,6 @@ public class Kitsulope : ObjectType
             exitBubbleTextObject.SetActive(!exitBubbleTextObject);*/
         }
 
-        // TODO: Copypaste & modify bubbles for Exit button.
         Debug.Log(hitType);
         switch (hitType)
         {
