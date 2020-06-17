@@ -225,7 +225,7 @@ public class SaveSerial : MonoBehaviour
             hungerLvlToSave++;
             hungerCounter = maxCounter;
             Debug.Log("Hunger level is: " + hungerLvlToSave);
-            hungerTimeToSave = DateTime.Now;
+            hungerTimeToSave = DateTime.UtcNow;
             SaveGame();
         }
 
@@ -249,7 +249,7 @@ public class SaveSerial : MonoBehaviour
             affectionLvlToSave++;
             affectionCounter = maxCounter;
             Debug.Log("Affection level is: " + affectionLvlToSave);
-            affectionTimeToSave = DateTime.Now;
+            affectionTimeToSave = DateTime.UtcNow;
             SaveGame();
         }
 
@@ -268,7 +268,10 @@ public class SaveSerial : MonoBehaviour
             if (timeSpan.Days > 0)
             {
                 daysReduction = (timeSpan.Days * 24) / howManyHours;
+                float affectionCounterReduction = (float) (timeSpan.TotalDays * 24 / howManyHours) * 3600;
+                Debug.Log(affectionCounterReduction);
                 affectionLvlToSave -= daysReduction;
+                affectionCounter -= affectionCounterReduction;
                 Debug.Log("What?! You've ignored the pet for over a day... :( Here's how much will be added to stacks lowering: " + daysReduction);
                 Debug.Log("Amount decreased should be: " + daysReduction);
             }
