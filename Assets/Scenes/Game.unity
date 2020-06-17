@@ -2987,4 +2987,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - '    Should I exit? Tap to confirm.'
+  - "\tShould I exit? \n\tTap to confirm."
