@@ -190,7 +190,7 @@ GameObject:
   - component: {fileID: 119697652}
   - component: {fileID: 119697651}
   m_Layer: 5
-  m_Name: ExitDialogue
+  m_Name: ExitDialoguePlacement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -383,10 +383,6 @@ GameObject:
   - component: {fileID: 299115867}
   - component: {fileID: 299115869}
   - component: {fileID: 299115870}
-  - component: {fileID: 299115872}
-  - component: {fileID: 299115871}
-  - component: {fileID: 299115873}
-  - component: {fileID: 299115874}
   m_Layer: 0
   m_Name: Kitsulope
   m_TagString: Untagged
@@ -474,20 +470,16 @@ MonoBehaviour:
   xMin: -1
   xMax: 1
   speed: 2.6
-  fridgeBubble: {fileID: 471360555}
+  fridge: {fileID: 1197394779}
+  dialogue: {fileID: 1197394784}
+  dialogueManager: {fileID: 1197394783}
+  fridgeBubbleObject: {fileID: 471360555}
   fridgeBubbleText: {fileID: 1625694126}
   color: {r: 0, g: 0, b: 0, a: 0}
   bubbleText: {fileID: 1625694128}
   fridgeSprite: {fileID: 471360557}
   maxBubbleCounter: 5
   bubbleCounter: 0
-  exitBubble: {fileID: 1705576615}
-  exitBubbleTextObject: {fileID: 119697649}
-  exitColor: {r: 0, g: 0, b: 0, a: 0}
-  exitBubbleText: {fileID: 119697651}
-  exitSprite: {fileID: 1705576617}
-  maxExitBubbleCounter: 5
-  exitBubbleCounter: 0
   animator: {fileID: 299115870}
   pettingAnimationLength: 5.5
   maxPettingAnimationLength: 2.5
@@ -532,70 +524,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &299115871
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 299115864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 997df7e5b63e3e741ab90784516493b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueText: {fileID: 1625694128}
---- !u!114 &299115872
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 299115864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 340e5376436f19c46abe98e07a053f1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sentences:
-  - 'Should I feed my pet?
-
-    Tap fridge again to confrim.'
-  - 
-  - 
-  - 
---- !u!114 &299115873
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 299115864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ec0055f49ed22a44b477c956008c45f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sentences:
-  - 'Should I exit?
-
-    Tap again to confirm.'
-  - 
-  - 
-  - 
---- !u!114 &299115874
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 299115864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b5b609412029904aa0377614a5e4c27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueText: {fileID: 119697651}
 --- !u!1 &471360555
 GameObject:
   m_ObjectHideFlags: 0
@@ -2195,8 +2123,8 @@ GameObject:
   - component: {fileID: 1197394780}
   - component: {fileID: 1197394781}
   - component: {fileID: 1197394782}
-  - component: {fileID: 1197394783}
   - component: {fileID: 1197394784}
+  - component: {fileID: 1197394783}
   m_Layer: 0
   m_Name: Fridge
   m_TagString: Untagged
@@ -2266,10 +2194,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1197394779}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c79ecfe2352667458f8d116d64b6718, type: 3}
+  m_Script: {fileID: 11500000, guid: 997df7e5b63e3e741ab90784516493b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogue: {fileID: 1197394784}
+  dialogueText: {fileID: 1625694128}
 --- !u!114 &1197394784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2298,7 +2226,7 @@ GameObject:
   - component: {fileID: 1625694129}
   - component: {fileID: 1625694128}
   m_Layer: 5
-  m_Name: Dialogue
+  m_Name: FridgeTextPlacement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3223,6 +3151,7 @@ GameObject:
   - component: {fileID: 2145421759}
   - component: {fileID: 2145421760}
   - component: {fileID: 2145421761}
+  - component: {fileID: 2145421762}
   m_Layer: 0
   m_Name: ExitButton
   m_TagString: Untagged
@@ -3283,3 +3212,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 4
+--- !u!114 &2145421762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2145421758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 340e5376436f19c46abe98e07a053f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sentences:
+  - Should I exit? Tap to confirm.

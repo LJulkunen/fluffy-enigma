@@ -25,9 +25,10 @@ public class Kitsulope : ObjectType
     #endregion
     // TODO: Copypaste & modify these for Exit button.
     #region FridgeBubble
-    Dialogue dialogue;
-    DialogueManager dialogueManager;
-    public GameObject fridgeBubble;
+    public GameObject fridge;
+    public Dialogue dialogue;
+    public DialogueManager dialogueManager;
+    public GameObject fridgeBubbleObject;
     public GameObject fridgeBubbleText;
     public Color color;
     public TextMeshProUGUI bubbleText;
@@ -38,7 +39,7 @@ public class Kitsulope : ObjectType
     #endregion
 
     #region ExitBubble
-    ExitDialogue exitDialogue;
+    /*ExitDialogue exitDialogue;
     ExitDialogueManager exitDialogueManager;
     public GameObject exitBubble;
     public GameObject exitBubbleTextObject;
@@ -47,7 +48,7 @@ public class Kitsulope : ObjectType
     public SpriteRenderer exitSprite;
     [SerializeField]
     public float maxExitBubbleCounter = 10f;
-    public float exitBubbleCounter = 0f;
+    public float exitBubbleCounter = 0f;*/
     #endregion
 
     #region Animation
@@ -73,23 +74,23 @@ public class Kitsulope : ObjectType
     private void Start()
     {
         save = FindObjectOfType<SaveSerial>();
-        dialogue = GetComponent<Dialogue>();
-        dialogueManager = GetComponent<DialogueManager>();
-        exitDialogue = GetComponent<ExitDialogue>();
-        exitDialogueManager = GetComponent<ExitDialogueManager>();
+        dialogue = fridge.GetComponent<Dialogue>();
+        dialogueManager = fridge.GetComponent<DialogueManager>();
+        //exitDialogue = GetComponent<ExitDialogue>();
+        //exitDialogueManager = GetComponent<ExitDialogueManager>();
         maxPettingAnimationLength = pettingAnimationLength;
         maxFeedingAnimationLength = feedingAnimationLength;
         maxChillingAnimationLength = chillingAnimationLength;
         color = fridgeSprite.color;
-        exitColor = exitSprite.color;
+        //exitColor = exitSprite.color;
         bubbleText = fridgeBubbleText.GetComponent<TextMeshProUGUI>();
-        exitBubbleText = exitBubbleText.GetComponent<TextMeshProUGUI>();
+        //exitBubbleText = exitBubbleText.GetComponent<TextMeshProUGUI>();
     }
 
     void Update()
     {
         FridgeBubbleCounter();
-        ExitBubbleCounter();
+        //ExitBubbleCounter();
 
         if (!save.isFeeding || !save.isPetting)
         {
@@ -183,7 +184,7 @@ public class Kitsulope : ObjectType
 
     void FridgeBubbleCounter()
     {
-        if (fridgeBubble.activeInHierarchy)
+        if (fridgeBubbleObject.activeInHierarchy)
         {
             bubbleCounter += Time.deltaTime;
         }
@@ -196,7 +197,7 @@ public class Kitsulope : ObjectType
             {
                 color.a = 0;
                 bubbleCounter = 0;
-                fridgeBubble.SetActive(!fridgeBubble);
+                fridgeBubbleObject.SetActive(!fridgeBubbleObject);
                 fridgeBubbleText.SetActive(!fridgeBubbleText);
             }
         } else
@@ -208,7 +209,7 @@ public class Kitsulope : ObjectType
         bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, color.a);
     }
 
-    void ExitBubbleCounter()
+    /*void ExitBubbleCounter()
     {
         if (exitBubble.activeInHierarchy)
         {
@@ -234,7 +235,8 @@ public class Kitsulope : ObjectType
 
         exitSprite.color = new Color(exitSprite.color.r, exitSprite.color.g, exitSprite.color.b, exitColor.a);
         exitBubbleText.color = new Color(exitBubbleText.color.r, exitBubbleText.color.g, exitBubbleText.color.b, exitColor.a);
-    }
+    }*/
+
     void DoTouch(Vector2 point)
     {
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(point), Vector2.zero);
@@ -243,12 +245,12 @@ public class Kitsulope : ObjectType
         // TODO: Probably useful when adding other bubbles. :D Use later.
         if (hitType != Object.Fridge)
         {
-            fridgeBubble.SetActive(!fridgeBubble);
+            fridgeBubbleObject.SetActive(!fridgeBubbleObject);
             fridgeBubbleText.SetActive(!fridgeBubbleText);
         } else if (hitType != Object.ExitButton)
         {
-            exitBubble.SetActive(!exitBubble);
-            exitBubbleTextObject.SetActive(!exitBubbleTextObject);
+            /*exitBubble.SetActive(!exitBubble);
+            exitBubbleTextObject.SetActive(!exitBubbleTextObject);*/
         }
 
         // TODO: Copypaste & modify bubbles for Exit button.
@@ -259,13 +261,13 @@ public class Kitsulope : ObjectType
                 save.Pet();
                 break;
             case Object.Fridge:
-                if (!fridgeBubble.activeInHierarchy)
+                if (!fridgeBubbleObject.activeInHierarchy)
                 {
-                    fridgeBubble.SetActive(fridgeBubble);
+                    fridgeBubbleObject.SetActive(fridgeBubbleObject);
                     fridgeBubbleText.SetActive(fridgeBubbleText);
                     dialogueManager.StartDialogue(dialogue);
                     color.a = 1;
-                } else if (fridgeBubble.activeInHierarchy && fridgeSprite.color.a == 1f)
+                } else if (fridgeBubbleObject.activeInHierarchy && fridgeSprite.color.a == 1f)
                 {
                         save.Feed();
                 } else if(fridgeSprite.color.a < 1f && fridgeSprite.color.a > 0)
@@ -279,7 +281,7 @@ public class Kitsulope : ObjectType
                 save.ResetSave();
                 break;
             case Object.ExitButton:
-                if (!exitBubble.activeInHierarchy)
+                /*if (!exitBubble.activeInHierarchy)
                 {
                     exitBubble.SetActive(exitBubble);
                     exitBubbleTextObject.SetActive(exitBubbleTextObject);
@@ -295,7 +297,7 @@ public class Kitsulope : ObjectType
                     exitSprite.color = new Color(exitSprite.color.r, exitSprite.color.g, exitSprite.color.b, 1f);
                     exitBubbleText.color = new Color(exitBubbleText.color.r, exitBubbleText.color.g, exitBubbleText.color.b, 1f);
                     exitBubbleCounter = 0;
-                }
+                }*/
                 break;
             default:
                 Debug.LogWarning("Blep");
