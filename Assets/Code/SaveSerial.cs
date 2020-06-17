@@ -62,7 +62,7 @@ public class SaveSerial : MonoBehaviour
         affectionCounter = maxCounter;
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            ResetSave();
+            //ResetSave();
         }
 
         LoadGame();
