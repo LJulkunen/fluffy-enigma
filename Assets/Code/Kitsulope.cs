@@ -26,13 +26,14 @@ public class Kitsulope : ObjectType
     float counter = 0;
     #endregion
 
+    // TODO: When object touched Get component from object (atm fridge & exitButton).
     public Dialogue dialogue;
     DialogueManager dialogueManager;
-    public GameObject fridgeBubbleObject;
-    public GameObject fridgeBubbleText;
+    public GameObject bubbleObject;
+    public GameObject bubbleTextObject;
     public Color color;
     public TextMeshProUGUI bubbleText;
-    public SpriteRenderer fridgeSprite;
+    public SpriteRenderer bubbleSprite;
     [SerializeField]
     public float maxBubbleCounter = 10f;
     public float bubbleCounter = 0f;
@@ -74,15 +75,18 @@ public class Kitsulope : ObjectType
     private void Start()
     {
         save = FindObjectOfType<SaveSerial>();
+
+        // Probably just needs to be set as something at the start to avoid errors. 
+        // TODO: Set dialogue to be the dialogue of another object when needed later.
         dialogue = fridge.GetComponent<Dialogue>();
         dialogueManager = GetComponent<DialogueManager>();
 
         maxPettingAnimationLength = pettingAnimationLength;
         maxFeedingAnimationLength = feedingAnimationLength;
         maxChillingAnimationLength = chillingAnimationLength;
-        color = fridgeSprite.color;
+        color = bubbleSprite.color;
         //exitColor = exitSprite.color;
-        bubbleText = fridgeBubbleText.GetComponent<TextMeshProUGUI>();
+        bubbleText = bubbleTextObject.GetComponent<TextMeshProUGUI>();
         //exitBubbleText = exitBubbleText.GetComponent<TextMeshProUGUI>();
     }
 
@@ -183,7 +187,7 @@ public class Kitsulope : ObjectType
 
     void FridgeBubbleCounter()
     {
-        if (fridgeBubbleObject.activeInHierarchy)
+        if (bubbleObject.activeInHierarchy)
         {
             bubbleCounter += Time.deltaTime;
         }
@@ -196,15 +200,15 @@ public class Kitsulope : ObjectType
             {
                 color.a = 0;
                 bubbleCounter = 0;
-                fridgeBubbleObject.SetActive(!fridgeBubbleObject);
-                fridgeBubbleText.SetActive(!fridgeBubbleText);
+                bubbleObject.SetActive(!bubbleObject);
+                bubbleTextObject.SetActive(!bubbleTextObject);
             }
         } else
         {
             color.a = 1f;
         }
 
-        fridgeSprite.color = new Color(fridgeSprite.color.r, fridgeSprite.color.g, fridgeSprite.color.b, color.a);
+        bubbleSprite.color = new Color(bubbleSprite.color.r, bubbleSprite.color.g, bubbleSprite.color.b, color.a);
         bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, color.a);
     }
 
@@ -243,13 +247,15 @@ public class Kitsulope : ObjectType
 
         if (hitType != Object.Fridge)
         {
-            fridgeBubbleObject.SetActive(!fridgeBubbleObject);
-            fridgeBubbleText.SetActive(!fridgeBubbleText);
+            bubbleObject.SetActive(!bubbleObject);
+            bubbleTextObject.SetActive(!bubbleTextObject);
         } else if (hitType != Object.ExitButton)
         {
             /*exitBubble.SetActive(!exitBubble);
             exitBubbleTextObject.SetActive(!exitBubbleTextObject);*/
         }
+
+        //TODO: Figure out if there should be object types for bubbles.
 
         Debug.Log(hitType);
         switch (hitType)
@@ -258,18 +264,18 @@ public class Kitsulope : ObjectType
                 save.Pet();
                 break;
             case Object.Fridge:
-                if (!fridgeBubbleObject.activeInHierarchy)
+                if (!bubbleObject.activeInHierarchy)
                 {
-                    fridgeBubbleObject.SetActive(fridgeBubbleObject);
-                    fridgeBubbleText.SetActive(fridgeBubbleText);
+                    bubbleObject.SetActive(bubbleObject);
+                    bubbleTextObject.SetActive(bubbleTextObject);
                     dialogueManager.StartDialogue(dialogue);
                     color.a = 1;
-                } else if (fridgeBubbleObject.activeInHierarchy && fridgeSprite.color.a == 1f)
+                } else if (bubbleObject.activeInHierarchy && bubbleSprite.color.a == 1f)
                 {
                         save.Feed();
-                } else if(fridgeSprite.color.a < 1f && fridgeSprite.color.a > 0)
+                } else if(bubbleSprite.color.a < 1f && bubbleSprite.color.a > 0)
                 {
-                    fridgeSprite.color = new Color(fridgeSprite.color.r, fridgeSprite.color.g, fridgeSprite.color.b, 1f);
+                    bubbleSprite.color = new Color(bubbleSprite.color.r, bubbleSprite.color.g, bubbleSprite.color.b, 1f);
                     bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
                     bubbleCounter = 0;
                 }
