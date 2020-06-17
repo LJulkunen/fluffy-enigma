@@ -287,12 +287,12 @@ public class SaveSerial : MonoBehaviour
                 affectionLvlToSave -= daysReduction;
 
                 // Reducing affection counter.
-                affectionRemainder = (float) timeSpan.TotalDays - timeSpan.Days;
+                affectionRemainder = ((float) timeSpan.TotalDays - timeSpan.Days) * 24;
                 affectionModulo = timeSpan.Hours % howManyHours;
-                affectionCounterReduction = (affectionRemainder + affectionModulo) * 3600;
+                affectionCounterReduction = affectionRemainder + affectionModulo * 3600;
                 Debug.Log("Affection remainder:" + affectionRemainder);
                 Debug.Log("Modulo: " + affectionModulo);
-                UpdateAffectionCounter(true, affectionCounterReduction);
+                UpdateAffectionCounter(affectionCounterReduction);
             }
              else if (timeSpan.Days == 0 & timeSpan.Hours < 0)
             {
@@ -303,12 +303,12 @@ public class SaveSerial : MonoBehaviour
                 Debug.Log("Amount decreased should be: " + timeSpan.Hours / howManyHours);
 
                 // Reducing affection counter.
-                affectionRemainder = (float)timeSpan.TotalHours - timeSpan.Hours;
+                affectionRemainder = ((float)timeSpan.TotalHours - timeSpan.Hours) * 60;
                 affectionModulo = timeSpan.Hours % howManyHours;
-                affectionCounterReduction = (affectionRemainder + affectionModulo) * 3600;
+                affectionCounterReduction = affectionRemainder + affectionModulo * 3600;
                 Debug.Log("Affection remainder:" + affectionRemainder);
                 Debug.Log("Modulo: " + affectionModulo);
-                UpdateAffectionCounter(false, affectionCounterReduction);
+                UpdateAffectionCounter(affectionCounterReduction);
             }
             else
             {
@@ -319,12 +319,12 @@ public class SaveSerial : MonoBehaviour
                 Debug.Log("Amount decreased should be: " + timeSpan.Hours / howManyHours);
 
                 // Reducing affection counter.
-                affectionRemainder = (float)timeSpan.TotalHours - timeSpan.Hours;
+                affectionRemainder = ((float)timeSpan.TotalHours - timeSpan.Hours) * 60;
                 affectionModulo = timeSpan.Hours % howManyHours;
-                affectionCounterReduction = (affectionRemainder + affectionModulo) * 3600;
+                affectionCounterReduction = affectionRemainder + affectionModulo * 3600;
                 Debug.Log("Affection remainder:" + affectionRemainder);
                 Debug.Log("Modulo: " + affectionModulo);
-                UpdateAffectionCounter(false, affectionCounterReduction);
+                UpdateAffectionCounter(affectionCounterReduction);
             }
 
             if (affectionLvlToSave >= maxAffectionLvl)
@@ -363,12 +363,12 @@ public class SaveSerial : MonoBehaviour
                 Debug.Log("Amount decreased should be: " + daysReduction);
 
                 // Reducing hunger counter.
-                hungerRemainder = (float)timeSpan.TotalDays - timeSpan.Days;
+                hungerRemainder = ((float)timeSpan.TotalDays - timeSpan.Days) * 24;
                 hungerModulo = timeSpan.Hours % howManyHours;
-                hungerCounterReduction = (hungerRemainder + affectionModulo) * 3600;
+                hungerCounterReduction = hungerRemainder + hungerModulo * 3600;
                 Debug.Log("Hunger remainder:" + hungerRemainder);
                 Debug.Log("Modulo: " + hungerModulo);
-                UpdateHungerCounter(true, hungerCounterReduction);
+                UpdateHungerCounter(hungerCounterReduction);
             }
             else if (timeSpan.Days == 0 && timeSpan.Hours < 0)
             {
@@ -376,12 +376,12 @@ public class SaveSerial : MonoBehaviour
                 Debug.Log("Amount decreased should be: " + timeSpan.Hours / howManyHours);
 
                 // Reducing hunger counter.
-                hungerRemainder = (float)timeSpan.TotalHours - timeSpan.Hours;
+                hungerRemainder = ((float)timeSpan.TotalHours - timeSpan.Hours) * 60;
                 hungerModulo = timeSpan.Hours % howManyHours;
-                hungerCounterReduction = (hungerRemainder + affectionModulo) * 3600;
+                hungerCounterReduction = hungerRemainder + hungerModulo * 3600;
                 Debug.Log("Hunger remainder:" + hungerRemainder);
                 Debug.Log("Modulo: " + hungerModulo);
-                UpdateHungerCounter(false, hungerCounterReduction);
+                UpdateHungerCounter(hungerCounterReduction);
             }
             else
             {
@@ -389,12 +389,12 @@ public class SaveSerial : MonoBehaviour
                 Debug.Log("Amount decreased should be: " + timeSpan.Hours / howManyHours);
 
                 // Reducing hunger counter.
-                hungerRemainder = (float)timeSpan.TotalHours - timeSpan.Hours;
+                hungerRemainder = ((float)timeSpan.TotalHours - timeSpan.Hours) * 60;
                 hungerModulo = timeSpan.Hours % howManyHours;
-                hungerCounterReduction = (hungerRemainder + affectionModulo) * 3600;
+                hungerCounterReduction = hungerRemainder + hungerModulo * 3600;
                 Debug.Log("Hunger remainder:" + hungerRemainder);
                 Debug.Log("Modulo: " + hungerModulo);
-                UpdateHungerCounter(false, hungerCounterReduction);
+                UpdateHungerCounter(hungerCounterReduction);
             }
 
             if (hungerLvlToSave >= maxHungerLvl)
@@ -451,12 +451,12 @@ public class SaveSerial : MonoBehaviour
             satisfiedLvlToSave = 0;
         }
     }
-    void UpdateAffectionCounter(bool isItOverADay, float reduced)
+    void UpdateAffectionCounter(float reduced)
     {
         affectionCounter -= reduced;
         Debug.Log("Affection counter reduced by: " + reduced);
     }
-    void UpdateHungerCounter(bool isItOverADay, float reduced)
+    void UpdateHungerCounter(float reduced)
     {
         hungerCounter -= reduced;
         Debug.Log("Hunger counter reduced by: " + reduced);
