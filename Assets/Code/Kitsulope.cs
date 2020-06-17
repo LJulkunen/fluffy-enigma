@@ -14,6 +14,8 @@ public class Kitsulope : ObjectType
     SaveSerial save;
     public GameObject fridge;
     public GameObject exitButton;
+    public Sprite exitSprite;
+    public Sprite fridgeSprite;
 
     #region MovementVariables
     [SerializeField]
@@ -33,24 +35,10 @@ public class Kitsulope : ObjectType
     public GameObject bubbleTextObject;
     public Color color;
     public TextMeshProUGUI bubbleText;
-    public SpriteRenderer bubbleSprite;
+    public SpriteRenderer bubbleSpriteRenderer;
     [SerializeField]
     public float maxBubbleCounter = 10f;
     public float bubbleCounter = 0f;
-
-    
-    #region ExitBubble
-    /*ExitDialogue exitDialogue;
-    ExitDialogueManager exitDialogueManager;
-    public GameObject exitBubble;
-    public GameObject exitBubbleTextObject;
-    public Color exitColor;
-    public TextMeshProUGUI exitBubbleText;
-    public SpriteRenderer exitSprite;
-    [SerializeField]
-    public float maxExitBubbleCounter = 10f;
-    public float exitBubbleCounter = 0f;*/
-    #endregion
 
     #region Animation
     public Animator animator;
@@ -84,16 +72,14 @@ public class Kitsulope : ObjectType
         maxPettingAnimationLength = pettingAnimationLength;
         maxFeedingAnimationLength = feedingAnimationLength;
         maxChillingAnimationLength = chillingAnimationLength;
-        color = bubbleSprite.color;
-        //exitColor = exitSprite.color;
+        color = bubbleSpriteRenderer.color;
+
         bubbleText = bubbleTextObject.GetComponent<TextMeshProUGUI>();
-        //exitBubbleText = exitBubbleText.GetComponent<TextMeshProUGUI>();
     }
 
     void Update()
     {
-        FridgeBubbleCounter();
-        //ExitBubbleCounter();
+        BubbleCounter();
 
         if (!save.isFeeding || !save.isPetting)
         {
@@ -185,7 +171,7 @@ public class Kitsulope : ObjectType
         #endregion
     } 
 
-    void FridgeBubbleCounter()
+    void BubbleCounter()
     {
         if (bubbleObject.activeInHierarchy)
         {
@@ -208,37 +194,9 @@ public class Kitsulope : ObjectType
             color.a = 1f;
         }
 
-        bubbleSprite.color = new Color(bubbleSprite.color.r, bubbleSprite.color.g, bubbleSprite.color.b, color.a);
+        bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, color.a);
         bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, color.a);
     }
-
-    /*void ExitBubbleCounter()
-    {
-        if (exitBubble.activeInHierarchy)
-        {
-            exitBubbleCounter += Time.deltaTime;
-        }
-
-        if (exitBubbleCounter >= maxExitBubbleCounter)
-        {
-            exitBubbleCounter = maxExitBubbleCounter;
-            exitColor.a = exitColor.a - 0.01f;
-            if (exitColor.a <= 0)
-            {
-                exitColor.a = 0;
-                exitBubbleCounter = 0;
-                exitBubble.SetActive(!exitBubble);
-                exitBubbleTextObject.SetActive(!exitBubbleTextObject);
-            }
-        }
-        else
-        {
-            exitColor.a = 1f;
-        }
-
-        exitSprite.color = new Color(exitSprite.color.r, exitSprite.color.g, exitSprite.color.b, exitColor.a);
-        exitBubbleText.color = new Color(exitBubbleText.color.r, exitBubbleText.color.g, exitBubbleText.color.b, exitColor.a);
-    }*/
 
     void DoTouch(Vector2 point)
     {
@@ -251,8 +209,8 @@ public class Kitsulope : ObjectType
             bubbleTextObject.SetActive(!bubbleTextObject);
         } else if (hitType != Object.ExitButton)
         {
-            /*exitBubble.SetActive(!exitBubble);
-            exitBubbleTextObject.SetActive(!exitBubbleTextObject);*/
+            bubbleObject.SetActive(!bubbleObject);
+            bubbleTextObject.SetActive(!bubbleTextObject);
         }
 
         //TODO: Figure out if there should be object types for bubbles.
@@ -264,18 +222,21 @@ public class Kitsulope : ObjectType
                 save.Pet();
                 break;
             case Object.Fridge:
+                dialogue = fridge.GetComponent<Dialogue>();
                 if (!bubbleObject.activeInHierarchy)
                 {
+                    bubbleCounter = 0;
                     bubbleObject.SetActive(bubbleObject);
+                    bubbleSpriteRenderer.sprite = fridgeSprite;
                     bubbleTextObject.SetActive(bubbleTextObject);
                     dialogueManager.StartDialogue(dialogue);
                     color.a = 1;
-                } else if (bubbleObject.activeInHierarchy && bubbleSprite.color.a == 1f)
+                } else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f)
                 {
                         save.Feed();
-                } else if(bubbleSprite.color.a < 1f && bubbleSprite.color.a > 0)
+                } else if(bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0)
                 {
-                    bubbleSprite.color = new Color(bubbleSprite.color.r, bubbleSprite.color.g, bubbleSprite.color.b, 1f);
+                    bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
                     bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
                     bubbleCounter = 0;
                 }
@@ -284,23 +245,27 @@ public class Kitsulope : ObjectType
                 save.ResetSave();
                 break;
             case Object.ExitButton:
-                /*if (!exitBubble.activeInHierarchy)
+                dialogue = exitButton.GetComponent<Dialogue>();
+                
+                if (!bubbleObject.activeInHierarchy)
                 {
-                    exitBubble.SetActive(exitBubble);
-                    exitBubbleTextObject.SetActive(exitBubbleTextObject);
-                    exitDialogueManager.StartDialogue(exitDialogue);
-                    exitColor.a = 1;
+                    bubbleCounter = 0;
+                    bubbleObject.SetActive(bubbleObject);
+                    bubbleSpriteRenderer.sprite = exitSprite;
+                    bubbleTextObject.SetActive(bubbleTextObject);
+                    dialogueManager.StartDialogue(dialogue);
+                    color.a = 1;
                 }
-                else if (exitBubble.activeInHierarchy && exitSprite.color.a == 1f)
+                else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f)
                 {
-                    save.Exit();
+                    save.Feed();
                 }
-                else if (exitSprite.color.a < 1f && exitSprite.color.a > 0)
+                else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0)
                 {
-                    exitSprite.color = new Color(exitSprite.color.r, exitSprite.color.g, exitSprite.color.b, 1f);
-                    exitBubbleText.color = new Color(exitBubbleText.color.r, exitBubbleText.color.g, exitBubbleText.color.b, 1f);
-                    exitBubbleCounter = 0;
-                }*/
+                    bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
+                    bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
+                    bubbleCounter = 0;
+                }
                 break;
             default:
                 Debug.LogWarning("Blep");
