@@ -317,11 +317,11 @@ MonoBehaviour:
   xMax: 1
   speed: 2.6
   dialogue: {fileID: 1197394784}
-  fridgeBubbleObject: {fileID: 471360555}
-  fridgeBubbleText: {fileID: 1625694126}
+  bubbleObject: {fileID: 471360555}
+  bubbleTextObject: {fileID: 1625694126}
   color: {r: 0, g: 0, b: 0, a: 0}
   bubbleText: {fileID: 1625694128}
-  fridgeSprite: {fileID: 471360557}
+  bubbleSprite: {fileID: 471360557}
   maxBubbleCounter: 5
   bubbleCounter: 0
   animator: {fileID: 299115870}
