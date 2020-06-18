@@ -48,6 +48,23 @@ public class Intro : MonoBehaviour
         }
         else if (Input.GetMouseButtonDown(0))
         {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (!dialogueBoxObject.activeInHierarchy)
+                {
+                    dialogueBoxObject.SetActive(dialogueBoxObject);
+                    dialogueTextObject.SetActive(dialogueTextObject);
+                    dialogueManager.StartDialogue(dialogue);
+                }
+            }
+            else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count > 0 && Input.GetMouseButtonUp(0))
+            {
+                dialogueManager.DisplayNextSentence();
+            }
+            else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count == 0 && Input.GetMouseButtonUp(0))
+            {
+                LoadGameScene();
+            }
         }
     }
 

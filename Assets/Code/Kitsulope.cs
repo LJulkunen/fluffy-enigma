@@ -274,7 +274,7 @@ public class Kitsulope : ObjectType
                 #endregion
                 break;
             case Object.Window:
-                save.ResetSave();
+                //save.ResetSave();
                 break;
             case Object.ExitButton:
                 #region exitBubble

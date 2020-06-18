@@ -6,6 +6,8 @@ public class MenuManager : MonoBehaviour
     public GameObject flashText;
     private Touch theTouch;
 
+    public SaveSerial save;
+
     void Start()
     {
         InvokeRepeating("FlashTheText", 0f, 0.5f);
@@ -28,7 +30,13 @@ public class MenuManager : MonoBehaviour
 
     void LoadGameScene()
     {
-        SceneManager.LoadScene("Intro");
+        if (!save.isIntroOver)
+        {
+            SceneManager.LoadScene("Intro");
+        } else
+        {
+            SceneManager.LoadScene("Game");
+        }
     }
 
     void FlashTheText()

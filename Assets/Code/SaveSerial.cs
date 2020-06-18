@@ -52,6 +52,8 @@ public class SaveSerial : MonoBehaviour
 
     private static SaveSerial save;
 
+    public bool isIntroOver;
+
     void Awake()
     {
         if (save != null && save != this)
@@ -63,6 +65,22 @@ public class SaveSerial : MonoBehaviour
             save = this;
             DontDestroyOnLoad(save);
         }
+
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            //ResetSave();
+        }
+
+        if (SceneManager.GetActiveScene().buildIndex == 3)
+        {
+            isIntroOver = true;
+            SaveGame();
+        }
+
+        LoadGame();
+
+        Debug.Log("Intro over? " + isIntroOver);
+        Debug.Log(SceneManager.GetActiveScene().buildIndex);
     }
 
     void Start()
@@ -75,7 +93,16 @@ public class SaveSerial : MonoBehaviour
             //ResetSave();
         }
 
+        if (SceneManager.GetActiveScene().buildIndex == 3)
+        {
+            isIntroOver = true;
+            SaveGame();
+        }
+
         LoadGame();
+
+        Debug.Log("Intro over? " + isIntroOver);
+        Debug.Log(SceneManager.GetActiveScene().buildIndex);
 
         //Debug.Log(13 % 4);
         /*UpdateHungerLvl();
@@ -143,6 +170,7 @@ public class SaveSerial : MonoBehaviour
         satisfiedLvlToSave = 3;
         hungerTimeToSave = DateTime.UtcNow;
         affectionTimeToSave = DateTime.UtcNow;
+        isIntroOver = false;
         SaveGame();
     }
     public void DeleteSave()
@@ -184,6 +212,7 @@ public class SaveSerial : MonoBehaviour
         data.savedSatisfiedLvl = satisfiedLvlToSave;
         data.savedHungerTime = hungerTimeToSave.Ticks;
         data.savedAffectionTime = affectionTimeToSave.Ticks;
+        data.savedIsIntroOver = isIntroOver;
         bf.Serialize(file, data);
         file.Close();
         Debug.Log("Game data (hunger & affection & satisfaction levels & related times) saved!");
@@ -204,6 +233,7 @@ public class SaveSerial : MonoBehaviour
             satisfiedLvlToSave = data.savedSatisfiedLvl;
             hungerTimeToSave = DateTime.FromBinary(data.savedHungerTime);
             affectionTimeToSave = DateTime.FromBinary(data.savedAffectionTime);
+            isIntroOver = data.savedIsIntroOver;
             Debug.Log("Game data loaded!");
             UpdateHungerLvl();
             UpdateAffectionLvl();
@@ -480,6 +510,8 @@ class SaveData
     public long savedAffectionTime;
 
     public int savedSatisfiedLvl;
+
+    public bool savedIsIntroOver;
 }
 
 

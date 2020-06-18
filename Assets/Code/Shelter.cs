@@ -16,6 +16,8 @@ public class Shelter : MonoBehaviour
     public GameObject dialogueTextObject;
     public TextMeshProUGUI dialogueText;
 
+    float timer = 0;
+
     private void Start()
     {
         save = FindObjectOfType<SaveSerial>();
@@ -27,28 +29,53 @@ public class Shelter : MonoBehaviour
     }
     void Update()
     {
-        if (Input.touchCount > 0)
+        timer += Time.deltaTime;
+
+        if (timer > 2.5)
         {
-            if (Input.GetTouch(0).phase == TouchPhase.Began)
+            if (Input.touchCount > 0)
             {
-                if (!dialogueBoxObject.activeInHierarchy)
+                if (Input.GetTouch(0).phase == TouchPhase.Began)
                 {
-                    dialogueBoxObject.SetActive(dialogueBoxObject);
-                    dialogueTextObject.SetActive(dialogueTextObject);
-                    dialogueManager.StartDialogue(dialogue);
+                    if (!dialogueBoxObject.activeInHierarchy)
+                    {
+                        dialogueBoxObject.SetActive(dialogueBoxObject);
+                        dialogueTextObject.SetActive(dialogueTextObject);
+                        dialogueManager.StartDialogue(dialogue);
+                    }
+                }
+                else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+                {
+                    dialogueManager.DisplayNextSentence();
+                }
+                else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count == 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+                {
+                    LoadGameScene();
                 }
             }
-            else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+            else if (Input.GetMouseButtonDown(0))
             {
-                dialogueManager.DisplayNextSentence();
+                if (Input.touchCount > 0)
+                {
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        if (!dialogueBoxObject.activeInHierarchy)
+                        {
+                            dialogueBoxObject.SetActive(dialogueBoxObject);
+                            dialogueTextObject.SetActive(dialogueTextObject);
+                            dialogueManager.StartDialogue(dialogue);
+                        }
+                    }
+                    else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count > 0 && Input.GetMouseButtonUp(0))
+                    {
+                        dialogueManager.DisplayNextSentence();
+                    }
+                    else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count == 0 && Input.GetMouseButtonUp(0))
+                    {
+                        LoadGameScene();
+                    }
+                }
             }
-            else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count == 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
-            {
-                LoadGameScene();
-            }
-        }
-        else if (Input.GetMouseButtonDown(0))
-        {
         }
     }
 
