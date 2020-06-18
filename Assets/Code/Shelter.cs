@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Intro : MonoBehaviour
+public class Shelter : MonoBehaviour
 {
     SaveSerial save;
 
@@ -41,7 +41,8 @@ public class Intro : MonoBehaviour
             else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
             {
                 dialogueManager.DisplayNextSentence();
-            } else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count == 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+            }
+            else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count == 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
             {
                 LoadGameScene();
             }
@@ -53,6 +54,6 @@ public class Intro : MonoBehaviour
 
     void LoadGameScene()
     {
-        SceneManager.LoadScene("Shelter");
+        SceneManager.LoadScene("Game");
     }
 }
