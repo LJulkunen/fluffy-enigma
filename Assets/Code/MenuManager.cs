@@ -28,7 +28,7 @@ public class MenuManager : MonoBehaviour
 
     void LoadGameScene()
     {
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("Intro");
     }
 
     void FlashTheText()
