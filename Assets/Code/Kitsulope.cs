@@ -54,6 +54,7 @@ public class Kitsulope : ObjectType
     public float maxChillingAnimationLength = 2.5f;
 
     public bool isChilling;
+    public bool isPetNoticingYou;
     #endregion
 
     private int clickCount;
@@ -131,13 +132,10 @@ public class Kitsulope : ObjectType
 
         if (Input.touchCount > 0)
         {
-            if (Input.GetTouch(0).phase == TouchPhase.Began)
+            if (Input.GetTouch(0).phase == TouchPhase.Began || Input.GetTouch(0).phase == TouchPhase.Moved 
+             || Input.GetTouch(0).phase == TouchPhase.Stationary || Input.GetTouch(0).phase == TouchPhase.Ended)
             {
                 DoTouch(Input.GetTouch(0).position);
-                Debug.Log("You tapped.");
-            } else if (Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Stationary)
-            {
-                Debug.Log("Touch phase is Moved or Stationary.");
             }
         }
         else if (Input.GetMouseButtonDown(0))
@@ -202,14 +200,30 @@ public class Kitsulope : ObjectType
 
     void DoTouch(Vector2 point)
     {
-        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(point), Vector2.zero);
+        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(point), Vector2.down);
         Object hitType = hit.transform.GetComponent<ObjectType>().type;
 
         Debug.Log(hitType);
         switch (hitType)
         {
             case Object.Kitsulope:
-                save.Pet();
+                if (Input.GetTouch(0).phase == TouchPhase.Began)
+                {
+                    Debug.Log("You tapped.");
+                    isPetNoticingYou = true;
+                }
+
+                if ((Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Stationary) && isPetNoticingYou == true)
+                {
+                    Debug.Log("Touch phase is Moved or Stationary.");
+                    animator.SetBool("IsPetting", true);
+                }
+
+                if (Input.GetTouch(0).phase == TouchPhase.Ended)
+                {
+                    save.Pet();
+                    isPetNoticingYou = false;
+                }
                 break;
             case Object.Fridge:
                 #region fridgeBubble
@@ -256,6 +270,7 @@ public class Kitsulope : ObjectType
                 #region exitBubble
                 dialogue = exitButton.GetComponent<Dialogue>();
 
+                // Exit bubble not active, gets activated. Doesn't do anything yet.
                 if (!bubbleObject.activeInHierarchy)
                 {
                     bubbleCounter = 0;
@@ -265,22 +280,27 @@ public class Kitsulope : ObjectType
                     dialogueManager.StartDialogue(dialogue);
                     color.a = 1;
                 }
+                // Exit bubble has been activated and is touched when opacity is full. Calls Exit method.
                 else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == exitSprite)
                 {
                     save.Exit();
                 }
+                // Generic bubble object active but sprite and dialogue wrong. They are changed here.
                 else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite != exitSprite)
                 {
                     bubbleSpriteRenderer.sprite = exitSprite;
                     dialogue = exitButton.GetComponent<Dialogue>();
                     dialogueManager.StartDialogue(dialogue);
                 }
+                // Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
                 else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite == exitSprite)
                 {
                     bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
                     bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
                     bubbleCounter = 0;
-                } else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite != exitSprite)
+                }
+                // Generic bubble object active but sprite and dialogue wrong. They are changed here. Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
+                else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite != exitSprite)
                 {
                     bubbleSpriteRenderer.sprite = exitSprite;
                     dialogue = exitButton.GetComponent<Dialogue>();
