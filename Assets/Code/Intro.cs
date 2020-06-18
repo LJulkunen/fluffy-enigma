@@ -6,25 +6,48 @@ using UnityEngine.SceneManagement;
 
 public class Intro : MonoBehaviour
 {
-    public GameObject dialogueBox;
-    public GameObject dialogue;
+    SaveSerial save;
 
+    //public GameObject textPlacementObject;
+
+    public Dialogue dialogue;
+    public DialogueManager dialogueManager;
+    public GameObject dialogueBoxObject;
+    public GameObject dialogueTextObject;
+    public TextMeshProUGUI dialogueText;
+
+    private void Start()
+    {
+        save = FindObjectOfType<SaveSerial>();
+
+        dialogue = GetComponent<Dialogue>();
+        dialogueManager = GetComponent<DialogueManager>();
+
+        dialogueText = dialogueTextObject.GetComponent<TextMeshProUGUI>();
+    }
     void Update()
     {
         if (Input.touchCount > 0)
         {
             if (Input.GetTouch(0).phase == TouchPhase.Began)
             {
-                dialogueBox.SetActive(dialogueBox);
-                dialogue.SetActive(dialogue);
-                //LoadGameScene();
+                if (!dialogueBoxObject.activeInHierarchy)
+                {
+                    dialogueBoxObject.SetActive(dialogueBoxObject);
+                    dialogueTextObject.SetActive(dialogueTextObject);
+                    dialogueManager.StartDialogue(dialogue);
+                }
+            }
+            else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+            {
+                dialogueManager.DisplayNextSentence();
+            } else if (dialogueManager.sentences.Count == 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+            {
+                LoadGameScene();
             }
         }
         else if (Input.GetMouseButtonDown(0))
         {
-            dialogueBox.SetActive(dialogueBox);
-            dialogue.SetActive(dialogue);
-            //LoadGameScene();
         }
     }
 
