@@ -28,7 +28,6 @@ public class Kitsulope : ObjectType
     float counter = 0;
     #endregion
 
-    // TODO: When object touched Get component from object (atm fridge & exitButton).
     public Dialogue dialogue;
     DialogueManager dialogueManager;
     public GameObject bubbleObject;
@@ -64,8 +63,7 @@ public class Kitsulope : ObjectType
     {
         save = FindObjectOfType<SaveSerial>();
 
-        // Probably just needs to be set as something at the start to avoid errors. 
-        // TODO: Set dialogue to be the dialogue of another object when needed later.
+        // Needs to be set as something at the start to avoid errors. 
         dialogue = fridge.GetComponent<Dialogue>();
         dialogueManager = GetComponent<DialogueManager>();
 
@@ -136,6 +134,10 @@ public class Kitsulope : ObjectType
             if (Input.GetTouch(0).phase == TouchPhase.Began)
             {
                 DoTouch(Input.GetTouch(0).position);
+                Debug.Log("You tapped.");
+            } else if (Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Stationary)
+            {
+                Debug.Log("Touch phase is Moved or Stationary.");
             }
         }
         else if (Input.GetMouseButtonDown(0))
@@ -203,18 +205,6 @@ public class Kitsulope : ObjectType
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(point), Vector2.zero);
         Object hitType = hit.transform.GetComponent<ObjectType>().type;
 
-        /*if (hitType == Object.Fridge)
-        {
-            bubbleSpriteRenderer.sprite = fridgeSprite;
-            dialogue = fridge.GetComponent<Dialogue>();
-        } else if (hitType == Object.ExitButton)
-        {
-            bubbleSpriteRenderer.sprite = exitSprite;
-            dialogue = exitButton.GetComponent<Dialogue>();
-        }*/
-
-        //TODO: Figure out if there should be object types for bubbles.
-
         Debug.Log(hitType);
         switch (hitType)
         {
@@ -222,6 +212,7 @@ public class Kitsulope : ObjectType
                 save.Pet();
                 break;
             case Object.Fridge:
+                #region fridgeBubble
                 dialogue = fridge.GetComponent<Dialogue>();
 
                 if (!bubbleObject.activeInHierarchy)
@@ -256,11 +247,13 @@ public class Kitsulope : ObjectType
                     bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
                     bubbleCounter = 0;
                 }
+                #endregion
                 break;
             case Object.Window:
                 save.ResetSave();
                 break;
             case Object.ExitButton:
+                #region exitBubble
                 dialogue = exitButton.GetComponent<Dialogue>();
 
                 if (!bubbleObject.activeInHierarchy)
@@ -296,6 +289,7 @@ public class Kitsulope : ObjectType
                     bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
                     bubbleCounter = 0;
                 }
+                #endregion
                 break;
             default:
                 Debug.LogWarning("Blep");
