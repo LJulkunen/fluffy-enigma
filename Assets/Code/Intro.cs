@@ -41,7 +41,7 @@ public class Intro : MonoBehaviour
             else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
             {
                 dialogueManager.DisplayNextSentence();
-            } else if (dialogueManager.sentences.Count == 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+            } else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count == 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
             {
                 LoadGameScene();
             }

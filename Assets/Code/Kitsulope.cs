@@ -227,46 +227,49 @@ public class Kitsulope : ObjectType
                 break;
             case Object.Fridge:
                 #region fridgeBubble
-                dialogue = fridge.GetComponent<Dialogue>();
+                if (Input.GetTouch(0).phase == TouchPhase.Began)
+                {
+                    dialogue = fridge.GetComponent<Dialogue>();
 
-                // Fridge bubble not active, gets activated. Doesn't do anything yet.
-                if (!bubbleObject.activeInHierarchy)
-                {
-                    bubbleCounter = 0;
-                    bubbleObject.SetActive(bubbleObject);
-                    bubbleSpriteRenderer.sprite = fridgeSprite;
-                    bubbleTextObject.SetActive(bubbleTextObject);
-                    dialogueManager.StartDialogue(dialogue);
-                    color.a = 1;
-                }
-                // Fridge bubble has been activated and is touched when opacity is full. Calls Feed method.
-                else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == fridgeSprite)
-                {
-                    save.Feed();
-                }
-                // Generic bubble object active but sprite and dialogue wrong. They are changed here.
-                else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite != fridgeSprite)
-                {
-                    bubbleSpriteRenderer.sprite = fridgeSprite;
-                    dialogue = fridge.GetComponent<Dialogue>();
-                    dialogueManager.StartDialogue(dialogue);
-                }
-                // Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
-                else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite == fridgeSprite)
-                {
-                    bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
-                    bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
-                    bubbleCounter = 0;
-                }
-                // Generic bubble object active but sprite and dialogue wrong. They are changed here. Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
-                else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite != fridgeSprite)
-                {
-                    bubbleSpriteRenderer.sprite = fridgeSprite;
-                    dialogue = fridge.GetComponent<Dialogue>();
-                    dialogueManager.StartDialogue(dialogue);
-                    bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
-                    bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
-                    bubbleCounter = 0;
+                    // Fridge bubble not active, gets activated. Doesn't do anything yet.
+                    if (!bubbleObject.activeInHierarchy)
+                    {
+                        bubbleCounter = 0;
+                        bubbleObject.SetActive(bubbleObject);
+                        bubbleSpriteRenderer.sprite = fridgeSprite;
+                        bubbleTextObject.SetActive(bubbleTextObject);
+                        dialogueManager.StartDialogue(dialogue);
+                        color.a = 1;
+                    }
+                    // Fridge bubble has been activated and is touched when opacity is full. Calls Feed method.
+                    else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == fridgeSprite)
+                    {
+                        save.Feed();
+                    }
+                    // Generic bubble object active but sprite and dialogue wrong. They are changed here.
+                    else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite != fridgeSprite)
+                    {
+                        bubbleSpriteRenderer.sprite = fridgeSprite;
+                        dialogue = fridge.GetComponent<Dialogue>();
+                        dialogueManager.StartDialogue(dialogue);
+                    }
+                    // Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
+                    else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite == fridgeSprite)
+                    {
+                        bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
+                        bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
+                        bubbleCounter = 0;
+                    }
+                    // Generic bubble object active but sprite and dialogue wrong. They are changed here. Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
+                    else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite != fridgeSprite)
+                    {
+                        bubbleSpriteRenderer.sprite = fridgeSprite;
+                        dialogue = fridge.GetComponent<Dialogue>();
+                        dialogueManager.StartDialogue(dialogue);
+                        bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
+                        bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
+                        bubbleCounter = 0;
+                    }
                 }
                 #endregion
                 break;
@@ -275,46 +278,49 @@ public class Kitsulope : ObjectType
                 break;
             case Object.ExitButton:
                 #region exitBubble
-                dialogue = exitButton.GetComponent<Dialogue>();
+                if (Input.GetTouch(0).phase == TouchPhase.Began)
+                {
+                    dialogue = exitButton.GetComponent<Dialogue>();
 
-                // Exit bubble not active, gets activated. Doesn't do anything yet.
-                if (!bubbleObject.activeInHierarchy)
-                {
-                    bubbleCounter = 0;
-                    bubbleObject.SetActive(bubbleObject);
-                    bubbleSpriteRenderer.sprite = exitSprite;
-                    bubbleTextObject.SetActive(bubbleTextObject);
-                    dialogueManager.StartDialogue(dialogue);
-                    color.a = 1;
-                }
-                // Exit bubble has been activated and is touched when opacity is full. Calls Exit method.
-                else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == exitSprite)
-                {
-                    save.Exit();
-                }
-                // Generic bubble object active but sprite and dialogue wrong. They are changed here.
-                else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite != exitSprite)
-                {
-                    bubbleSpriteRenderer.sprite = exitSprite;
-                    dialogue = exitButton.GetComponent<Dialogue>();
-                    dialogueManager.StartDialogue(dialogue);
-                }
-                // Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
-                else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite == exitSprite)
-                {
-                    bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
-                    bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
-                    bubbleCounter = 0;
-                }
-                // Generic bubble object active but sprite and dialogue wrong. They are changed here. Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
-                else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite != exitSprite)
-                {
-                    bubbleSpriteRenderer.sprite = exitSprite;
-                    dialogue = exitButton.GetComponent<Dialogue>();
-                    dialogueManager.StartDialogue(dialogue);
-                    bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
-                    bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
-                    bubbleCounter = 0;
+                    // Exit bubble not active, gets activated. Doesn't do anything yet.
+                    if (!bubbleObject.activeInHierarchy)
+                    {
+                        bubbleCounter = 0;
+                        bubbleObject.SetActive(bubbleObject);
+                        bubbleSpriteRenderer.sprite = exitSprite;
+                        bubbleTextObject.SetActive(bubbleTextObject);
+                        dialogueManager.StartDialogue(dialogue);
+                        color.a = 1;
+                    }
+                    // Exit bubble has been activated and is touched when opacity is full. Calls Exit method.
+                    else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == exitSprite)
+                    {
+                        save.Exit();
+                    }
+                    // Generic bubble object active but sprite and dialogue wrong. They are changed here.
+                    else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite != exitSprite)
+                    {
+                        bubbleSpriteRenderer.sprite = exitSprite;
+                        dialogue = exitButton.GetComponent<Dialogue>();
+                        dialogueManager.StartDialogue(dialogue);
+                    }
+                    // Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
+                    else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite == exitSprite)
+                    {
+                        bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
+                        bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
+                        bubbleCounter = 0;
+                    }
+                    // Generic bubble object active but sprite and dialogue wrong. They are changed here. Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
+                    else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite != exitSprite)
+                    {
+                        bubbleSpriteRenderer.sprite = exitSprite;
+                        dialogue = exitButton.GetComponent<Dialogue>();
+                        dialogueManager.StartDialogue(dialogue);
+                        bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
+                        bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
+                        bubbleCounter = 0;
+                    }
                 }
                 #endregion
                 break;
