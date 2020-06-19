@@ -88,7 +88,7 @@ public class SaveSerial : MonoBehaviour
         maxCounter = howManyHours * 3600;
         hungerCounter = maxCounter;
         affectionCounter = maxCounter;
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        /*if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             //ResetSave();
         }
@@ -102,7 +102,7 @@ public class SaveSerial : MonoBehaviour
         LoadGame();
 
         Debug.Log("Intro over? " + isIntroOver);
-        Debug.Log(SceneManager.GetActiveScene().buildIndex);
+        Debug.Log(SceneManager.GetActiveScene().buildIndex);*/
 
         //Debug.Log(13 % 4);
         /*UpdateHungerLvl();
