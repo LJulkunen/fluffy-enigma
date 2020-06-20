@@ -43,9 +43,10 @@ public class SaveSerial : MonoBehaviour
         hungerCounter = maxCounter;
         affectionCounter = maxCounter;
         LoadGame();
-        UpdateHungerLvl();
+        /*UpdateHungerLvl();
         UpdateAffectionLvl();
-        UpdateSatisfiedLvl();
+        UpdateSatisfiedLvl();*/
+        //Debug.Log(DateTime.Now);
     }
 
     public void Feed()
@@ -66,7 +67,7 @@ public class SaveSerial : MonoBehaviour
             hungerLvlToSave++;
             hungerCounter = maxCounter;
             Debug.Log("Hunger level is: " + hungerLvlToSave);
-            timeToSave = DateTime.Now.ToLongTimeString();
+            timeToSave = DateTime.Now.ToLongDateString();
             SaveGame();
         }
 
@@ -90,7 +91,7 @@ public class SaveSerial : MonoBehaviour
             affectionLvlToSave++;
             affectionCounter = maxCounter;
             Debug.Log("Affection level is: " + affectionLvlToSave);
-            affectionTimeToSave = DateTime.Now.ToLongTimeString();
+            affectionTimeToSave = DateTime.Now.ToLongDateString();
             SaveGame();
         }
 
@@ -151,25 +152,35 @@ public class SaveSerial : MonoBehaviour
             Debug.LogError("There is no save data!");
     }
 
+    int daysReduction = 0;
     void UpdateAffectionLvl()
     {
         TimeSpan timeSpan = DateTime.Now - Convert.ToDateTime(affectionTimeToSave);
         
         Debug.Log("Time was: " + Convert.ToDateTime(affectionTimeToSave) + " and time is: " + DateTime.Now);
         Debug.Log("It's been this long since last petting: " + timeSpan);
+        Debug.Log("Affection level was: " + affectionLvlToSave);
         if (affectionLvlToSave > 0)
         {
-            if (timeSpan.Hours < 0)
+            if (timeSpan.Days > 0)
+            {
+                daysReduction = (timeSpan.Days * 24) / howManyHours;
+                affectionLvlToSave -= daysReduction;
+                Debug.Log("What?! You've ignored the pet for over a day... :( Here's how much will be added to stacks lowering: " + daysReduction);
+                Debug.Log("Amount decreased should be: " + daysReduction);
+            }
+             else if (timeSpan.Days == 0 & timeSpan.Hours < 0)
             {
                 if (isThisForJustMyTesting)
                 {
 
                     affectionLvlToSave += timeSpan.Minutes / howManyHours;
-                    Debug.Log("Amount decreased should be: " + timeSpan.Minutes / howManyHours);
+                    //Debug.Log("Amount decreased should be: " + timeSpan.Minutes / howManyHours);
                 }
                 else
                 {
                     affectionLvlToSave += timeSpan.Hours / howManyHours;
+                    Debug.Log("Amount decreased should be: " + timeSpan.Hours / howManyHours);
                 }
             }
             else
@@ -178,11 +189,12 @@ public class SaveSerial : MonoBehaviour
                 {
 
                     affectionLvlToSave -= timeSpan.Minutes / howManyHours;
-                    Debug.Log("Amount decreased should be: " + timeSpan.Minutes / howManyHours);
+                    //Debug.Log("Amount decreased should be: " + timeSpan.Minutes / howManyHours);
                 }
                 else
                 {
                     affectionLvlToSave -= timeSpan.Hours / howManyHours;
+                    Debug.Log("Amount decreased should be: " + timeSpan.Hours / howManyHours);
                 }
             }
 
@@ -203,8 +215,6 @@ public class SaveSerial : MonoBehaviour
         {
             affectionLvlToSave = 0;
         }
-
-        Debug.Log("Amount decreased should be: " + timeSpan.Hours / howManyHours);
         Debug.Log("Affection level is: " + affectionLvlToSave);
     }
     void UpdateHungerLvl()
@@ -212,20 +222,28 @@ public class SaveSerial : MonoBehaviour
         TimeSpan timeSpan = DateTime.Now - Convert.ToDateTime(timeToSave);
         Debug.Log("Time was: " + Convert.ToDateTime(timeToSave) + " and time is: " + DateTime.Now);
         Debug.Log("This much time has passed since last offering..." + timeSpan);
-
-        Debug.Log("Hunger level was: " + hungerLvlToSave);
+        Debug.Log("Hunger level was: " + hungerLvlToSave); 
 
         if (hungerLvlToSave > 0)
         {
-            if (timeSpan.Hours < 0)
+            if (timeSpan.Days > 0)
+            {
+                daysReduction = (timeSpan.Days * 24) / howManyHours;
+                hungerLvlToSave -= daysReduction;
+                Debug.Log("What?! You've ignored the pet for over a day... :( Here's how much will be added to stacks lowering: " + daysReduction);
+                Debug.Log("Amount decreased should be: " + daysReduction);
+            }
+            else if (timeSpan.Days == 0 && timeSpan.Hours < 0)
             {
                 hungerLvlToSave += timeSpan.Hours / howManyHours;
+                Debug.Log("Amount decreased should be: " + timeSpan.Hours / howManyHours);
             }
             else
             {
                 hungerLvlToSave -= timeSpan.Hours / howManyHours;
+                Debug.Log("Amount decreased should be: " + timeSpan.Hours / howManyHours);
             }
-            //hungerLvlToSave -= timeSpan.Hours / howManyHours;
+
             if (hungerLvlToSave >= maxHungerLvl)
             {
                 hungerLvlToSave = maxHungerLvl;
@@ -242,9 +260,9 @@ public class SaveSerial : MonoBehaviour
         {
             hungerLvlToSave = 0;
         }
-        Debug.Log("Amount decreased should be: " + timeSpan.Hours / howManyHours);
         Debug.Log("Hunger level is: " + hungerLvlToSave);
     }
+
     private void UpdateSatisfiedLvl()
     {
         if (hungerLvlToSave == maxHungerLvl && affectionLvlToSave == maxAffectionLvl)
