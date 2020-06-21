@@ -52,7 +52,7 @@ public class SaveSerial : MonoBehaviour
 
     private static SaveSerial save;
 
-    public bool isIntroOver;
+    public int isIntroOver = 0;
 
     void Awake()
     {
@@ -66,7 +66,7 @@ public class SaveSerial : MonoBehaviour
             DontDestroyOnLoad(save);
         }
 
-        if (SceneManager.GetActiveScene().name == "Intro")
+        if (SceneManager.GetActiveScene().name == "StartScreen")
         {
             //ResetSave();
         }
@@ -74,7 +74,7 @@ public class SaveSerial : MonoBehaviour
         //  if (SceneManager.GetActiveScene().buildIndex == 3)
         if (SceneManager.GetActiveScene().name == "Game")
         {
-            isIntroOver = true;
+            isIntroOver = 1;
             SaveGame();
         }
 
@@ -171,7 +171,7 @@ public class SaveSerial : MonoBehaviour
         satisfiedLvlToSave = 3;
         hungerTimeToSave = DateTime.UtcNow;
         affectionTimeToSave = DateTime.UtcNow;
-        isIntroOver = false;
+        isIntroOver = 0;
         SaveGame();
     }
     public void DeleteSave()
@@ -512,7 +512,7 @@ class SaveData
 
     public int savedSatisfiedLvl;
 
-    public bool savedIsIntroOver;
+    public int savedIsIntroOver;
 }
 
 

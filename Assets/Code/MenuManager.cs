@@ -30,7 +30,7 @@ public class MenuManager : MonoBehaviour
 
     void LoadGameScene()
     {
-        if (save.isIntroOver)
+        if (save.isIntroOver == 1)
         {
             SceneManager.LoadScene("Game");
         } else
