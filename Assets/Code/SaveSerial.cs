@@ -66,12 +66,13 @@ public class SaveSerial : MonoBehaviour
             DontDestroyOnLoad(save);
         }
 
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        if (SceneManager.GetActiveScene().name == "Intro")
         {
             //ResetSave();
         }
 
-        if (SceneManager.GetActiveScene().buildIndex == 3)
+        //  if (SceneManager.GetActiveScene().buildIndex == 3)
+        if (SceneManager.GetActiveScene().name == "Game")
         {
             isIntroOver = true;
             SaveGame();
