@@ -172,7 +172,13 @@ public class SaveSerial : MonoBehaviour
         hungerTimeToSave = DateTime.UtcNow;
         affectionTimeToSave = DateTime.UtcNow;
         isIntroOver = 0;
-        SaveGame();
+
+        // makes long array with zeros
+        SaveLoad.SaveData = new long[SaveLoad.SAVEDATA_LENGHT];
+        // populating array with correct values
+        SaveLoad.SaveData[SaveLoad.HUNGER_LVL] = hungerLvlToSave;
+        SaveLoad.SaveData[SaveLoad.HUNGER_TIME] = hungerTimeToSave.Ticks;
+        ...
     }
     public void DeleteSave()
     {
@@ -497,23 +503,9 @@ public class SaveSerial : MonoBehaviour
     {
         SaveGame();
         Application.Quit();
+
+
+        //
+
     }
 }
-
-[Serializable]
-class SaveData
-{
-
-    public int savedHungerLvl;
-    public long savedHungerTime;
-
-    public int savedAffectionLvl;
-    public long savedAffectionTime;
-
-    public int savedSatisfiedLvl;
-
-    public int savedIsIntroOver;
-}
-
-
-
