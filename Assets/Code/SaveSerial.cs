@@ -60,7 +60,7 @@ public class SaveSerial : MonoBehaviour
     {
         if (save != null && save != this)
         {
-            Debug.LogError("Destroyed newer save");
+            //Debug.LogError("Destroyed newer save");
             Destroy(this);
         } else
         {
