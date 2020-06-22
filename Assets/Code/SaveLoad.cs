@@ -23,7 +23,7 @@ public static class SaveLoad
     public const int TRUE = 1;
 
     // filepath
-    public const string FILE_PATH = "/KitsulopeData.sd";
+    public const string FILE_PATH = "/KitsulopeData.kd";
 
     public static bool FindSaveFile()
     {
@@ -33,13 +33,6 @@ public static class SaveLoad
         }
 
         return false;
-    }
-
-    public static void MakeSaveData(long[] defaultValues)
-    {
-        SaveData = defaultValues;
-
-        Save();
     }
 
     public static void Save()
@@ -60,7 +53,7 @@ public static class SaveLoad
             file.Close();
         }
     }
-
+    
     public static void Delete()
     {
         if (File.Exists(Application.persistentDataPath + FILE_PATH))

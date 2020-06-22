@@ -168,6 +168,7 @@ public class SaveSerial : MonoBehaviour
 
     public void CreateSave()
     {
+        // set default values
         hungerLvlToSave = 3;
         affectionLvlToSave = 3;
         satisfiedLvlToSave = 3;
@@ -185,8 +186,11 @@ public class SaveSerial : MonoBehaviour
         SaveLoad.SaveData[SaveLoad.AFFECTION_TIME] = affectionTimeToSave.Ticks;
         SaveLoad.SaveData[SaveLoad.SATISFIED_LVL] = satisfiedLvlToSave;
         SaveLoad.SaveData[SaveLoad.INTRO_OVER] = isIntroOver;
+        // now save new SaveData values
+        SaveLoad.Save();
     }
-    public void DeleteSave()
+
+    public void DeleteOldSave()
     {
         if (File.Exists(Application.persistentDataPath
                        + "/MySaveData.dat"))
@@ -195,9 +199,11 @@ public class SaveSerial : MonoBehaviour
                        + "/MySaveData.dat");
         }
     }
+
     public void ResetSave()
     {
-        DeleteSave();
+        DeleteOldSave();    // can be deleted after next build
+        SaveLoad.Delete();
         CreateSave();
         /*if (File.Exists(Application.persistentDataPath
                       + "/MySaveData.dat"))
@@ -216,12 +222,6 @@ public class SaveSerial : MonoBehaviour
     }
     public void SaveGame()
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath
-                     + "/MySaveData.dat");
-
-        // makes long array with zeros
-        SaveLoad.SaveData = new long[SaveLoad.SAVEDATA_LENGHT];
         // populating array with correct values
         SaveLoad.SaveData[SaveLoad.VERSION] = version;
         SaveLoad.SaveData[SaveLoad.HUNGER_LVL] = hungerLvlToSave;
@@ -230,7 +230,13 @@ public class SaveSerial : MonoBehaviour
         SaveLoad.SaveData[SaveLoad.AFFECTION_TIME] = affectionTimeToSave.Ticks;
         SaveLoad.SaveData[SaveLoad.SATISFIED_LVL] = satisfiedLvlToSave;
         SaveLoad.SaveData[SaveLoad.INTRO_OVER] = isIntroOver;
-        /*SaveData data = new SaveData();
+        // saving correct values
+        SaveLoad.Save();
+        
+        /*BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(Application.persistentDataPath
+                     + "/MySaveData.dat");
+        SaveData data = new SaveData();
         data.savedHungerLvl = hungerLvlToSave;
         data.savedAffectionLvl = affectionLvlToSave;
         data.savedSatisfiedLvl = satisfiedLvlToSave;
@@ -243,6 +249,19 @@ public class SaveSerial : MonoBehaviour
     }
     void LoadGame()
     {
+        if (SaveLoad.FindSaveFile())
+        {
+            SaveLoad.Load();
+        }
+        else
+        {
+            CreateSave();
+        }
+
+        hungerLvlToSave = (int)SaveLoad.SaveData[SaveLoad.HUNGER_LVL];
+        hungerTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[SaveLoad.HUNGER_TIME]);
+
+        /*
         if (File.Exists(Application.persistentDataPath
                        + "/MySaveData.dat"))
         {
@@ -260,7 +279,7 @@ public class SaveSerial : MonoBehaviour
             affectionTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[SaveLoad.AFFECTION_TIME]);
             SaveLoad.SaveData[SaveLoad.SATISFIED_LVL] = satisfiedLvlToSave;
             SaveLoad.SaveData[SaveLoad.INTRO_OVER] = isIntroOver;
-            /*SaveData data = (SaveData)bf.Deserialize(file);
+            SaveData data = (SaveData)bf.Deserialize(file);
             file.Close();
             hungerLvlToSave = data.savedHungerLvl;
             affectionLvlToSave = data.savedAffectionLvl;
@@ -276,11 +295,6 @@ public class SaveSerial : MonoBehaviour
             data.savedAffectionTime = affectionTimeToSave.Ticks;
             data.savedHungerTime = hungerTimeToSave.Ticks;
             data.savedSatisfiedLvl = satisfiedLvlToSave;*/
-        }
-        else
-        {
-            //Debug.LogError("There is no save data!");
-        }
     }
 
     public void Feed()
