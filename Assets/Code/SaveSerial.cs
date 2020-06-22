@@ -255,10 +255,9 @@ public class SaveSerial : MonoBehaviour
             // populating array with correct values
             version = (int) SaveLoad.SaveData[SaveLoad.VERSION];
             hungerLvlToSave = (int) SaveLoad.SaveData[SaveLoad.HUNGER_LVL];
-            hungerTimeToSave = SaveLoad.SaveData[SaveLoad.HUNGER_TIME];
-
-            affectionLvlToSave = (int) SaveLoad.SaveData[SaveLoad.AFFECTION_LVL];
-            SaveLoad.SaveData[SaveLoad.AFFECTION_TIME] = affectionTimeToSave.Ticks;
+            hungerTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[SaveLoad.HUNGER_TIME]);
+            SaveLoad.SaveData[SaveLoad.AFFECTION_LVL] = affectionLvlToSave;
+            affectionTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[SaveLoad.AFFECTION_TIME]);
             SaveLoad.SaveData[SaveLoad.SATISFIED_LVL] = satisfiedLvlToSave;
             SaveLoad.SaveData[SaveLoad.INTRO_OVER] = isIntroOver;
             /*SaveData data = (SaveData)bf.Deserialize(file);
