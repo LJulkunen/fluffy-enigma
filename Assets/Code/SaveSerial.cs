@@ -4,6 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class SaveSerial : MonoBehaviour
 {
@@ -55,6 +56,8 @@ public class SaveSerial : MonoBehaviour
     public int isIntroOver = 0;
 
     public int version = 0;
+
+    public TextMeshProUGUI introOverText;
 
     void Awake()
     {
@@ -115,6 +118,7 @@ public class SaveSerial : MonoBehaviour
     }
     void Update()
     {
+        introOverText.text = "" + isIntroOver;
         timer += Time.deltaTime;
         float seconds = timer % 60;
 
