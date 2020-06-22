@@ -258,8 +258,13 @@ public class SaveSerial : MonoBehaviour
             CreateSave();
         }
 
+        version = (int)SaveLoad.SaveData[SaveLoad.VERSION];
         hungerLvlToSave = (int)SaveLoad.SaveData[SaveLoad.HUNGER_LVL];
         hungerTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[SaveLoad.HUNGER_TIME]);
+        affectionLvlToSave = (int)SaveLoad.SaveData[SaveLoad.AFFECTION_LVL];
+        affectionTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[SaveLoad.AFFECTION_TIME]);
+        satisfiedLvlToSave = (int)SaveLoad.SaveData[SaveLoad.SATISFIED_LVL];
+        isIntroOver = (int) SaveLoad.SaveData[SaveLoad.INTRO_OVER];
 
         /*
         if (File.Exists(Application.persistentDataPath
