@@ -713,8 +713,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4283848395
-  m_fontColor: {r: 0.7960785, g: 0.3372549, b: 0.3372549, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -909,7 +909,7 @@ MonoBehaviour:
   isFeeding: 0
   isIntroOver: 0
   version: 0
-  introOverText: {fileID: 844077962}
+  debugText: {fileID: 844077962}
 --- !u!1 &1689337070
 GameObject:
   m_ObjectHideFlags: 0

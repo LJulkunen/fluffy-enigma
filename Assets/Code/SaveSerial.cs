@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using System;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
@@ -57,10 +55,12 @@ public class SaveSerial : MonoBehaviour
 
     public int version = 0;
 
-    public TextMeshProUGUI introOverText;
+    public TextMeshProUGUI debugText;
+    int _debugID;
 
     void Awake()
     {
+        #region singleton
         if (save != null && save != this)
         {
             //Debug.LogError("Destroyed newer save");
@@ -70,6 +70,7 @@ public class SaveSerial : MonoBehaviour
             save = this;
             DontDestroyOnLoad(save);
         }
+        #endregion
 
         if (SceneManager.GetActiveScene().name == "StartScreen")
         {
@@ -118,7 +119,6 @@ public class SaveSerial : MonoBehaviour
     }
     void Update()
     {
-        introOverText.text = "" + isIntroOver;
         timer += Time.deltaTime;
         float seconds = timer % 60;
 
@@ -236,7 +236,9 @@ public class SaveSerial : MonoBehaviour
         SaveLoad.SaveData[SaveLoad.INTRO_OVER] = isIntroOver;
         // saving correct values
         SaveLoad.Save();
-        
+
+        debugText.text = "Local: " + isIntroOver.ToString() + " Saved: " + SaveLoad.SaveData[SaveLoad.INTRO_OVER] + " DebugID: " + _debugID.ToString();
+        _debugID++;
         /*BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath
                      + "/MySaveData.dat");
@@ -269,6 +271,9 @@ public class SaveSerial : MonoBehaviour
         affectionTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[SaveLoad.AFFECTION_TIME]);
         satisfiedLvlToSave = (int)SaveLoad.SaveData[SaveLoad.SATISFIED_LVL];
         isIntroOver = (int) SaveLoad.SaveData[SaveLoad.INTRO_OVER];
+
+        debugText.text = "Local: " + isIntroOver.ToString() + " Loaded: " + SaveLoad.SaveData[SaveLoad.INTRO_OVER] + " DebugID: " + _debugID.ToString();
+        _debugID++;
 
         /*
         if (File.Exists(Application.persistentDataPath
