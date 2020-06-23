@@ -5,7 +5,7 @@ using System.IO;
 public static class SaveLoad
 {
     // all saved data is turned into longs (64bit int)
-    public static long[] SaveData { get; set; }
+    public static int[] SaveData { get; set; }
     // SaveData lenght
     public const int SAVEDATA_LENGHT = 7;
 
@@ -49,7 +49,7 @@ public static class SaveLoad
         {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(Application.persistentDataPath + FILE_PATH, FileMode.Open);
-            SaveData = (long[])bf.Deserialize(file);
+            SaveData = bf.Deserialize(file) as int[];
             file.Close();
         }
     }

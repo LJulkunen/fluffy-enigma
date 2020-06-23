@@ -74,7 +74,7 @@ public class SaveSerial : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "StartScreen")
         {
-            //SaveLoad.Delete();
+            //ResetSave();
         }
 
         //  if (SceneManager.GetActiveScene().buildIndex == 3)
@@ -181,13 +181,13 @@ public class SaveSerial : MonoBehaviour
         isIntroOver = 0;
 
         // makes long array with zeros
-        SaveLoad.SaveData = new long[SaveLoad.SAVEDATA_LENGHT];
+        SaveLoad.SaveData = new int[SaveLoad.SAVEDATA_LENGHT];
         // populating array with correct values
         SaveLoad.SaveData[SaveLoad.VERSION] = version;
         SaveLoad.SaveData[SaveLoad.HUNGER_LVL] = hungerLvlToSave;
-        SaveLoad.SaveData[SaveLoad.HUNGER_TIME] = hungerTimeToSave.Ticks;
+        SaveLoad.SaveData[SaveLoad.HUNGER_TIME] = (int) hungerTimeToSave.Ticks;
         SaveLoad.SaveData[SaveLoad.AFFECTION_LVL] = affectionLvlToSave;
-        SaveLoad.SaveData[SaveLoad.AFFECTION_TIME] = affectionTimeToSave.Ticks;
+        SaveLoad.SaveData[SaveLoad.AFFECTION_TIME] = (int) affectionTimeToSave.Ticks;
         SaveLoad.SaveData[SaveLoad.SATISFIED_LVL] = satisfiedLvlToSave;
         SaveLoad.SaveData[SaveLoad.INTRO_OVER] = isIntroOver;
         // now save new SaveData values
@@ -206,7 +206,7 @@ public class SaveSerial : MonoBehaviour
 
     public void ResetSave()
     {
-        DeleteOldSave();    // can be deleted after next build
+        //DeleteOldSave();    // can be deleted after next build
         SaveLoad.Delete();
         CreateSave();
         /*if (File.Exists(Application.persistentDataPath
@@ -229,9 +229,9 @@ public class SaveSerial : MonoBehaviour
         // populating array with correct values
         SaveLoad.SaveData[SaveLoad.VERSION] = version;
         SaveLoad.SaveData[SaveLoad.HUNGER_LVL] = hungerLvlToSave;
-        SaveLoad.SaveData[SaveLoad.HUNGER_TIME] = hungerTimeToSave.Ticks;
+        SaveLoad.SaveData[SaveLoad.HUNGER_TIME] = (int) hungerTimeToSave.Ticks;
         SaveLoad.SaveData[SaveLoad.AFFECTION_LVL] = affectionLvlToSave;
-        SaveLoad.SaveData[SaveLoad.AFFECTION_TIME] = affectionTimeToSave.Ticks;
+        SaveLoad.SaveData[SaveLoad.AFFECTION_TIME] = (int) affectionTimeToSave.Ticks;
         SaveLoad.SaveData[SaveLoad.SATISFIED_LVL] = satisfiedLvlToSave;
         SaveLoad.SaveData[SaveLoad.INTRO_OVER] = isIntroOver;
         // saving correct values
