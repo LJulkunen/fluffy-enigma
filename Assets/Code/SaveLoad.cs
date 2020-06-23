@@ -1,23 +1,27 @@
 ﻿using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Linq;
+using System;
 
 public static class SaveLoad
 {
     // all saved data is turned into longs (64bit int)
-    public static int[] SaveData { get; set; }
+    public static long[] SaveData { get; set; }
     // SaveData lenght
     public const int SAVEDATA_LENGHT = 7;
 
-    // indexes of long array
-    public const int VERSION = 0;           // you can check if version is different and add/remove/change data etc.
-    public const int HUNGER_LVL = 1;
-    public const int HUNGER_TIME = 2;
-    public const int AFFECTION_LVL = 3;
-    public const int AFFECTION_TIME = 4;
-    public const int SATISFIED_LVL = 5;
-    public const int INTRO_OVER = 6;
-
+    public enum Line
+    {
+        Version,            // 0
+        HungerLevel,        // 1
+        HungerTime,         // 2
+        AffectionLevel,     // ...
+        AffectionTime,
+        SatisfiedLevel,
+        IntroOver
+    }
+    
     // boolean values
     public const int FALSE = 0;
     public const int TRUE = 1;
@@ -25,40 +29,74 @@ public static class SaveLoad
     // filepath
     public const string FILE_PATH = "/KitsulopeData.kd";
 
-    public static bool FindSaveFile()
+    public static bool Find()
     {
-        if (File.Exists(Application.persistentDataPath + FILE_PATH))
+        return File.Exists(Application.persistentDataPath + FILE_PATH);
+    }
+
+    public static void Save(TMPro.TextMeshProUGUI debugText)
+    {
+        // making string for saving
+        string data = "";
+        for (int i = 0; i < SaveData.Length; i++)
         {
-            return true;
+            // adding only number value and newline
+            data += SaveData[i].ToString() + Environment.NewLine;
         }
 
-        return false;
-    }
+        // write data to file
+        File.WriteAllText(Application.persistentDataPath + FILE_PATH, data, System.Text.Encoding.UTF8);
 
-    public static void Save()
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + FILE_PATH);
-        bf.Serialize(file, SaveData);
-        file.Close();
-    }
-
-    public static void Load()
-    {
-        if (File.Exists(Application.persistentDataPath + FILE_PATH))
+        #region debug
+        data = "Saved:" + Environment.NewLine;
+        for (int i = 0; i < SaveData.Length; i++)
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + FILE_PATH, FileMode.Open);
-            SaveData = bf.Deserialize(file) as int[];
-            file.Close();
+            data += ((Line)i).ToString() + " : " + SaveData[i].ToString() + Environment.NewLine;
         }
+        debugText.text = data;
+        #endregion
     }
-    
+
+    public static void Load(TMPro.TextMeshProUGUI debugText)
+    {
+        // converting textlines to longs
+        string[] lines = File.ReadAllLines(Application.persistentDataPath + FILE_PATH, System.Text.Encoding.UTF8);
+        for (int i = 0; i < lines.Length; i++)
+        {
+            SaveData[i] = TextToLong(lines[i]);
+        }
+
+        #region debug
+        string data = "Loaded:" + Environment.NewLine;
+        for (int i = 0; i < SaveData.Length; i++)
+        {
+            data += ((Line)i).ToString() + " : " + SaveData[i].ToString() + Environment.NewLine;
+        }
+        debugText.text = data;
+        #endregion
+    }
+
     public static void Delete()
     {
-        if (File.Exists(Application.persistentDataPath + FILE_PATH))
+        if (Find())
         {
             File.Delete(Application.persistentDataPath + FILE_PATH);
         }
+    }
+
+    static long TextToLong(string text)
+    {
+        long result = 0;
+        char[] numbers = text.ToCharArray();
+
+        for (int i = 0; i < numbers.Length; i++)
+        {
+            result *= 10;
+            // number zero is value 30(hex) 48(dec) in unicode and ascii
+            // meaning char '0' = int 48
+            result += numbers[i] - 48;
+        }
+
+        return result;
     }
 }

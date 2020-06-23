@@ -56,7 +56,6 @@ public class SaveSerial : MonoBehaviour
     public int version = 0;
 
     public TextMeshProUGUI debugText;
-    int _debugID;
 
     void Awake()
     {
@@ -72,12 +71,9 @@ public class SaveSerial : MonoBehaviour
         }
         #endregion
 
-        if (SceneManager.GetActiveScene().name == "StartScreen")
-        {
-            //ResetSave();
-        }
+        // initializes long array
+        SaveLoad.SaveData = new long[SaveLoad.SAVEDATA_LENGHT];
 
-        //  if (SceneManager.GetActiveScene().buildIndex == 3)
         if (SceneManager.GetActiveScene().name == "Game")
         {
             isIntroOver = 1;
@@ -85,9 +81,6 @@ public class SaveSerial : MonoBehaviour
         }
 
         LoadGame();
-
-        Debug.Log("Intro over? " + isIntroOver);
-        Debug.Log(SceneManager.GetActiveScene().buildIndex);
     }
 
     void Start()
@@ -95,28 +88,8 @@ public class SaveSerial : MonoBehaviour
         maxCounter = howManyHours * 3600;
         hungerCounter = maxCounter;
         affectionCounter = maxCounter;
-        /*if (SceneManager.GetActiveScene().buildIndex == 0)
-        {
-            //ResetSave();
-        }
-
-        if (SceneManager.GetActiveScene().buildIndex == 3)
-        {
-            isIntroOver = true;
-            SaveGame();
-        }
-
-        LoadGame();
-
-        Debug.Log("Intro over? " + isIntroOver);
-        Debug.Log(SceneManager.GetActiveScene().buildIndex);*/
-
-        //Debug.Log(13 % 4);
-        /*UpdateHungerLvl();
-        UpdateAffectionLvl();
-        UpdateSatisfiedLvl();*/
-        //Debug.Log(DateTime.UtcNow);
     }
+
     void Update()
     {
         timer += Time.deltaTime;
@@ -159,6 +132,7 @@ public class SaveSerial : MonoBehaviour
             }
         }
     }
+
     // Might be useful with testing. Hide when you give a build tho.
     void OnGUI()
     {
@@ -170,7 +144,7 @@ public class SaveSerial : MonoBehaviour
         }
     }
 
-    public void CreateSave()
+    void CreateSave()
     {
         // set default values
         hungerLvlToSave = 3;
@@ -179,34 +153,12 @@ public class SaveSerial : MonoBehaviour
         hungerTimeToSave = DateTime.UtcNow;
         affectionTimeToSave = DateTime.UtcNow;
         isIntroOver = 0;
-
-        // makes long array with zeros
-        SaveLoad.SaveData = new int[SaveLoad.SAVEDATA_LENGHT];
-        // populating array with correct values
-        SaveLoad.SaveData[SaveLoad.VERSION] = version;
-        SaveLoad.SaveData[SaveLoad.HUNGER_LVL] = hungerLvlToSave;
-        SaveLoad.SaveData[SaveLoad.HUNGER_TIME] = (int) hungerTimeToSave.Ticks;
-        SaveLoad.SaveData[SaveLoad.AFFECTION_LVL] = affectionLvlToSave;
-        SaveLoad.SaveData[SaveLoad.AFFECTION_TIME] = (int) affectionTimeToSave.Ticks;
-        SaveLoad.SaveData[SaveLoad.SATISFIED_LVL] = satisfiedLvlToSave;
-        SaveLoad.SaveData[SaveLoad.INTRO_OVER] = isIntroOver;
-        // now save new SaveData values
-        SaveLoad.Save();
+        
+        SaveGame();
     }
 
-    public void DeleteOldSave()
+    void ResetSave()
     {
-        if (File.Exists(Application.persistentDataPath
-                       + "/MySaveData.dat"))
-        {
-            File.Delete(Application.persistentDataPath
-                       + "/MySaveData.dat");
-        }
-    }
-
-    public void ResetSave()
-    {
-        //DeleteOldSave();    // can be deleted after next build
         SaveLoad.Delete();
         CreateSave();
         /*if (File.Exists(Application.persistentDataPath
@@ -224,21 +176,20 @@ public class SaveSerial : MonoBehaviour
         else
             Debug.LogError("No save data to delete.");*/
     }
-    public void SaveGame()
+
+    void SaveGame()
     {
         // populating array with correct values
-        SaveLoad.SaveData[SaveLoad.VERSION] = version;
-        SaveLoad.SaveData[SaveLoad.HUNGER_LVL] = hungerLvlToSave;
-        SaveLoad.SaveData[SaveLoad.HUNGER_TIME] = (int) hungerTimeToSave.Ticks;
-        SaveLoad.SaveData[SaveLoad.AFFECTION_LVL] = affectionLvlToSave;
-        SaveLoad.SaveData[SaveLoad.AFFECTION_TIME] = (int) affectionTimeToSave.Ticks;
-        SaveLoad.SaveData[SaveLoad.SATISFIED_LVL] = satisfiedLvlToSave;
-        SaveLoad.SaveData[SaveLoad.INTRO_OVER] = isIntroOver;
+        SaveLoad.SaveData[(int)SaveLoad.Line.Version] = version;
+        SaveLoad.SaveData[(int)SaveLoad.Line.HungerLevel] = hungerLvlToSave;
+        SaveLoad.SaveData[(int)SaveLoad.Line.HungerTime] = hungerTimeToSave.Ticks;
+        SaveLoad.SaveData[(int)SaveLoad.Line.AffectionLevel] = affectionLvlToSave;
+        SaveLoad.SaveData[(int)SaveLoad.Line.AffectionTime] = affectionTimeToSave.Ticks;
+        SaveLoad.SaveData[(int)SaveLoad.Line.SatisfiedLevel] = satisfiedLvlToSave;
+        SaveLoad.SaveData[(int)SaveLoad.Line.IntroOver] = isIntroOver;
         // saving correct values
-        SaveLoad.Save();
+        SaveLoad.Save(debugText);
 
-        debugText.text = "Local: " + isIntroOver.ToString() + " Saved: " + SaveLoad.SaveData[SaveLoad.INTRO_OVER] + " DebugID: " + _debugID.ToString();
-        _debugID++;
         /*BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath
                      + "/MySaveData.dat");
@@ -253,27 +204,22 @@ public class SaveSerial : MonoBehaviour
         file.Close();
         Debug.Log("Game data (hunger & affection & satisfaction levels & related times) saved!");*/
     }
+
     void LoadGame()
     {
-        if (SaveLoad.FindSaveFile())
-        {
-            SaveLoad.Load();
-        }
+        if (SaveLoad.Find())
+            SaveLoad.Load(debugText);
         else
-        {
             CreateSave();
-        }
 
-        version = (int)SaveLoad.SaveData[SaveLoad.VERSION];
-        hungerLvlToSave = (int)SaveLoad.SaveData[SaveLoad.HUNGER_LVL];
-        hungerTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[SaveLoad.HUNGER_TIME]);
-        affectionLvlToSave = (int)SaveLoad.SaveData[SaveLoad.AFFECTION_LVL];
-        affectionTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[SaveLoad.AFFECTION_TIME]);
-        satisfiedLvlToSave = (int)SaveLoad.SaveData[SaveLoad.SATISFIED_LVL];
-        isIntroOver = (int) SaveLoad.SaveData[SaveLoad.INTRO_OVER];
-
-        debugText.text = "Local: " + isIntroOver.ToString() + " Loaded: " + SaveLoad.SaveData[SaveLoad.INTRO_OVER] + " DebugID: " + _debugID.ToString();
-        _debugID++;
+        // assign local values from saved ones
+        version = (int)SaveLoad.SaveData[(int)SaveLoad.Line.Version];
+        hungerLvlToSave = (int)SaveLoad.SaveData[(int)SaveLoad.Line.HungerLevel];
+        hungerTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[(int)SaveLoad.Line.HungerTime]);
+        affectionLvlToSave = (int)SaveLoad.SaveData[(int)SaveLoad.Line.AffectionLevel];
+        affectionTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[(int)SaveLoad.Line.AffectionTime]);
+        satisfiedLvlToSave = (int)SaveLoad.SaveData[(int)SaveLoad.Line.SatisfiedLevel];
+        isIntroOver = (int) SaveLoad.SaveData[(int)SaveLoad.Line.IntroOver];
 
         /*
         if (File.Exists(Application.persistentDataPath
@@ -560,9 +506,5 @@ public class SaveSerial : MonoBehaviour
     {
         SaveGame();
         Application.Quit();
-
-
-        //
-
     }
 }
