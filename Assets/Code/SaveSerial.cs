@@ -74,7 +74,7 @@ public class SaveSerial : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "StartScreen")
         {
-            //ResetSave();
+            //SaveLoad.Delete();
         }
 
         //  if (SceneManager.GetActiveScene().buildIndex == 3)
@@ -542,6 +542,8 @@ public class SaveSerial : MonoBehaviour
         {
             satisfiedLvlToSave = 0;
         }
+
+        SaveGame();
     }
     void UpdateAffectionCounter(float reduced)
     {
