@@ -130,7 +130,7 @@ public class SaveSerial : MonoBehaviour
             // Check if Back was pressed this frame
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-
+                isIntroOver = 1;
                 // Quit the application
                 Application.Quit();
             }
