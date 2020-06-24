@@ -74,6 +74,10 @@ public class SaveSerial : MonoBehaviour
         // initializes long array
         SaveLoad.SaveData = new long[SaveLoad.SAVEDATA_LENGHT];
 
+        if (SceneManager.GetActiveScene().name == "StartScreen")
+        {
+            //ResetSave();
+        }
         if (SceneManager.GetActiveScene().name == "Game")
         {
             isIntroOver = 1;
@@ -220,6 +224,13 @@ public class SaveSerial : MonoBehaviour
         affectionTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[(int)SaveLoad.Line.AffectionTime]);
         satisfiedLvlToSave = (int)SaveLoad.SaveData[(int)SaveLoad.Line.SatisfiedLevel];
         isIntroOver = (int) SaveLoad.SaveData[(int)SaveLoad.Line.IntroOver];
+
+        Debug.Log("Game data loaded!");
+        UpdateHungerLvl();
+        UpdateAffectionLvl();
+        UpdateSatisfiedLvl();
+
+        SaveGame();
 
         /*
         if (File.Exists(Application.persistentDataPath
@@ -504,6 +515,7 @@ public class SaveSerial : MonoBehaviour
 
     public void Exit()
     {
+        isIntroOver = 1;
         SaveGame();
         Application.Quit();
     }
