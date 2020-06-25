@@ -29,20 +29,17 @@ public class Intro : MonoBehaviour
     }
     void Update()
     {
-        if (Input.touchCount > 0)
+        if (!dialogueBoxObject.activeInHierarchy)
         {
-            if (Input.GetTouch(0).phase == TouchPhase.Began)
-            {
-                if (!dialogueBoxObject.activeInHierarchy)
-                {
-                    dialogueBoxObject.SetActive(dialogueBoxObject);
-                    dialogueTextObject.SetActive(dialogueTextObject);
-                    dialogueManager.StartDialogue(dialogue);
-                    flashText.SetActive(true);
-                    InvokeRepeating("FlashTheText", 0f, 0.5f);
-                }
-            }
-            else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+            dialogueBoxObject.SetActive(dialogueBoxObject);
+            dialogueTextObject.SetActive(dialogueTextObject);
+            dialogueManager.StartDialogue(dialogue);
+            flashText.SetActive(true);
+            InvokeRepeating("FlashTheText", 0f, 0.5f);
+        }
+        else if (Input.touchCount > 0)
+        {
+            if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
             {
                 dialogueManager.DisplayNextSentence();
             } else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count == 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
