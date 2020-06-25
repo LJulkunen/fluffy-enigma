@@ -164,6 +164,9 @@ MonoBehaviour:
   isThisForJustMyTesting: 0
   isPetting: 0
   isFeeding: 0
+  isIntroOver: 0
+  version: 0
+  debugText: {fileID: 0}
 --- !u!4 &27253537
 Transform:
   m_ObjectHideFlags: 0
@@ -334,6 +337,7 @@ MonoBehaviour:
   chillingAnimationLength: 5.5
   maxChillingAnimationLength: 2.5
   isChilling: 0
+  isPetNoticingYou: 0
   rand: 0
 --- !u!114 &299115868
 MonoBehaviour:

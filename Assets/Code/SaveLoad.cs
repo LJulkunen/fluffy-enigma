@@ -53,7 +53,7 @@ public static class SaveLoad
         {
             data += ((Line)i).ToString() + " : " + SaveData[i].ToString() + Environment.NewLine;
         }
-        debugText.text = data;
+        //debugText.text = data;
         #endregion
     }
 

@@ -16,6 +16,8 @@ public class Intro : MonoBehaviour
     public GameObject dialogueTextObject;
     public TextMeshProUGUI dialogueText;
 
+    public GameObject flashText;
+
     private void Start()
     {
         save = FindObjectOfType<SaveSerial>();
@@ -36,6 +38,8 @@ public class Intro : MonoBehaviour
                     dialogueBoxObject.SetActive(dialogueBoxObject);
                     dialogueTextObject.SetActive(dialogueTextObject);
                     dialogueManager.StartDialogue(dialogue);
+                    flashText.SetActive(true);
+                    InvokeRepeating("FlashTheText", 0f, 0.5f);
                 }
             }
             else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
@@ -68,5 +72,17 @@ public class Intro : MonoBehaviour
     void LoadGameScene()
     {
         SceneManager.LoadScene("Shelter");
+    }
+
+    void FlashTheText()
+    {
+        if (flashText.activeInHierarchy)
+        {
+            flashText.SetActive(false);
+        }
+        else
+        {
+            flashText.SetActive(true);
+        }
     }
 }

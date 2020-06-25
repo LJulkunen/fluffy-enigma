@@ -16,6 +16,8 @@ public class Shelter : MonoBehaviour
     public GameObject dialogueTextObject;
     public TextMeshProUGUI dialogueText;
 
+    public GameObject flashText;
+
     float timer = 0;
 
     private void Start()
@@ -42,6 +44,8 @@ public class Shelter : MonoBehaviour
                         dialogueBoxObject.SetActive(dialogueBoxObject);
                         dialogueTextObject.SetActive(dialogueTextObject);
                         dialogueManager.StartDialogue(dialogue);
+                        flashText.SetActive(true);
+                        InvokeRepeating("FlashTheText", 0f, 0.5f);
                     }
                 }
                 else if (dialogueBoxObject.activeInHierarchy && dialogueManager.sentences.Count > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
@@ -77,5 +81,17 @@ public class Shelter : MonoBehaviour
     void LoadGameScene()
     {
         SceneManager.LoadScene("Game");
+    }
+
+    void FlashTheText()
+    {
+        if (flashText.activeInHierarchy)
+        {
+            flashText.SetActive(false);
+        }
+        else
+        {
+            flashText.SetActive(true);
+        }
     }
 }
