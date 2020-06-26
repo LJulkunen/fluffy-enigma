@@ -544,10 +544,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - 
   - Wha... aww! What a cute lil'...
   - ...kitsune? Jackalope? Kitsulope?
-  - Well... I have experience with bunnies. I'll just have to brush up on my mothology
+  - Well... I have experience with bunnies. I'll just have to brush up on my mythology
     a bit.
   - I sign the paperwork and return home with my new pet.
 --- !u!1 &739563212
@@ -684,8 +683,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: -167.71}
-  m_SizeDelta: {x: -579.95526, y: -335.41754}
+  m_AnchoredPosition: {x: -2.500061, y: -167.71}
+  m_SizeDelta: {x: -395, y: -335.41754}
   m_Pivot: {x: 0.5000001, y: 0.5}
 --- !u!114 &1178475513
 MonoBehaviour:
@@ -1191,7 +1190,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -227}
+  m_AnchoredPosition: {x: 239.76, y: -230.03}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1928077790
@@ -1249,7 +1248,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_textAlignment: 258
+  m_textAlignment: 260
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
