@@ -37,6 +37,9 @@ public class AloeVera : ObjectType
     private int clickCount;
     public float rand;
 
+    public float randX;
+    public Vector3 newPos;
+
     private void Start()
     {
         save = FindObjectOfType<SaveSerial>();
@@ -48,6 +51,14 @@ public class AloeVera : ObjectType
         color = bubbleSpriteRenderer.color;
 
         bubbleText = bubbleTextObject.GetComponent<TextMeshProUGUI>();
+
+        #region randomPlacement
+        randX = Random.Range(xMin, xMax);
+        newPos.x = randX;
+        newPos.y = transform.position.y;
+        transform.Translate(newPos);
+        Debug.Log(newPos);
+        #endregion
     }
 
     void Update()
@@ -60,6 +71,10 @@ public class AloeVera : ObjectType
              || Input.GetTouch(0).phase == TouchPhase.Stationary || Input.GetTouch(0).phase == TouchPhase.Ended)
             {
                 DoTouch(Input.GetTouch(0).position);
+                if (Input.GetTouch(0).phase == TouchPhase.Stationary)
+                {
+                    Debug.Log("TouchPhase: Stationary");
+                }
             }
         }
         else if (Input.GetMouseButtonDown(0))
@@ -68,7 +83,7 @@ public class AloeVera : ObjectType
         }
 
         #region movement
-        Vector3 position = transform.position;
+        /*Vector3 position = transform.position;
         if (direction == 0 || (direction == -1 && position.x < xMin))
         {
             direction = 1;
@@ -88,7 +103,7 @@ public class AloeVera : ObjectType
         {
             transform.Translate(movement * speed);
             counter = 0;
-        }
+        }*/
         #endregion
     }
 
@@ -120,12 +135,14 @@ public class AloeVera : ObjectType
         bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, color.a);
     }
 
+    public float exitCounter = 4.0f;
+
     void DoTouch(Vector2 point)
     {
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(point), Vector2.down);
         Object hitType = hit.transform.GetComponent<ObjectType>().type;
 
-        Debug.Log(hitType);
+        //Debug.Log(hitType);
         switch (hitType)
         {
             case Object.Fridge:
@@ -181,7 +198,7 @@ public class AloeVera : ObjectType
                 break;
             case Object.ExitButton:
                 #region exitBubble
-                if (Input.GetTouch(0).phase == TouchPhase.Began)
+                if (Input.GetTouch(0).phase == TouchPhase.Began || Input.GetTouch(0).phase == TouchPhase.Stationary)
                 {
                     dialogue = exitButton.GetComponent<Dialogue>();
 
@@ -189,15 +206,26 @@ public class AloeVera : ObjectType
                     if (!bubbleObject.activeInHierarchy)
                     {
                         bubbleCounter = 0;
+                        exitCounter = 4.0f;
                         bubbleObject.SetActive(bubbleObject);
                         bubbleSpriteRenderer.sprite = exitSprite;
                         bubbleTextObject.SetActive(bubbleTextObject);
                         dialogueManager.StartDialogue(dialogue);
                         color.a = 1;
                     }
-                    // Exit bubble has been activated and is touched when opacity is full. Calls Exit method.
-                    else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == exitSprite)
+                    // Exit bubble active. Shouldn't start fading when touch stationary.
+                    else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == exitSprite
+                        && exitCounter > 0 && Input.GetTouch(0).phase == TouchPhase.Stationary)
                     {
+                        exitCounter -= Time.deltaTime;
+                        bubbleCounter = 0;
+                        Debug.Log("THIS SHOULD WORK?");
+                    } 
+                    // Exit bubble has been activated and is touched when opacity is full. Calls Exit method.
+                    else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == exitSprite
+                        && exitCounter <= 0)
+                    {
+                        Debug.Log("AND NOW, EXIT!");
                         save.Exit();
                     }
                     // Generic bubble object active but sprite and dialogue wrong. They are changed here.

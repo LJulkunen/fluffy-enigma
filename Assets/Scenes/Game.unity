@@ -2991,4 +2991,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - "\tShould I exit? \n\tTap to confirm."
+  - "\tShould I exit? Press \t\n\t4 seconds to confirm."

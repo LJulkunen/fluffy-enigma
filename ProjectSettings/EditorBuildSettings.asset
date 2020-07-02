@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/AloeCareStartScreen.unity
     guid: 460f2e9fd327e694ab20c15dfb0cf654
   - enabled: 1
+    path: Assets/Scenes/AloeCareGame.unity
+    guid: 21dd90d8e7c46b84e900062a23b732b9
+  - enabled: 1
     path: Assets/Scenes/StartScreen.unity
     guid: 0ca089ccc771e7244917ba2b3086df7e
   - enabled: 1
