@@ -30,12 +30,15 @@ public class MenuManager : MonoBehaviour
 
     void LoadGameScene()
     {
-        if (save.isIntroOver == 1)
+        if (save.isIntroOver == 1 && save.hungerLvlToSave > 0)
         {
             SceneManager.LoadScene("Game");
-        } else
+        } else if (save.isIntroOver == 0)
         {
             SceneManager.LoadScene("Intro");
+        } else
+        {
+            SceneManager.LoadScene("AloeCareGame");
         }
     }
 

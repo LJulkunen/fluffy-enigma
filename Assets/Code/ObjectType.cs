@@ -8,7 +8,8 @@ public class ObjectType : MonoBehaviour
         Fridge,
         Shelf,
         Window,
-        ExitButton
+        ExitButton,
+        AloeVera
     }
     public Object type;
 }

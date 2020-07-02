@@ -161,7 +161,7 @@ public class SaveSerial : MonoBehaviour
         SaveGame();
     }
 
-    void ResetSave()
+    public void ResetSave()
     {
         SaveLoad.Delete();
         CreateSave();
