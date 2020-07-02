@@ -55,10 +55,9 @@ public class Kitsulope : ObjectType
 
     public bool isChilling;
     public bool isPetNoticingYou;
-    #endregion
 
-    private int clickCount;
     public float rand;
+    #endregion
 
     private void Start()
     {

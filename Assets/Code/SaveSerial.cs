@@ -6,6 +6,7 @@ using TMPro;
 
 public class SaveSerial : MonoBehaviour
 {
+    #region KitsulopeVariables
     [SerializeField]
     public int maxHungerLvl = 4;
     public int hungerLvlToSave = 0;
@@ -48,14 +49,23 @@ public class SaveSerial : MonoBehaviour
     public bool isFeeding;
 
     int daysReduction = 0;
+    #endregion
 
     private static SaveSerial save;
-
     public int isIntroOver = 0;
-
     public int version = 0;
-
     public TextMeshProUGUI debugText;
+
+    /* TODO: [] Save aloe stats.
+     *       [] Change sprite after a day if aloe watered enough.
+     *       [] 4 aloe levels. 0 being just got nibbled by kitsulope, 4 fully grown.
+     *       [] WateredLevel just probably needs to be 0 or 1?
+     *       [] A high max counter for waterLevel dropping (a day probably).
+     *       [] Counter should work in the exact same way as it does with the actual pet.
+    */
+    public int aloeWateredLevel = 0;
+    public int aloeLevel = 0;
+    DateTime aloeWateredTime;
 
     void Awake()
     {

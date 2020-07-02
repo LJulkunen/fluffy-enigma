@@ -23,6 +23,7 @@ public class AloeVera : ObjectType
     float counter = 0;
     #endregion
 
+    #region dialogueBubbles
     public Dialogue dialogue;
     DialogueManager dialogueManager;
     public GameObject bubbleObject;
@@ -33,9 +34,7 @@ public class AloeVera : ObjectType
     [SerializeField]
     public float maxBubbleCounter = 10f;
     public float bubbleCounter = 0f;
-
-    private int clickCount;
-    public float rand;
+    #endregion
 
     public float randX;
     public Vector3 newPos;
