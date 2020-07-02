@@ -48,12 +48,12 @@ public static class SaveLoad
         File.WriteAllText(Application.persistentDataPath + FILE_PATH, data, System.Text.Encoding.UTF8);
 
         #region debug
-        /*data = "Saved:" + Environment.NewLine;
+        data = "Saved:" + Environment.NewLine;
         for (int i = 0; i < SaveData.Length; i++)
         {
             data += ((Line)i).ToString() + " : " + SaveData[i].ToString() + Environment.NewLine;
         }
-        debugText.text = data;*/
+        debugText.text = data;
         #endregion
     }
 
@@ -67,12 +67,12 @@ public static class SaveLoad
         }
 
         #region debug
-        /*string data = "Loaded:" + Environment.NewLine;
+        string data = "Loaded:" + Environment.NewLine;
         for (int i = 0; i < SaveData.Length; i++)
         {
             data += ((Line)i).ToString() + " : " + SaveData[i].ToString() + Environment.NewLine;
         }
-        debugText.text = data;*/
+        debugText.text = data;
         #endregion
     }
 
