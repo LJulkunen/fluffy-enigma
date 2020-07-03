@@ -10,6 +10,7 @@ public class DecideStartScreen : MonoBehaviour
 
     void Start()
     {
+        //save.ResetSave();
         if (save.hungerLvlToSave == 0)
         {
             SceneManager.LoadScene("AloeCareStartScreen");
