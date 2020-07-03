@@ -74,6 +74,7 @@ public class SaveSerial : MonoBehaviour
         {
             //Debug.LogError("Destroyed newer save");
             Destroy(this);
+            return;
         } else
         {
             save = this;
@@ -223,10 +224,10 @@ public class SaveSerial : MonoBehaviour
 
     void LoadGame()
     {
-        /*if (SaveLoad.Find())
+        if (SaveLoad.Find())
             SaveLoad.Load(debugText);
         else
-            CreateSave();*/
+            CreateSave();
 
         // assign local values from saved ones
         version = (int)SaveLoad.SaveData[(int)SaveLoad.Line.Version];
