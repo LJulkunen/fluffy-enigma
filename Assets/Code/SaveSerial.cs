@@ -51,7 +51,7 @@ public class SaveSerial : MonoBehaviour
     int daysReduction = 0;
     #endregion
 
-    private static SaveSerial save;
+    public static SaveSerial SAVE;
     public int isIntroOver = 0;
     public int version = 0;
     public TextMeshProUGUI debugText;
@@ -70,30 +70,20 @@ public class SaveSerial : MonoBehaviour
     void Awake()
     {
         #region singleton
-        if (save != null && save != this)
+        if (SAVE != null && SAVE != this)
         {
             //Debug.LogError("Destroyed newer save");
             Destroy(this);
             return;
         } else
         {
-            save = this;
-            DontDestroyOnLoad(save);
+            SAVE = this;
+            DontDestroyOnLoad(SAVE);
         }
         #endregion
 
         // initializes long array
         SaveLoad.SaveData = new long[SaveLoad.SAVEDATA_LENGHT];
-
-        if (SceneManager.GetActiveScene().name == "StartScreen")
-        {
-            //ResetSave();
-        }
-        if (SceneManager.GetActiveScene().name == "Game")
-        {
-            isIntroOver = 1;
-            SaveGame();
-        }
 
         LoadGame();
     }
@@ -224,6 +214,7 @@ public class SaveSerial : MonoBehaviour
 
     void LoadGame()
     {
+        // if savegame load it else make savegame
         if (SaveLoad.Find())
             SaveLoad.Load(debugText);
         else
@@ -532,5 +523,14 @@ public class SaveSerial : MonoBehaviour
         isIntroOver = 1;
         SaveGame();
         Application.Quit();
+    }
+
+    private void OnApplicationQuit()
+    {
+        if (Application.isEditor)
+        {
+            isIntroOver = 1;
+            SaveGame();
+        }
     }
 }

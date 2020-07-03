@@ -6,11 +6,13 @@ public class MenuManager : MonoBehaviour
     public GameObject flashText;
     private Touch theTouch;
 
-    public SaveSerial save;
+    private SaveSerial save;
 
     void Start()
     {
         InvokeRepeating("FlashTheText", 0f, 0.5f);
+
+        save = SaveSerial.SAVE;
     }
     
     void Update()
@@ -30,15 +32,17 @@ public class MenuManager : MonoBehaviour
 
     void LoadGameScene()
     {
-        if (save.isIntroOver == 1 && save.hungerLvlToSave > 0)
-        {
-            SceneManager.LoadScene("Game");
-        } else if (save.isIntroOver == 0)
-        {
-            SceneManager.LoadScene("Intro");
-        } else
+        if (save.hungerLvlToSave == 0)
         {
             SceneManager.LoadScene("AloeCareGame");
+        }
+        else if (save.isIntroOver == 1)
+        {
+            SceneManager.LoadScene("Game");
+        }
+        else
+        {
+            SceneManager.LoadScene("Intro");
         }
     }
 
