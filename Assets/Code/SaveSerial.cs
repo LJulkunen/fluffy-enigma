@@ -63,7 +63,7 @@ public class SaveSerial : MonoBehaviour
      *       [] A high max counter for waterLevel dropping (a day probably).
      *       [] Counter should work in the exact same way as it does with the actual pet.
     */
-    public int aloeWateredLevel = 0;
+    public int aloeWatered = 0;
     public int aloeLevel = 0;
     DateTime aloeWateredTime;
 
@@ -167,6 +167,7 @@ public class SaveSerial : MonoBehaviour
         hungerTimeToSave = DateTime.UtcNow;
         affectionTimeToSave = DateTime.UtcNow;
         isIntroOver = 0;
+        aloeWatered = 0;
         
         SaveGame();
     }
@@ -201,6 +202,7 @@ public class SaveSerial : MonoBehaviour
         SaveLoad.SaveData[(int)SaveLoad.Line.AffectionTime] = affectionTimeToSave.Ticks;
         SaveLoad.SaveData[(int)SaveLoad.Line.SatisfiedLevel] = satisfiedLvlToSave;
         SaveLoad.SaveData[(int)SaveLoad.Line.IntroOver] = isIntroOver;
+        SaveLoad.SaveData[(int)SaveLoad.Line.AloeWatered] = aloeWatered;
         // saving correct values
         SaveLoad.Save(debugText);
 
@@ -234,6 +236,7 @@ public class SaveSerial : MonoBehaviour
         affectionTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[(int)SaveLoad.Line.AffectionTime]);
         satisfiedLvlToSave = (int)SaveLoad.SaveData[(int)SaveLoad.Line.SatisfiedLevel];
         isIntroOver = (int) SaveLoad.SaveData[(int)SaveLoad.Line.IntroOver];
+        aloeWatered = (int)SaveLoad.SaveData[(int)SaveLoad.Line.AloeWatered];
 
         Debug.Log("Game data loaded!");
         UpdateHungerLvl();
