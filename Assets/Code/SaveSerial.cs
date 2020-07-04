@@ -93,8 +93,8 @@ public class SaveSerial : MonoBehaviour
             UpdateSatisfaction();
         }
 
-        // Check if Back was pressed this frame
-        if (Input.GetKeyDown(KeyCode.Escape))
+        // Check platform and if Back was pressed this frame
+        if (Application.platform == RuntimrPlatform.Android && Input.GetKeyDown(KeyCode.Escape))
         {
             Exit();
         }
