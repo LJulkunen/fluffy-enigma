@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-using System.Linq;
 using System;
 
 public static class SaveLoad
@@ -9,7 +7,24 @@ public static class SaveLoad
     // all saved data is turned into longs (64bit int)
     public static long[] SaveData { get; set; }
     // SaveData lenght
-    public const int SAVEDATA_LENGHT = 8;
+    public static int SaveDataSize
+    {
+        get { return (int)Line.LineCount; }
+    }
+
+    public static int LevelLineCount
+    {
+        get
+        {
+            int count = 0;
+            for (int i = 0; i < SaveDataSize; i++)
+            {
+                if (((Line)i).ToString().Contains("Level"))
+                    count++;
+            }
+            return count;
+        }
+    }
 
     public enum Line
     {
@@ -18,9 +33,10 @@ public static class SaveLoad
         HungerTime,         // 2
         AffectionLevel,     // ...
         AffectionTime,
-        SatisfiedLevel,
+        Satisfaction,
         IntroOver,
-        AloeWatered
+        AloeWatered,
+        LineCount           // Always last !!!!
     }
     
     // boolean values
@@ -58,7 +74,7 @@ public static class SaveLoad
         #endregion
     }
 
-    public static void Load(TMPro.TextMeshProUGUI debugText)
+    public static int Load(TMPro.TextMeshProUGUI debugText)
     {
         // converting textlines to longs
         string[] lines = File.ReadAllLines(Application.persistentDataPath + FILE_PATH, System.Text.Encoding.UTF8);
@@ -75,6 +91,9 @@ public static class SaveLoad
         }
         if (debugText) debugText.text = data;
         #endregion
+
+        return lines.Length;
+
     }
 
     public static void Delete()
