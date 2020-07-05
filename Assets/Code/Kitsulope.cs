@@ -53,8 +53,13 @@ public class Kitsulope : ObjectType
     public float chillingAnimationLength = 2.5f;
     public float maxChillingAnimationLength = 2.5f;
 
+    [SerializeField]
+    public float yawningAnimationLength = 2.5f;
+    public float maxYawningAnimationLength = 2.5f;
+
     public bool isChilling;
     public bool isPetNoticingYou;
+    public bool isYawning;
 
     public float rand;
     #endregion
@@ -86,7 +91,13 @@ public class Kitsulope : ObjectType
             if (rand > 99.6f)
             {
                 isChilling = true;
+                if (rand > 99.9)
+                {
+                    isYawning = true;
+                    chillingAnimationLength = maxYawningAnimationLength;
+                }
             }
+            
         } else
         {
             isChilling = false;
@@ -97,6 +108,7 @@ public class Kitsulope : ObjectType
         animator.SetBool("IsFeeding", save.isFeeding);
         animator.SetInteger("Direction", direction);
         animator.SetBool("IsChilling", isChilling);
+        animator.SetBool("IsYawning", isYawning);
         animator.SetFloat("Rand", rand);
 
         if (save.isPetting)
@@ -109,7 +121,16 @@ public class Kitsulope : ObjectType
             }
         }
 
-        if (isChilling)
+        if (isYawning)
+        {
+            chillingAnimationLength -= Time.deltaTime;
+            if (chillingAnimationLength <= 0)
+            {
+                isChilling = false;
+                isYawning = false;
+                chillingAnimationLength = maxChillingAnimationLength;
+            }
+        } else if (isChilling)
         {
             chillingAnimationLength -= Time.deltaTime;
             if (chillingAnimationLength <= 0)
@@ -128,6 +149,8 @@ public class Kitsulope : ObjectType
                 feedingAnimationLength = maxFeedingAnimationLength;
             }
         }
+
+        
 
         if (Input.touchCount > 0)
         {

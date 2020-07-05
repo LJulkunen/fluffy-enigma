@@ -167,6 +167,8 @@ MonoBehaviour:
   isIntroOver: 0
   version: 0
   debugText: {fileID: 0}
+  aloeWatered: 0
+  aloeLevel: 0
 --- !u!4 &27253537
 Transform:
   m_ObjectHideFlags: 0
@@ -301,8 +303,11 @@ MonoBehaviour:
   maxFeedingAnimationLength: 3.5
   chillingAnimationLength: 5.5
   maxChillingAnimationLength: 2.5
+  yawningAnimationLength: 0
+  maxYawningAnimationLength: 2
   isChilling: 0
   isPetNoticingYou: 0
+  isYawning: 0
   rand: 0
   exitCounter: 4
 --- !u!114 &299115868
