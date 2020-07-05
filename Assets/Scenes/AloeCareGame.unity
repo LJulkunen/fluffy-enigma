@@ -167,6 +167,8 @@ MonoBehaviour:
   isIntroOver: 0
   version: 0
   debugText: {fileID: 0}
+  aloeWatered: 0
+  aloeLevel: 0
 --- !u!4 &27253537
 Transform:
   m_ObjectHideFlags: 0
@@ -1144,10 +1146,9 @@ MonoBehaviour:
   bubbleSpriteRenderer: {fileID: 471360557}
   maxBubbleCounter: 10
   bubbleCounter: 0
-  rand: 0
   randX: 0
   newPos: {x: 0, y: 0, z: 0}
-  exitCounter: 4
+  exitCounter: 3
 --- !u!1 &2145421758
 GameObject:
   m_ObjectHideFlags: 0
@@ -1233,4 +1234,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - "\tShould I exit? Press \t\n\t4 seconds to confirm."
+  - "\tShould I exit? Press \t\n\t3 seconds to confirm."

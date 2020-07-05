@@ -309,7 +309,7 @@ MonoBehaviour:
   isPetNoticingYou: 0
   isYawning: 0
   rand: 0
-  exitCounter: 4
+  exitCounter: 3
 --- !u!114 &299115868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1314,4 +1314,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - "\tShould I exit? Press \t\n\t4 seconds to confirm."
+  - "\tShould I exit? Press \t\n\t3 seconds to confirm."
