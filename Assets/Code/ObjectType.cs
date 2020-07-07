@@ -9,7 +9,8 @@ public class ObjectType : MonoBehaviour
         Shelf,
         Window,
         ExitButton,
-        AloeVera
+        AloeVera,
+        WildRabbit
     }
     public Object type;
 }

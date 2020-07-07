@@ -298,7 +298,10 @@ public class Kitsulope : ObjectType
                 #endregion
                 break;
             case Object.Window:
-                //save.ResetSave();
+                SceneManager.LoadScene("Field");
+                break;
+            case Object.WildRabbit:
+                save.ResetSave();
                 break;
             case Object.ExitButton:
                 #region exitBubble
