@@ -78,6 +78,7 @@ public class Shelter : MonoBehaviour
 
     void LoadGameScene()
     {
+        save.isIntroOver = 1;
         SceneManager.LoadScene("Game");
     }
 

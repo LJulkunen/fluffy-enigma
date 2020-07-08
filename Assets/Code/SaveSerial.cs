@@ -131,8 +131,9 @@ public class SaveSerial : MonoBehaviour
             // Check if Back was pressed this frame
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                isIntroOver = 1;
+                //isIntroOver = 1;
                 // Quit the application
+                SaveGame();
                 Application.Quit();
             }
         }
@@ -540,7 +541,7 @@ public class SaveSerial : MonoBehaviour
     {
         if (Application.isEditor)
         {
-            isIntroOver = 1;
+            //isIntroOver = 1;
             SaveGame();
         }
     }
