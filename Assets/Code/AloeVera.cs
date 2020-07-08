@@ -12,6 +12,8 @@ public class AloeVera : ObjectType
     public Sprite exitSprite;
     public Sprite fridgeSprite;
 
+    public GameObject wateringCan;
+
     #region MovementVariables
     [SerializeField]
     private float xMin = -0.9F;
@@ -51,12 +53,12 @@ public class AloeVera : ObjectType
 
         bubbleText = bubbleTextObject.GetComponent<TextMeshProUGUI>();
 
-        #region randomPlacement
-        randX = Random.Range(xMin, xMax);
+        #region randomPlacement(A joke, don't use in actual game)
+        /*randX = Random.Range(xMin, xMax);
         newPos.x = randX;
         newPos.y = transform.position.y;
         transform.Translate(newPos);
-        Debug.Log(newPos);
+        Debug.Log(newPos);*/
         #endregion
     }
 
@@ -123,6 +125,7 @@ public class AloeVera : ObjectType
                 bubbleCounter = 0;
                 bubbleObject.SetActive(!bubbleObject);
                 bubbleTextObject.SetActive(!bubbleTextObject);
+                wateringCan.SetActive(!wateringCan);
             }
         }
         else
@@ -163,6 +166,7 @@ public class AloeVera : ObjectType
                     // Fridge bubble has been activated and is touched when opacity is full. Calls Feed method.
                     else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == fridgeSprite)
                     {
+                        wateringCan.SetActive(wateringCan);
                         //save.Feed();
                     }
                     // Generic bubble object active but sprite and dialogue wrong. They are changed here.
