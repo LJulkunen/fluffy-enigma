@@ -322,6 +322,17 @@ public class SaveSerial : MonoBehaviour
         UpdateSatisfiedLvl();
     }
 
+    public void WaterAloe()
+    {
+        if (aloeWatered < 1)
+        {
+            aloeWatered++;
+        }
+
+        Debug.LogWarning("Aloe watered: " + aloeWatered);
+        SaveGame();
+    }
+
     void UpdateAffectionLvl()
     {
         TimeSpan timeSpan = DateTime.UtcNow - Convert.ToDateTime(affectionTimeToSave);

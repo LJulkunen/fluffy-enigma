@@ -231,22 +231,24 @@ public class Kitsulope : ObjectType
         switch (hitType)
         {
             case Object.Kitsulope:
-                if (Input.GetTouch(0).phase == TouchPhase.Began)
+
+                // These might be useful later if I have time & it would be an improvement to add more scenes/animations.
+                /*if (Input.GetTouch(0).phase == TouchPhase.Began)
                 {
                     Debug.Log("You tapped.");
                     isPetNoticingYou = true;
-                }
-
-                if ((Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Stationary) && isPetNoticingYou == true)
-                {
-                    Debug.Log("Touch phase is Moved or Stationary.");
                     animator.SetBool("IsPetting", true);
                 }
 
-                if (Input.GetTouch(0).phase == TouchPhase.Ended)
+                if ((Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Stationary || Input.GetTouch(0).phase == TouchPhase.Began) && isPetNoticingYou == true)*/
+                if (Input.GetTouch(0).phase == TouchPhase.Began || Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Stationary)
+                {
+                    Debug.Log("Touch phase is Began, Moved or Stationary.");
+                    animator.SetBool("IsPetting", true);
+                } else if (Input.GetTouch(0).phase == TouchPhase.Ended)
                 {
                     save.Pet();
-                    isPetNoticingYou = false;
+                    //isPetNoticingYou = false;
                 }
                 break;
             case Object.Fridge:

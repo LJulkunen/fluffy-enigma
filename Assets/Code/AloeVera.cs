@@ -14,6 +14,9 @@ public class AloeVera : ObjectType
 
     public GameObject wateringCan;
 
+    public SpriteRenderer aloeSprite;
+    public Sprite healedAloe;
+
     #region MovementVariables
     [SerializeField]
     private float xMin = -0.9F;
@@ -53,6 +56,11 @@ public class AloeVera : ObjectType
 
         bubbleText = bubbleTextObject.GetComponent<TextMeshProUGUI>();
 
+        Debug.Log("Aloe watered? " + save.aloeWatered);
+        if (save.aloeWatered == 1)
+        {
+            aloeSprite.sprite = healedAloe;
+        }
         #region randomPlacement(A joke, don't use in actual game)
         /*randX = Random.Range(xMin, xMax);
         newPos.x = randX;
@@ -167,6 +175,8 @@ public class AloeVera : ObjectType
                     else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == fridgeSprite)
                     {
                         wateringCan.SetActive(wateringCan);
+                        save.WaterAloe();
+                        aloeSprite.sprite = healedAloe;
                         //save.Feed();
                     }
                     // Generic bubble object active but sprite and dialogue wrong. They are changed here.
