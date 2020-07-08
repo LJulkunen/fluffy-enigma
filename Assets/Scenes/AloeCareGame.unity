@@ -818,7 +818,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 48fc34ba09558dc47a37f6d5ef2073c6, type: 3}
   m_Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
   m_FlipX: 0
@@ -1232,7 +1232,7 @@ MonoBehaviour:
   bubbleCounter: 0
   randX: 0
   newPos: {x: 0, y: 0, z: 0}
-  exitCounter: 3
+  exitCounter: 2
 --- !u!1 &2145421758
 GameObject:
   m_ObjectHideFlags: 0
@@ -1318,4 +1318,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - "\tShould I exit? Press \t\n\t3 seconds to confirm."
+  - "\tShould I exit? Press &\n\thold for 2 seconds \n\tto confirm."
