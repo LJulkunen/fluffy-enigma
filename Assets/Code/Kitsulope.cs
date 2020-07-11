@@ -72,6 +72,8 @@ public class Kitsulope : ObjectType
     public Sprite fridgeOpen;
     #endregion
 
+    public Vector3 newPos;
+
     private void Start()
     {
         save = FindObjectOfType<SaveSerial>();
@@ -86,6 +88,17 @@ public class Kitsulope : ObjectType
         color = bubbleSpriteRenderer.color;
 
         bubbleText = bubbleTextObject.GetComponent<TextMeshProUGUI>();
+
+        if (SceneManager.GetActiveScene().name == "Field")
+        {
+            newPos.x = xMin;
+            transform.Translate(newPos);
+        }
+        else if (SceneManager.GetActiveScene().name == "Game")
+        {
+            newPos.x = xMax;
+            transform.Translate(newPos);
+        }
     }
 
     void Update()

@@ -318,6 +318,7 @@ MonoBehaviour:
   fridgeRenderer: {fileID: 0}
   fridgeClosed: {fileID: 0}
   fridgeOpen: {fileID: 0}
+  newPos: {x: 0, y: 0, z: 0}
   exitCounter: 2
 --- !u!114 &299115868
 MonoBehaviour:
@@ -533,7 +534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - "Should we return home?\nPress & hold for 2 seconds \nto confirm."
+  - " Should we return home?\n Press & hold for 2 seconds \n to confirm."
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
