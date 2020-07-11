@@ -15,9 +15,11 @@ public class Kitsulope : ObjectType
     public GameObject fridge;
     public GameObject window;
     public GameObject exitButton;
+    public GameObject bike;
     public Sprite exitSprite;
     public Sprite windowSprite;
     public Sprite fridgeSprite;
+    public Sprite bikeSprite;
 
     #region MovementVariables
     [SerializeField]
@@ -371,6 +373,67 @@ public class Kitsulope : ObjectType
                 break;
             case Object.WildRabbit:
                 save.ResetSave();
+                break;
+            case Object.Bike:
+                #region backInside?
+                if (Input.GetTouch(0).phase == TouchPhase.Began || Input.GetTouch(0).phase == TouchPhase.Stationary)
+                {
+                    dialogue = bike.GetComponent<Dialogue>();
+
+                    // Exit bubble not active, gets activated. Doesn't do anything yet.
+                    if (!bubbleObject.activeInHierarchy)
+                    {
+                        bubbleCounter = 0;
+                        exitCounter = 4.0f;
+                        bubbleObject.SetActive(bubbleObject);
+                        bubbleSpriteRenderer.sprite = bikeSprite;
+                        bubbleTextObject.SetActive(bubbleTextObject);
+                        dialogueManager.StartDialogue(dialogue);
+                        color.a = 1;
+                    }
+                    // Exit bubble active. Shouldn't start fading when touch stationary.
+                    else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == bikeSprite
+                        && exitCounter > 0 && Input.GetTouch(0).phase == TouchPhase.Stationary)
+                    {
+                        exitCounter -= Time.deltaTime;
+                        bubbleCounter = 0;
+                    }
+                    // Exit bubble has been activated and is touched when opacity is full. Calls Exit method.
+                    else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == bikeSprite
+                        && exitCounter <= 0)
+                    {
+                        dialogue = bike.GetComponent<Dialogue>();
+                        dialogueManager.StartDialogue(dialogue);
+                        Debug.Log("Back inside!");
+                        SceneManager.LoadScene("Game");
+                    }
+                    // Generic bubble object active but sprite and dialogue wrong. They are changed here.
+                    else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite != bikeSprite)
+                    {
+                        bubbleSpriteRenderer.sprite = bikeSprite;
+                        dialogue = window.GetComponent<Dialogue>();
+                        dialogueManager.StartDialogue(dialogue);
+                        bubbleCounter = 0;
+                    }
+                    // Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
+                    else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite == bikeSprite)
+                    {
+                        bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
+                        bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
+                        bubbleCounter = 0;
+                    }
+                    // Generic bubble object active but sprite and dialogue wrong. They are changed here. Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
+                    else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite != bikeSprite)
+                    {
+                        bubbleSpriteRenderer.sprite = bikeSprite;
+                        dialogue = bike.GetComponent<Dialogue>();
+                        dialogueManager.StartDialogue(dialogue);
+                        bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
+                        bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
+                        bubbleCounter = 0;
+                    }
+                }
+                #endregion
                 break;
             case Object.ExitButton:
                 #region exitBubble

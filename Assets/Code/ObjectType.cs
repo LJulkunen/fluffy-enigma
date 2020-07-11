@@ -10,7 +10,8 @@ public class ObjectType : MonoBehaviour
         Window,
         ExitButton,
         AloeVera,
-        WildRabbit
+        WildRabbit,
+        Bike
     }
     public Object type;
 }
