@@ -533,7 +533,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - "Should we return home? Press \n\t& hold for 2 seconds \n\tto confirm."
+  - "Should we return home?\nPress & hold for 2 seconds \nto confirm."
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
