@@ -89,6 +89,7 @@ public class SaveSerial : MonoBehaviour
         SaveLoad.SaveData = new long[SaveLoad.SAVEDATA_LENGHT];
 
         LoadGame();
+        Debug.Log("Sapient level is: " + sapientLevel);
     }
 
     void Start()
@@ -343,6 +344,16 @@ public class SaveSerial : MonoBehaviour
         }
 
         Debug.LogWarning("Aloe watered: " + aloeWatered);
+        SaveGame();
+    }
+
+    public void Read()
+    {
+        if (sapientLevel < 1)
+        {
+            sapientLevel++;
+        }
+
         SaveGame();
     }
 
