@@ -424,7 +424,7 @@ public class Kitsulope : ObjectType
                     else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite != bikeSprite)
                     {
                         bubbleSpriteRenderer.sprite = bikeSprite;
-                        dialogue = window.GetComponent<Dialogue>();
+                        dialogue = bike.GetComponent<Dialogue>();
                         dialogueManager.StartDialogue(dialogue);
                         bubbleCounter = 0;
                     }
