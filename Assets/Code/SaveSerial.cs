@@ -56,16 +56,19 @@ public class SaveSerial : MonoBehaviour
     public int version = 0;
     public TextMeshProUGUI debugText;
 
-    /* TODO: [] Save aloe stats.
+    /* TODO: [x] Save aloe stats.
      *       [] Change sprite after a day if aloe watered enough.
      *       [] 4 aloe levels. 0 being just got nibbled by kitsulope, 4 fully grown.
-     *       [] WateredLevel just probably needs to be 0 or 1?
+     *       [x] WateredLevel just probably needs to be 0 or 1?
      *       [] A high max counter for waterLevel dropping (a day probably).
      *       [] Counter should work in the exact same way as it does with the actual pet.
     */
     public int aloeWatered = 0;
     public int aloeLevel = 0;
     DateTime aloeWateredTime;
+
+    public int maxSapientLevel = 7;
+    public int sapientLevel = 0;
 
     void Awake()
     {
@@ -160,6 +163,9 @@ public class SaveSerial : MonoBehaviour
         affectionTimeToSave = DateTime.UtcNow;
         isIntroOver = 0;
         aloeWatered = 0;
+        aloeLevel = 0;
+        aloeWateredTime = DateTime.UtcNow;
+        sapientLevel = 0;
         
         SaveGame();
     }
@@ -195,6 +201,9 @@ public class SaveSerial : MonoBehaviour
         SaveLoad.SaveData[(int)SaveLoad.Line.SatisfiedLevel] = satisfiedLvlToSave;
         SaveLoad.SaveData[(int)SaveLoad.Line.IntroOver] = isIntroOver;
         SaveLoad.SaveData[(int)SaveLoad.Line.AloeWatered] = aloeWatered;
+        SaveLoad.SaveData[(int)SaveLoad.Line.AloeLevel] = aloeLevel;
+        SaveLoad.SaveData[(int)SaveLoad.Line.AloeWateredTime] = aloeWateredTime.Ticks;
+        SaveLoad.SaveData[(int)SaveLoad.Line.SapientLevel] = sapientLevel;
         // saving correct values
         SaveLoad.Save(debugText);
 
@@ -230,6 +239,9 @@ public class SaveSerial : MonoBehaviour
         satisfiedLvlToSave = (int)SaveLoad.SaveData[(int)SaveLoad.Line.SatisfiedLevel];
         isIntroOver = (int) SaveLoad.SaveData[(int)SaveLoad.Line.IntroOver];
         aloeWatered = (int)SaveLoad.SaveData[(int)SaveLoad.Line.AloeWatered];
+        aloeLevel = (int) SaveLoad.SaveData[(int)SaveLoad.Line.AloeLevel];
+        aloeWateredTime = DateTime.FromBinary(SaveLoad.SaveData[(int)SaveLoad.Line.AloeWateredTime]);
+        sapientLevel = (int)SaveLoad.SaveData[(int)SaveLoad.Line.SapientLevel];
 
         Debug.Log("Game data loaded!");
         UpdateHungerLvl();
