@@ -8,9 +8,11 @@ public class AloeVera : ObjectType
 
     SaveSerial save;
     public GameObject fridge;
+    public GameObject aloe;
     public GameObject exitButton;
     public Sprite exitSprite;
     public Sprite fridgeSprite;
+    public Sprite cornerSprite;
 
     public GameObject wateringCan;
 
@@ -166,6 +168,61 @@ public class AloeVera : ObjectType
         //Debug.Log(hitType);
         switch (hitType)
         {
+            case Object.AloeVera:
+                if (save.aloeLevel == 3)
+                {
+                    if (Input.GetTouch(0).phase == TouchPhase.Began)
+                    {
+                        dialogue = aloe.GetComponent<Dialogue>();
+
+                        // Bubble not active, gets activated. Doesn't do anything yet.
+                        if (!bubbleObject.activeInHierarchy)
+                        {
+                            bubbleCounter = 0;
+                            bubbleObject.SetActive(bubbleObject);
+                            bubbleSpriteRenderer.sprite = cornerSprite;
+                            bubbleTextObject.SetActive(bubbleTextObject);
+                            dialogueManager.StartDialogue(dialogue);
+                            color.a = 1;
+                        }
+
+                        //Bubble has been activated and is touched when opacity is full. Calls Feed method.
+                        else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == cornerSprite && dialogueManager.sentences.Count > 0)
+                        {
+                            dialogueManager.DisplayNextSentence();
+                        }
+                        else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == cornerSprite && dialogueManager.sentences.Count == 0)
+                        {
+                            Debug.LogWarning("RESETTING FROM ALOE END!");
+                            save.ResetSave();
+                        }
+                        // Generic bubble object active but sprite and dialogue wrong. They are changed here.
+                        else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite != cornerSprite)
+                        {
+                            bubbleSpriteRenderer.sprite = cornerSprite;
+                            dialogue = aloe.GetComponent<Dialogue>();
+                            dialogueManager.StartDialogue(dialogue);
+                        }
+                        // Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
+                        else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite == cornerSprite)
+                        {
+                            bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
+                            bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
+                            bubbleCounter = 0;
+                        }
+                        // Generic bubble object active but sprite and dialogue wrong. They are changed here. Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
+                        else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite != cornerSprite)
+                        {
+                            bubbleSpriteRenderer.sprite = cornerSprite;
+                            dialogue = aloe.GetComponent<Dialogue>();
+                            dialogueManager.StartDialogue(dialogue);
+                            bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
+                            bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
+                            bubbleCounter = 0;
+                        }
+                    }
+                }
+                break;
             case Object.Fridge:
                 #region fridgeBubble
                 if (Input.GetTouch(0).phase == TouchPhase.Began)
@@ -218,7 +275,7 @@ public class AloeVera : ObjectType
                 #endregion
                 break;
             case Object.Window:
-                save.ResetSave();
+                //save.ResetSave();
                 break;
             case Object.ExitButton:
                 #region exitBubble

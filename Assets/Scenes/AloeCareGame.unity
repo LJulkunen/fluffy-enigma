@@ -1101,6 +1101,7 @@ GameObject:
   - component: {fileID: 2024066986}
   - component: {fileID: 2024066984}
   - component: {fileID: 2024066990}
+  - component: {fileID: 2024066985}
   m_Layer: 0
   m_Name: Aloe
   m_TagString: Untagged
@@ -1121,6 +1122,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueText: {fileID: 1625694128}
+--- !u!114 &2024066985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2024066983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 340e5376436f19c46abe98e07a053f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sentences:
+  - "\tHello! Your love has \n\tbrought me to lif... err... \n\tI mean... you know.
+    \n\tI can talk now."
+  - "\tOh, a clich\xE9 fewer dream. \n\tHow original...Tap me\n\tagain to restart
+    the game."
 --- !u!70 &2024066986
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -1215,9 +1233,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 5
   fridge: {fileID: 1197394779}
+  aloe: {fileID: 2024066983}
   exitButton: {fileID: 2145421758}
   exitSprite: {fileID: 21300000, guid: 52f0158013e3fcb4589bab0cb8ca7af1, type: 3}
   fridgeSprite: {fileID: 21300000, guid: 34ee19f7387ea944a899c0335519e601, type: 3}
+  cornerSprite: {fileID: 21300000, guid: 82437c58a0657d740a6a54effeb84d25, type: 3}
   wateringCan: {fileID: 1289090040}
   aloeSprite: {fileID: 2024066988}
   healedAloe: {fileID: 21300000, guid: 4d60ec0f664d3664692b5b94710defbf, type: 3}
