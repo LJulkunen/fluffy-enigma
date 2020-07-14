@@ -16,6 +16,8 @@ public class AloeVera : ObjectType
 
     public SpriteRenderer aloeSprite;
     public Sprite healedAloe;
+    public Sprite growingAloe;
+    public Sprite grownAloe;
 
     #region MovementVariables
     [SerializeField]
@@ -56,10 +58,19 @@ public class AloeVera : ObjectType
 
         bubbleText = bubbleTextObject.GetComponent<TextMeshProUGUI>();
 
-        Debug.Log("Aloe watered? " + save.aloeWatered);
-        if (save.aloeWatered == 1)
-        {
-            aloeSprite.sprite = healedAloe;
+        Debug.Log("Aloe watered? " + save.aloeWatered + " Aloe level? :" + save.aloeLevel);
+
+        switch (save.aloeLevel) {
+
+            case 1:
+                aloeSprite.sprite = healedAloe;
+                break;
+            case 2:
+                aloeSprite.sprite = growingAloe;
+                break;
+            case 3:
+                aloeSprite.sprite = grownAloe;
+                break;
         }
         #region randomPlacement(A joke, don't use in actual game)
         /*randX = Random.Range(xMin, xMax);

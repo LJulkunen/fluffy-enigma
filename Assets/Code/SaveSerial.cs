@@ -60,7 +60,7 @@ public class SaveSerial : MonoBehaviour
      *       [] Change sprite after a day if aloe watered enough.
      *       [] 4 aloe levels. 0 being just got nibbled by kitsulope, 4 fully grown.
      *       [x] WateredLevel just probably needs to be 0 or 1?
-     *       [] A high max counter for waterLevel dropping (a day probably).
+     *       [x] A high max counter for waterLevel dropping (a day probably).
      *       [] Counter should work in the exact same way as it does with the actual pet.
     */
     public int aloeWatered = 0;
@@ -338,12 +338,21 @@ public class SaveSerial : MonoBehaviour
 
     public void WaterAloe()
     {
-        if (aloeWatered < 1)
+        TimeSpan timeSpan = DateTime.UtcNow - Convert.ToDateTime(aloeWateredTime);
+
+        if (timeSpan.Days > 0)
         {
-            aloeWatered++;
+            aloeWatered = 0;
         }
 
-        Debug.LogWarning("Aloe watered: " + aloeWatered);
+        if (aloeWatered < 1 && aloeLevel < 3)
+        {
+            aloeWatered++;
+            aloeLevel++;
+            aloeWateredTime = DateTime.UtcNow;
+        }
+
+        Debug.LogWarning("Aloe watered: " + aloeWatered + " at: " + aloeWateredTime);
         SaveGame();
     }
 

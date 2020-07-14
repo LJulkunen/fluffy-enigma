@@ -169,6 +169,8 @@ MonoBehaviour:
   debugText: {fileID: 0}
   aloeWatered: 0
   aloeLevel: 0
+  maxSapientLevel: 7
+  sapientLevel: 0
 --- !u!4 &27253537
 Transform:
   m_ObjectHideFlags: 0
@@ -878,7 +880,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 370, y: -11.437027}
+  m_AnchoredPosition: {x: 370, y: -11.437012}
   m_SizeDelta: {x: -817.72394, y: -196.88391}
   m_Pivot: {x: 0.5000001, y: 0.5}
 --- !u!114 &1625694128
@@ -1219,6 +1221,8 @@ MonoBehaviour:
   wateringCan: {fileID: 1289090040}
   aloeSprite: {fileID: 2024066988}
   healedAloe: {fileID: 21300000, guid: 4d60ec0f664d3664692b5b94710defbf, type: 3}
+  growingAloe: {fileID: 21300000, guid: 277866071bbef7245877dfbbfa9cba82, type: 3}
+  grownAloe: {fileID: 21300000, guid: 9722abab94f82bf42968ce22131c143c, type: 3}
   xMin: -0.9
   xMax: 0.9
   speed: 0.1
