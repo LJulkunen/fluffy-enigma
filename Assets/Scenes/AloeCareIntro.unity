@@ -536,11 +536,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 726717363}
-  - component: {fileID: 726717362}
   - component: {fileID: 726717364}
   - component: {fileID: 726717365}
+  - component: {fileID: 726717362}
   m_Layer: 0
-  m_Name: Intro
+  m_Name: AloeIntro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -555,10 +555,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 726717361}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0a15d6024c566f40bb9832bda02ee94, type: 3}
+  m_Script: {fileID: 11500000, guid: a58b690e4bc4de1459bfae62befbcec9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogue: {fileID: 0}
+  dialogue: {fileID: 726717365}
   dialogueManager: {fileID: 726717364}
   dialogueBoxObject: {fileID: 1417618655}
   dialogueTextObject: {fileID: 1417618655}
@@ -604,12 +604,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - Today's the day I'm getting a pet.
-  - I've really missed having a bunny in my life, so I've made an agreement to get
-    one from a rescue shelter.
-  - I was informed that the bunny might be a bit of a special case.
-  - I think the exact phrasing was "probably mutated but still cute".
-  - Well, time to head to the shelter.
+  - ...I should repot this plant.
 --- !u!1 &739563212
 GameObject:
   m_ObjectHideFlags: 0
@@ -919,7 +914,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4282400952
-  m_fontColor: {r: 0.72156864, g: 0.2509804, b: 0.2509804, a: 1}
+  m_fontColor: {r: 0.10196079, g: 0.5254902, b: 0.10196079, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1080,7 +1075,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: ea2f2539f6cbfe147bec1be59a080b57, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c5c40564f248996478cae550e646a078, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1147,7 +1142,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 58aa60d8337213a44965618bc771bb24, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 56d201ae0c61aad49909a7621ffbc6ee, type: 3}
   m_Color: {r: 0.9, g: 0.9, b: 0.9, a: 1}
   m_FlipX: 0
   m_FlipY: 0
