@@ -735,6 +735,7 @@ GameObject:
   - component: {fileID: 787507193}
   - component: {fileID: 787507192}
   - component: {fileID: 787507194}
+  - component: {fileID: 787507195}
   m_Layer: 0
   m_Name: Window
   m_TagString: Untagged
@@ -878,6 +879,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sentences:
   - "Should we go outside? Press \n\t& hold for 2 seconds \n\tto confirm."
+--- !u!114 &787507195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787507188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abec6ac9663df6b49a0f418ea1689ed0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugPrefab: {fileID: 9181116421722251255, guid: 95eb8eb3162eef24b9ff1279e635d5a6,
+    type: 3}
 --- !u!1 &791600369
 GameObject:
   m_ObjectHideFlags: 0
@@ -940,6 +955,7 @@ GameObject:
   - component: {fileID: 1197394782}
   - component: {fileID: 1197394784}
   - component: {fileID: 1197394783}
+  - component: {fileID: 1197394785}
   m_Layer: 0
   m_Name: Fridge
   m_TagString: Untagged
@@ -1076,6 +1092,7 @@ GameObject:
   - component: {fileID: 1583341380}
   - component: {fileID: 1583341381}
   - component: {fileID: 1583341382}
+  - component: {fileID: 1583341383}
   m_Layer: 0
   m_Name: Shelf
   m_TagString: Untagged
@@ -1151,6 +1168,20 @@ MonoBehaviour:
   sentences:
   - "\tShould I read?\n\tTap to confirm."
   - "\tThe bunny seems... \n\toddly interested?"
+--- !u!114 &1583341383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583341378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abec6ac9663df6b49a0f418ea1689ed0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugPrefab: {fileID: 9181116421722251255, guid: 95eb8eb3162eef24b9ff1279e635d5a6,
+    type: 3}
 --- !u!1 &1625694126
 GameObject:
   m_ObjectHideFlags: 0
@@ -1209,7 +1240,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 35d37161aa475794ca559f87bf7070a9, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: 3776522582149721584, guid: 35d37161aa475794ca559f87bf7070a9,
     type: 2}
   m_fontSharedMaterials: []
@@ -1406,6 +1437,7 @@ GameObject:
   - component: {fileID: 2145421760}
   - component: {fileID: 2145421761}
   - component: {fileID: 2145421762}
+  - component: {fileID: 2145421763}
   m_Layer: 0
   m_Name: ExitButton
   m_TagString: Untagged
@@ -1480,3 +1512,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sentences:
   - "\tShould I exit? Press &\n\thold for 2 seconds \n\tto confirm."
+--- !u!114 &2145421763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2145421758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abec6ac9663df6b49a0f418ea1689ed0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugPrefab: {fileID: 9181116421722251255, guid: 95eb8eb3162eef24b9ff1279e635d5a6,
+    type: 3}
