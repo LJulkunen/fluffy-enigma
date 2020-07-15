@@ -1,68 +1,40 @@
 ﻿using UnityEngine;
 using System;
-using System.IO;
-using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.SceneManagement;
 
+[ExecuteInEditMode]
 public class SaveSerial : MonoBehaviour
 {
-    #region KitsulopeVariables
-    [SerializeField]
-    public int maxHungerLvl = 4;
-    public int hungerLvlToSave = 0;
-    DateTime hungerTimeToSave;
-
-    [SerializeField]
-    public int maxAffectionLvl = 4;
-    public int affectionLvlToSave = 0;
-    DateTime affectionTimeToSave;
-
-    [SerializeField]
-    public int maxSatisfiedLvl = 4;
-    public int satisfiedLvlToSave = 0;
-
-
-    [SerializeField]
-    public int howManyHours = 4;
-
-    [SerializeField]
-    public float maxCounter = 28800;
-    public float hungerCounter;
-    public float affectionCounter;
-
-    #region forCounterReduction
-    // Reduction = remainder + modulo
-    float affectionCounterReduction;
-    float hungerCounterReduction;
-    float affectionRemainder;
-    float hungerRemainder;
-    float affectionModulo;
-    float hungerModulo;
-    #endregion
-
-    public float timer = 0.0f;
-
-    [SerializeField]
-    public bool isThisForJustMyTesting;
-
-    public bool isPetting;
-    public bool isFeeding;
-
-    int daysReduction = 0;
-    #endregion
-
+    // static variables
     public static SaveSerial SAVE;
-    public int isIntroOver = 0;
-    public int version = 0;
+
+    // uncategorized variables
+    public bool isThisForJustMyTesting;
+    public bool isPetting, isFeeding;
+    public int howManyHours = 4;
     public TextMeshProUGUI debugText;
 
+    // generic default values
+    public int defaultLevelValue = 3, levelMin = 0, levelMax = 4;
+
+    // for satisfaction level
+    int _levelValueCounter;
+    long[] _levelValues = new long[SaveLoad.LevelLineCount];
+
+    // for counters
+    int _remainingHours, _remainingMinutes, _remainingSeconds;
+    public float maxCounter, hungerCounter, affectionCounter;
+    float timer = 0.0f;
+
+    #region TODO and ???
     /* TODO: [x] Save aloe stats.
      *       [] Change sprite after a day if aloe watered enough.
      *       [] 4 aloe levels. 0 being just got nibbled by kitsulope, 4 fully grown.
      *       [x] WateredLevel just probably needs to be 0 or 1?
      *       [x] A high max counter for waterLevel dropping (a day probably).
      *       [] Counter should work in the exact same way as it does with the actual pet.
-    */
+     */
     public int aloeWatered = 0;
     public int aloeLevel = 0;
     DateTime aloeWateredTime;
@@ -71,6 +43,7 @@ public class SaveSerial : MonoBehaviour
     public int sapientLevel = 0;
 
     public int isAloeIntroOver = 0;
+    #endregion
 
     void Awake()
     {
@@ -83,26 +56,39 @@ public class SaveSerial : MonoBehaviour
         } else
         {
             SAVE = this;
-            DontDestroyOnLoad(SAVE);
+            // cant do this in editor
+            if (Application.isPlaying)
+                DontDestroyOnLoad(SAVE);
         }
         #endregion
 
         // initializes long array
-        SaveLoad.SaveData = new long[SaveLoad.SAVEDATA_LENGHT];
+        if (SaveLoad.SaveData == null)
+            SaveLoad.SaveData = new long[SaveLoad.SaveDataSize];
 
         LoadGame();
         Debug.Log("Sapient level is: " + sapientLevel);
     }
 
-    void Start()
+    public void Start()
     {
-        maxCounter = howManyHours * 3600;
+        maxCounter = howManyHours * 60 * 60;
         hungerCounter = maxCounter;
         affectionCounter = maxCounter;
+
+        if (Application.isPlaying)
+        {
+            if (FindObjectOfType<DecideStartScreen>())
+                FindObjectOfType<DecideStartScreen>().LoadNextScene();
+        }
     }
 
     void Update()
     {
+        // only do update in playmode and builds
+        if (Application.isPlaying == false)
+            return;
+
         timer += Time.deltaTime;
         float seconds = timer % 60;
 
@@ -116,35 +102,23 @@ public class SaveSerial : MonoBehaviour
         if (hungerCounter <= 0)
         {
             hungerCounter = maxCounter;
-            hungerLvlToSave--;
-            satisfiedLvlToSave--;
-            UpdateSatisfiedLvl();
-            SaveGame();
+            SaveLoad.SaveData[(int)SaveLoad.Line.K_HungerLevel]--;
+            UpdateSatisfaction();
         }
         if (affectionCounter <= 0)
         {
             affectionCounter = maxCounter;
-            affectionLvlToSave--;
-            satisfiedLvlToSave--;
-            UpdateSatisfiedLvl();
-            SaveGame();
+            SaveLoad.SaveData[(int)SaveLoad.Line.K_AffectionLevel]--;
+            UpdateSatisfaction();
         }
 
-        // Make sure user is on Android platform
-        if (Application.platform == RuntimePlatform.Android)
+        // Check platform and if Back (or esc) was pressed this frame
+        if (Application.isPlaying && Input.GetKeyDown(KeyCode.Escape))
         {
-
-            // Check if Back was pressed this frame
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                //isIntroOver = 1;
-                // Quit the application
-                SaveGame();
-                Application.Quit();
-            }
+            Exit();
         }
     }
-
+    
     // Might be useful with testing. Hide when you give a build tho.
     void OnGUI()
     {
@@ -155,20 +129,31 @@ public class SaveSerial : MonoBehaviour
                 ResetSave();
         }
     }
-
-    void CreateSave()
+    
+    void CreateOrEditSave(int start)
     {
-        // set default values
-        hungerLvlToSave = 3;
-        affectionLvlToSave = 3;
-        satisfiedLvlToSave = 3;
-        hungerTimeToSave = DateTime.UtcNow;
-        affectionTimeToSave = DateTime.UtcNow;
-        isIntroOver = 0;
-        aloeWatered = 0;
-        aloeLevel = 0;
-        aloeWateredTime = DateTime.UtcNow;
-        sapientLevel = 0;
+        // sets all new data to default values
+        // if start is zero sets all data to default
+        for (int i = start; i < SaveLoad.SaveDataSize; i++)
+        {
+            // add hanling as needed :)
+            if (i == (int)SaveLoad.Line.Version)
+                continue;
+
+            if (((SaveLoad.Line)i).ToString().Contains("Level"))
+            {
+                SaveLoad.SaveData[i] = defaultLevelValue;
+                continue;
+            }
+            if (((SaveLoad.Line)i).ToString().Contains("Time"))
+            {
+                SaveLoad.SaveData[i] = DateTime.UtcNow.Ticks;
+                continue;
+            }
+
+            Debug.LogError("Missing handling for " + ((SaveLoad.Line)i).ToString() + " and is set to zero!");
+            SaveLoad.SaveData[i] = 0;
+        }
         
         SaveGame();
     }
@@ -176,166 +161,76 @@ public class SaveSerial : MonoBehaviour
     public void ResetSave()
     {
         SaveLoad.Delete();
-        CreateSave();
-        /*if (File.Exists(Application.persistentDataPath
-                      + "/MySaveData.dat"))
-        {
-            File.Delete(Application.persistentDataPath
-                              + "/MySaveData.dat");
-            hungerLvlToSave = 3;
-            affectionLvlToSave = 3;
-            satisfiedLvlToSave = 3;
-            hungerTimeToSave = DateTime.Now;
-            affectionTimeToSave = DateTime.Now;
-            Debug.Log("Data reset complete!");
-        }
-        else
-            Debug.LogError("No save data to delete.");*/
+        CreateOrEditSave(0);
     }
 
-    void SaveGame()
+    public void SaveGame()
     {
-        // populating array with correct values
-        SaveLoad.SaveData[(int)SaveLoad.Line.Version] = version;
-        SaveLoad.SaveData[(int)SaveLoad.Line.HungerLevel] = hungerLvlToSave;
-        SaveLoad.SaveData[(int)SaveLoad.Line.HungerTime] = hungerTimeToSave.Ticks;
-        SaveLoad.SaveData[(int)SaveLoad.Line.AffectionLevel] = affectionLvlToSave;
-        SaveLoad.SaveData[(int)SaveLoad.Line.AffectionTime] = affectionTimeToSave.Ticks;
-        SaveLoad.SaveData[(int)SaveLoad.Line.SatisfiedLevel] = satisfiedLvlToSave;
-        SaveLoad.SaveData[(int)SaveLoad.Line.IntroOver] = isIntroOver;
-        SaveLoad.SaveData[(int)SaveLoad.Line.AloeWatered] = aloeWatered;
-        SaveLoad.SaveData[(int)SaveLoad.Line.AloeLevel] = aloeLevel;
-        SaveLoad.SaveData[(int)SaveLoad.Line.AloeWateredTime] = aloeWateredTime.Ticks;
-        SaveLoad.SaveData[(int)SaveLoad.Line.SapientLevel] = sapientLevel;
         // saving correct values
         SaveLoad.Save(debugText);
-
-        /*BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath
-                     + "/MySaveData.dat");
-        SaveData data = new SaveData();
-        data.savedHungerLvl = hungerLvlToSave;
-        data.savedAffectionLvl = affectionLvlToSave;
-        data.savedSatisfiedLvl = satisfiedLvlToSave;
-        data.savedHungerTime = hungerTimeToSave.Ticks;
-        data.savedAffectionTime = affectionTimeToSave.Ticks;
-        data.savedIsIntroOver = isIntroOver;
-        bf.Serialize(file, data);
-        file.Close();
-        Debug.Log("Game data (hunger & affection & satisfaction levels & related times) saved!");*/
     }
 
-    void LoadGame()
+    public void LoadGame()
     {
-        // if savegame load it else make savegame
+        int oldDataCount = 0;
+        // if savegame exist load it
         if (SaveLoad.Find())
-            SaveLoad.Load(debugText);
-        else
-            CreateSave();
+            oldDataCount = SaveLoad.Load(debugText);
 
-        // assign local values from saved ones
-        version = (int)SaveLoad.SaveData[(int)SaveLoad.Line.Version];
-        hungerLvlToSave = (int)SaveLoad.SaveData[(int)SaveLoad.Line.HungerLevel];
-        hungerTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[(int)SaveLoad.Line.HungerTime]);
-        affectionLvlToSave = (int)SaveLoad.SaveData[(int)SaveLoad.Line.AffectionLevel];
-        affectionTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[(int)SaveLoad.Line.AffectionTime]);
-        satisfiedLvlToSave = (int)SaveLoad.SaveData[(int)SaveLoad.Line.SatisfiedLevel];
-        isIntroOver = (int) SaveLoad.SaveData[(int)SaveLoad.Line.IntroOver];
-        aloeWatered = (int)SaveLoad.SaveData[(int)SaveLoad.Line.AloeWatered];
-        aloeLevel = (int) SaveLoad.SaveData[(int)SaveLoad.Line.AloeLevel];
-        aloeWateredTime = DateTime.FromBinary(SaveLoad.SaveData[(int)SaveLoad.Line.AloeWateredTime]);
-        sapientLevel = (int)SaveLoad.SaveData[(int)SaveLoad.Line.SapientLevel];
+        CreateOrEditSave(oldDataCount);
 
-        Debug.Log("Game data loaded!");
-        UpdateHungerLvl();
-        UpdateAffectionLvl();
-        UpdateSatisfiedLvl();
-
-        SaveGame();
-
-        /*
-        if (File.Exists(Application.persistentDataPath
-                       + "/MySaveData.dat"))
+        if (Application.isPlaying)
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file =
-                       File.Open(Application.persistentDataPath
-                       + "/MySaveData.dat", FileMode.Open);
-            // makes long array with zeros
-            SaveLoad.SaveData = new long[SaveLoad.SAVEDATA_LENGHT];
-            // populating array with correct values
-            version = (int) SaveLoad.SaveData[SaveLoad.VERSION];
-            hungerLvlToSave = (int) SaveLoad.SaveData[SaveLoad.HUNGER_LVL];
-            hungerTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[SaveLoad.HUNGER_TIME]);
-            SaveLoad.SaveData[SaveLoad.AFFECTION_LVL] = affectionLvlToSave;
-            affectionTimeToSave = DateTime.FromBinary(SaveLoad.SaveData[SaveLoad.AFFECTION_TIME]);
-            SaveLoad.SaveData[SaveLoad.SATISFIED_LVL] = satisfiedLvlToSave;
-            SaveLoad.SaveData[SaveLoad.INTRO_OVER] = isIntroOver;
-            SaveData data = (SaveData)bf.Deserialize(file);
-            file.Close();
-            hungerLvlToSave = data.savedHungerLvl;
-            affectionLvlToSave = data.savedAffectionLvl;
-            satisfiedLvlToSave = data.savedSatisfiedLvl;
-            hungerTimeToSave = DateTime.FromBinary(data.savedHungerTime);
-            affectionTimeToSave = DateTime.FromBinary(data.savedAffectionTime);
-            isIntroOver = data.savedIsIntroOver;
-            Debug.Log("Game data loaded!");
-            UpdateHungerLvl();
+            CorrectHungerLevel();
             UpdateAffectionLvl();
-            UpdateSatisfiedLvl();
-            data.savedHungerLvl = hungerLvlToSave;
-            data.savedAffectionTime = affectionTimeToSave.Ticks;
-            data.savedHungerTime = hungerTimeToSave.Ticks;
-            data.savedSatisfiedLvl = satisfiedLvlToSave;*/
+            UpdateSatisfaction();
+        }
     }
 
     public void Feed()
     {
         isFeeding = true;
-        if (hungerLvlToSave < 0)
-        {
-            hungerLvlToSave = 0;
-            SaveGame();
-        }
-        else if (hungerLvlToSave >= maxHungerLvl)
-        {
-            hungerLvlToSave = maxHungerLvl;
-            SaveGame();
-        }
-        else if (hungerLvlToSave < maxHungerLvl)
-        {
-            hungerLvlToSave++;
-            hungerCounter = maxCounter;
-            Debug.Log("Hunger level is: " + hungerLvlToSave);
-            hungerTimeToSave = DateTime.UtcNow;
-            SaveGame();
-        }
 
-        UpdateSatisfiedLvl();
+        SaveLoad.SaveData[(int)SaveLoad.Line.K_HungerLevel] =
+            UpdateLevelValue(SaveLoad.SaveData[(int)SaveLoad.Line.K_HungerLevel], valueToAdd: 1);
+
+        hungerCounter = maxCounter;
+        SaveLoad.SaveData[(int)SaveLoad.Line.K_HungerTime] = DateTime.UtcNow.Ticks;
+        //Debug.Log("Hunger level is: " + SaveLoad.SaveData[(int)SaveLoad.Line.HungerLevel]);
+
+        UpdateSatisfaction();
     }
+
     public void Pet()
     {
         isPetting = true;
-        if (affectionLvlToSave < 0)
-        {
-            affectionLvlToSave = 0;
-            SaveGame();
-        }
-        else if (affectionLvlToSave >= maxAffectionLvl)
-        {
-            affectionLvlToSave = maxAffectionLvl;
-            SaveGame();
-        }
-        else
-        {
-            affectionLvlToSave++;
-            affectionCounter = maxCounter;
-            Debug.Log("Affection level is: " + affectionLvlToSave);
-            affectionTimeToSave = DateTime.UtcNow;
-            SaveGame();
-        }
 
-        UpdateSatisfiedLvl();
+        SaveLoad.SaveData[(int)SaveLoad.Line.K_AffectionLevel] =
+            UpdateLevelValue(SaveLoad.SaveData[(int)SaveLoad.Line.K_AffectionLevel], valueToAdd: 1);
+
+        affectionCounter = maxCounter;
+        SaveLoad.SaveData[(int)SaveLoad.Line.K_AffectionTime] = DateTime.UtcNow.Ticks;
+        //Debug.Log("Hunger level is: " + SaveLoad.SaveData[(int)SaveLoad.Line.HungerLevel]);
+
+        UpdateSatisfaction();
+    }
+
+    void CorrectLevelValue(SaveLoad.Line time, SaveLoad.Line level)
+    {
+        // Link to documentation of TimeSpan
+        // https://docs.microsoft.com/en-us/dotnet/api/system.timespan?view=netcore-3.1
+
+        TimeSpan difference = 
+            DateTime.UtcNow - new DateTime(SaveLoad.SaveData[(int)time]);
+
+        // every N hour is full number down
+        SaveLoad.SaveData[(int)level] -= difference.Hours / howManyHours;
+        // Updates levelValue between levelMin and levelMax
+        UpdateLevelValue(SaveLoad.SaveData[(int)level], valueToAdd: 0);
+        // remaining time to seconds with some steps :D
+        _remainingHours = difference.Hours % howManyHours;
+        _remainingMinutes = _remainingHours * 60 + difference.Minutes;
+        _remainingSeconds = _remainingMinutes * 60 + difference.Seconds;
     }
 
     public void WaterAloe()
@@ -375,213 +270,85 @@ public class SaveSerial : MonoBehaviour
 
     void UpdateAffectionLvl()
     {
-        TimeSpan timeSpan = DateTime.UtcNow - Convert.ToDateTime(affectionTimeToSave);
-        
-        Debug.Log("Time was: " + Convert.ToDateTime(affectionTimeToSave) + " and time is: " + DateTime.UtcNow);
-        Debug.Log("It's been this long since last petting: " + timeSpan);
-        Debug.Log("Affection level was: " + affectionLvlToSave);
-
-        if (affectionLvlToSave > 0)
-        {
-            if (timeSpan.Days > 0)
-            {
-                // Reducing affection stat.
-                daysReduction = (timeSpan.Days * 24) / howManyHours;
-                Debug.Log("What?! You've ignored the pet for over a day... :( Here's how much will be added to stacks lowering: " + daysReduction);
-                Debug.Log("Amount decreased should be: " + daysReduction);
-                affectionLvlToSave -= daysReduction;
-
-                // Reducing affection counter.
-                affectionRemainder = ((float) timeSpan.TotalDays - timeSpan.Days) * 24;
-                affectionModulo = timeSpan.Hours % howManyHours;
-                affectionCounterReduction = affectionRemainder + affectionModulo * 3600;
-                Debug.Log("Affection remainder:" + affectionRemainder);
-                Debug.Log("Modulo: " + affectionModulo);
-                UpdateAffectionCounter(affectionCounterReduction);
-            }
-             else if (timeSpan.Days == 0 & timeSpan.Hours < 0)
-            {
-                // Reducing affection stat.
-                affectionLvlToSave += timeSpan.Hours / howManyHours;
-                float affectionCounterReduction = (((float)timeSpan.TotalHours * 24 / howManyHours) * 3600) - timeSpan.Hours / howManyHours;
-                affectionCounter -= affectionCounterReduction;
-                Debug.Log("Amount decreased should be: " + timeSpan.Hours / howManyHours);
-
-                // Reducing affection counter.
-                affectionRemainder = ((float)timeSpan.TotalHours - timeSpan.Hours) * 60;
-                affectionModulo = timeSpan.Hours % howManyHours;
-                affectionCounterReduction = affectionRemainder + affectionModulo * 3600;
-                Debug.Log("Affection remainder:" + affectionRemainder);
-                Debug.Log("Modulo: " + affectionModulo);
-                UpdateAffectionCounter(affectionCounterReduction);
-            }
-            else
-            {
-                // Reducing affection stat.
-                affectionLvlToSave -= timeSpan.Hours / howManyHours;
-                float affectionCounterReduction = ((float)timeSpan.TotalHours - timeSpan.Hours) * 3600;
-                affectionCounter -= affectionCounterReduction;
-                Debug.Log("Amount decreased should be: " + timeSpan.Hours / howManyHours);
-
-                // Reducing affection counter.
-                affectionRemainder = ((float)timeSpan.TotalHours - timeSpan.Hours) * 60;
-                affectionModulo = timeSpan.Hours % howManyHours;
-                affectionCounterReduction = affectionRemainder + affectionModulo * 3600;
-                Debug.Log("Affection remainder:" + affectionRemainder);
-                Debug.Log("Modulo: " + affectionModulo);
-                UpdateAffectionCounter(affectionCounterReduction);
-            }
-
-            if (affectionLvlToSave >= maxAffectionLvl)
-            {
-                affectionLvlToSave = maxAffectionLvl;
-            }
-            else if (affectionLvlToSave > 0)
-            {
-
-            }
-            else
-            {
-                affectionLvlToSave = 0;
-            }
-        }
-        else
-        {
-            affectionLvlToSave = 0;
-        }
-        Debug.Log("Affection level is: " + affectionLvlToSave);
+        // corrects level when loading
+        CorrectLevelValue(SaveLoad.Line.K_AffectionTime, SaveLoad.Line.K_AffectionLevel);
+        // sets counter
+        affectionCounter = maxCounter - _remainingSeconds;
     }
-    void UpdateHungerLvl()
+
+    void CorrectHungerLevel()
     {
-        TimeSpan timeSpan = DateTime.UtcNow - Convert.ToDateTime(hungerTimeToSave);
-        Debug.Log("Time was: " + Convert.ToDateTime(hungerTimeToSave) + " and time is: " + DateTime.UtcNow);
-        Debug.Log("This much time has passed since last offering..." + timeSpan);
-        Debug.Log("Hunger level was: " + hungerLvlToSave); 
-
-        if (hungerLvlToSave > 0)
-        {
-            if (timeSpan.Days > 0)
-            {
-                daysReduction = (timeSpan.Days * 24) / howManyHours;
-                hungerLvlToSave -= daysReduction;
-                Debug.Log("What?! You've ignored the pet for over a day... :( Here's how much will be added to stacks lowering: " + daysReduction);
-                Debug.Log("Amount decreased should be: " + daysReduction);
-
-                // Reducing hunger counter.
-                hungerRemainder = ((float)timeSpan.TotalDays - timeSpan.Days) * 24;
-                hungerModulo = timeSpan.Hours % howManyHours;
-                hungerCounterReduction = hungerRemainder + hungerModulo * 3600;
-                Debug.Log("Hunger remainder:" + hungerRemainder);
-                Debug.Log("Modulo: " + hungerModulo);
-                UpdateHungerCounter(hungerCounterReduction);
-            }
-            else if (timeSpan.Days == 0 && timeSpan.Hours < 0)
-            {
-                hungerLvlToSave += timeSpan.Hours / howManyHours;
-                Debug.Log("Amount decreased should be: " + timeSpan.Hours / howManyHours);
-
-                // Reducing hunger counter.
-                hungerRemainder = ((float)timeSpan.TotalHours - timeSpan.Hours) * 60;
-                hungerModulo = timeSpan.Hours % howManyHours;
-                hungerCounterReduction = hungerRemainder + hungerModulo * 3600;
-                Debug.Log("Hunger remainder:" + hungerRemainder);
-                Debug.Log("Modulo: " + hungerModulo);
-                UpdateHungerCounter(hungerCounterReduction);
-            }
-            else
-            {
-                hungerLvlToSave -= timeSpan.Hours / howManyHours;
-                Debug.Log("Amount decreased should be: " + timeSpan.Hours / howManyHours);
-
-                // Reducing hunger counter.
-                hungerRemainder = ((float)timeSpan.TotalHours - timeSpan.Hours) * 60;
-                hungerModulo = timeSpan.Hours % howManyHours;
-                hungerCounterReduction = hungerRemainder + hungerModulo * 3600;
-                Debug.Log("Hunger remainder:" + hungerRemainder);
-                Debug.Log("Modulo: " + hungerModulo);
-                UpdateHungerCounter(hungerCounterReduction);
-            }
-
-            if (hungerLvlToSave >= maxHungerLvl)
-            {
-                hungerLvlToSave = maxHungerLvl;
-                
-            }
-            else if (hungerLvlToSave > 0)
-            {
-
-            } else
-            {
-                hungerLvlToSave = 0;
-            }
-        } else
-        {
-            hungerLvlToSave = 0;
-        }
-        Debug.Log("Hunger level is: " + hungerLvlToSave);
+        // corrects level when loading
+        CorrectLevelValue(SaveLoad.Line.K_HungerTime, SaveLoad.Line.K_HungerLevel);
+        // sets counter
+        hungerCounter = maxCounter - _remainingSeconds;
     }
-    void UpdateSatisfiedLvl()
+
+    void UpdateSatisfaction()
     {
-        if (hungerLvlToSave == maxHungerLvl && affectionLvlToSave == maxAffectionLvl)
+        // set satisfaction to max instead of zero
+        // before it checked is 3 less than 0 XD
+        SaveLoad.SaveData[(int)SaveLoad.Line.K_Satisfaction] = levelMax;
+
+        LoadLevelValues();
+
+        // sets satisfaction values to lowest level value
+        foreach (int value in _levelValues)
         {
-            satisfiedLvlToSave = maxSatisfiedLvl;
-            //Debug.Log("Your fluffy overlord is satisfied, good job!");
-        }
-        else if (hungerLvlToSave > affectionLvlToSave)
-        {
-            satisfiedLvlToSave = affectionLvlToSave;
-        }
-        else if (hungerLvlToSave < affectionLvlToSave)
-        {
-            satisfiedLvlToSave = hungerLvlToSave;
-        } else
-        {
-            satisfiedLvlToSave = hungerLvlToSave;
+            if (value < SaveLoad.SaveData[(int)SaveLoad.Line.K_Satisfaction])
+                SaveLoad.SaveData[(int)SaveLoad.Line.K_Satisfaction] = value;
         }
 
-        if (satisfiedLvlToSave == 3)
         {
-            //Debug.Log("Your fluffy overlord is mostly satisfied, keep it up!");
-        } else if (satisfiedLvlToSave == 2)
-        {
-            //Debug.Log("Your fluffy overlord is okay...");
-        } else if (satisfiedLvlToSave == 1)
-        {
-            //Debug.Log("Your fluffy overlord is getting impatient...");
-        } else if (satisfiedLvlToSave == 0)
-        {
-            //Debug.Log("Your fluffy overlord says fuck off!");
-        } else if (satisfiedLvlToSave < 0)
-        {
-            satisfiedLvlToSave = 0;
+            if (SaveLoad.SaveData[(int)SaveLoad.Line.K_Satisfaction] == 3)
+            {
+                //Debug.Log("Your fluffy overlord is mostly satisfied, keep it up!");
+            }
+            else if (SaveLoad.SaveData[(int)SaveLoad.Line.K_Satisfaction] == 2)
+            {
+                //Debug.Log("Your fluffy overlord is okay...");
+            }
+            else if (SaveLoad.SaveData[(int)SaveLoad.Line.K_Satisfaction] == 1)
+            {
+                //Debug.Log("Your fluffy overlord is getting impatient...");
+            }
+            else if (SaveLoad.SaveData[(int)SaveLoad.Line.K_Satisfaction] == 0)
+            {
+                //Debug.Log("Your fluffy overlord says fuck off!");
+            }
         }
 
         SaveGame();
     }
-    void UpdateAffectionCounter(float reduced)
+
+    void LoadLevelValues()
     {
-        affectionCounter -= reduced;
-        Debug.Log("Affection counter reduced by: " + reduced);
+        _levelValueCounter = 0;
+
+        for (int i = 0; i < SaveLoad.SaveDataSize; i++)
+        {
+            if (((SaveLoad.Line)i).ToString().Contains("Level"))
+            {
+                _levelValues[_levelValueCounter] = SaveLoad.SaveData[i];
+                _levelValueCounter++;
+                continue;
+            }
+        }
     }
-    void UpdateHungerCounter(float reduced)
+
+    long UpdateLevelValue(long value, int valueToAdd)
     {
-        hungerCounter -= reduced;
-        Debug.Log("Hunger counter reduced by: " + reduced);
+        if (value < levelMin) return levelMin;
+        if (value >= levelMax) return levelMax;
+        return value + valueToAdd;
     }
 
     public void Exit()
     {
-        isIntroOver = 1;
+        if (Application.isPlaying && SceneManager.GetActiveScene().name.Contains("Game"))
+            SaveLoad.SaveData[(int)SaveLoad.Line.K_IntroOver] = 1;
+
         SaveGame();
         Application.Quit();
-    }
-
-    private void OnApplicationQuit()
-    {
-        if (Application.isEditor)
-        {
-            //isIntroOver = 1;
-            SaveGame();
-        }
     }
 }

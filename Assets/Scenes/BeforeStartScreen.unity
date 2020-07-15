@@ -151,23 +151,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 939737a7a66597b43875c4d460161c98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHungerLvl: 4
-  hungerLvlToSave: 0
-  maxAffectionLvl: 4
-  affectionLvlToSave: 0
-  maxSatisfiedLvl: 4
-  satisfiedLvlToSave: 0
-  howManyHours: 4
-  maxCounter: 28800
-  hungerCounter: 0
-  affectionCounter: 0
-  timer: 0
   isThisForJustMyTesting: 0
   isPetting: 0
   isFeeding: 0
-  isIntroOver: 0
-  version: 0
+  howManyHours: 4
   debugText: {fileID: 367027296}
+  defaultLevelValue: 3
+  levelMin: 0
+  levelMax: 4
+  maxCounter: 14400
+  hungerCounter: 14400
+  affectionCounter: 14400
   aloeWatered: 0
   aloeLevel: 0
 --- !u!4 &3135092
@@ -178,7 +172,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3135090}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.31599924, z: -0.07260316}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1686576163}
@@ -235,7 +229,27 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 'Saved:
+
+    Version : 0
+
+    HungerLevel : 3
+
+    HungerTime : 637294082345958587
+
+    AffectionLevel
+    : 3
+
+    AffectionTime : 637294082345958587
+
+    Satisfaction : 0
+
+    IntroOver
+    : 0
+
+    AloeWatered : 0
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -304,12 +318,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 367027296}
-    characterCount: 8
+    characterCount: 177
     spriteCount: 0
-    spaceCount: 1
-    wordCount: 2
+    spaceCount: 25
+    wordCount: 17
     linkCount: 0
-    lineCount: 1
+    lineCount: 9
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -372,7 +386,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1686576163
 RectTransform:
   m_ObjectHideFlags: 0

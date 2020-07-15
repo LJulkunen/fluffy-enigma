@@ -4,11 +4,7 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-
-    public GameObject kitsulope;
-
     public TextMeshProUGUI hungerText;
-
     public TextMeshProUGUI affectionText;
 
     public string textPrefix = "";
@@ -28,13 +24,13 @@ public class GameManager : MonoBehaviour
         {
             case (0):
             default:
-                kitsulope.GetComponent<SaveSerial>().Feed();
-                hungerText.text = textPrefix + kitsulope.GetComponent<SaveSerial>().hungerLvlToSave.ToString();
+                SaveSerial.SAVE.Feed();
+                hungerText.text = textPrefix + SaveLoad.SaveData[(int)SaveLoad.Line.K_HungerLevel].ToString();
                 break;
 
             case (1):
-                kitsulope.GetComponent<SaveSerial>().Pet();
-                affectionText.text = textPrefix + kitsulope.GetComponent<SaveSerial>().affectionLvlToSave.ToString();
+                SaveSerial.SAVE.Pet();
+                affectionText.text = textPrefix + SaveLoad.SaveData[(int)SaveLoad.Line.K_AffectionLevel].ToString();
                 break;
 
             case (2):

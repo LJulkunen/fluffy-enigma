@@ -5,13 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class DecideStartScreen : MonoBehaviour
 {
-
-    public SaveSerial save;
-
-    void Start()
+    public void LoadNextScene()
     {
         //save.ResetSave();
-        if (save.hungerLvlToSave == 0)
+        if (SaveLoad.SaveData[(int)SaveLoad.Line.K_HungerLevel] == 0)
         {
             SceneManager.LoadScene("AloeCareStartScreen");
         }

@@ -1,15 +1,14 @@
-﻿using System;
-using UnityEngine;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using System.Collections;
+﻿using UnityEngine;
 using Random = UnityEngine.Random;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Kitsulope : ObjectType
 {
+    // ??????????
+    public float exitCounter = 4.0f;
+
+
 
     SaveSerial save;
     public GameObject fridge;
@@ -76,8 +75,9 @@ public class Kitsulope : ObjectType
     #endregion
 
     public Vector3 newPos;
+    bool _touchDown, _touchHold, _touchUp;
 
-    private void Start()
+    void Start()
     {
         save = FindObjectOfType<SaveSerial>();
 
@@ -127,7 +127,7 @@ public class Kitsulope : ObjectType
             isChilling = false;
         }
         
-        animator.SetInteger("Satisfaction", save.satisfiedLvlToSave);
+        animator.SetInteger("Satisfaction", (int)SaveLoad.SaveData[(int)SaveLoad.Line.K_Satisfaction]);
         animator.SetBool("IsPetting", save.isPetting);
         animator.SetBool("IsFeeding", save.isFeeding);
         animator.SetInteger("Direction", direction);
@@ -174,25 +174,28 @@ public class Kitsulope : ObjectType
             }
         }
 
-        
+        // && operations happen before || operations
+        // in math terms:
+        // && is * (multiply), || is + (add)
+        _touchDown = Input.GetMouseButtonDown(0) ||
+            Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began;
+        _touchHold = Input.GetMouseButton(0) || Input.touchCount > 0 &&
+            (Input.GetTouch(0).phase == TouchPhase.Stationary || Input.GetTouch(0).phase == TouchPhase.Moved);
+        _touchUp = Input.GetMouseButtonUp(0) || Input.touchCount > 0 &&
+            (Input.GetTouch(0).phase == TouchPhase.Canceled || Input.GetTouch(0).phase == TouchPhase.Ended);
 
-        if (Input.touchCount > 0)
+        if (_touchDown || _touchHold || _touchUp)
         {
-            if (Input.GetTouch(0).phase == TouchPhase.Began || Input.GetTouch(0).phase == TouchPhase.Moved 
-             || Input.GetTouch(0).phase == TouchPhase.Stationary || Input.GetTouch(0).phase == TouchPhase.Ended)
-            {
+            if (Input.touchCount > 0)
                 DoTouch(Input.GetTouch(0).position);
-            }
-        }
-        else if (Input.GetMouseButtonDown(0))
-        {
-            DoTouch(Input.mousePosition);
+            else
+                DoTouch(Input.mousePosition);
         }
 
         #region movement
         Vector3 position = transform.position;
 
-        if (isChilling || save.isPetting || save.isFeeding || save.satisfiedLvlToSave == 0)
+        if (isChilling || save.isPetting || save.isFeeding || SaveLoad.SaveData[(int)SaveLoad.Line.K_Satisfaction] == 0)
         {
             direction = 0;
         } else if (direction == 0 || (direction == -1 && position.x < xMin))
@@ -245,32 +248,29 @@ public class Kitsulope : ObjectType
         bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, color.a);
     }
 
-    public float exitCounter = 4.0f;
-
     void DoTouch(Vector2 point)
     {
-        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(point), Vector2.down);
+        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(point), Camera.main.transform.forward);
+        if (!hit) return;
         Object hitType = hit.transform.GetComponent<ObjectType>().type;
 
-        //Debug.Log(hitType);
         switch (hitType)
         {
             case Object.Kitsulope:
-                #region kitsulope
-                // These might be useful later if I have time & it would be an improvement to add more scenes/animations.
-                /*if (Input.GetTouch(0).phase == TouchPhase.Began)
+                #region Kitsulope
+                if (_touchDown)
                 {
                     Debug.Log("You tapped.");
                     isPetNoticingYou = true;
                     animator.SetBool("IsPetting", true);
                 }
-
-                if ((Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Stationary || Input.GetTouch(0).phase == TouchPhase.Began) && isPetNoticingYou == true)*/
-                if (Input.GetTouch(0).phase == TouchPhase.Began || Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Stationary)
+                if (_touchHold && isPetNoticingYou == true)
                 {
                     Debug.Log("Touch phase is Began, Moved or Stationary.");
                     animator.SetBool("IsPetting", true);
-                } else if (Input.GetTouch(0).phase == TouchPhase.Ended)
+                }
+
+                if (_touchUp)
                 {
                     save.Pet();
                     //isPetNoticingYou = false;
@@ -279,7 +279,7 @@ public class Kitsulope : ObjectType
                 break;
             case Object.Fridge:
                 #region fridgeBubble
-                if (Input.GetTouch(0).phase == TouchPhase.Began)
+                if (_touchDown)
                 {
                     dialogue = fridge.GetComponent<Dialogue>();
 
@@ -562,7 +562,7 @@ public class Kitsulope : ObjectType
                 break;
             case Object.ExitButton:
                 #region exitBubble
-                if (Input.GetTouch(0).phase == TouchPhase.Began || Input.GetTouch(0).phase == TouchPhase.Stationary)
+                if (_touchHold)
                 {
                     dialogue = exitButton.GetComponent<Dialogue>();
 
@@ -578,8 +578,10 @@ public class Kitsulope : ObjectType
                         color.a = 1;
                     }
                     // Exit bubble active. Shouldn't start fading when touch stationary.
-                    else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == exitBubble
-                        && exitCounter > 0 && Input.GetTouch(0).phase == TouchPhase.Stationary)
+                    else if (bubbleObject.activeInHierarchy
+                        && bubbleSpriteRenderer.color.a == 1f
+                        && bubbleSpriteRenderer.sprite == exitBubble
+                        && exitCounter > 0 && _touchHold)
                     {
                         exitCounter -= Time.deltaTime;
                         bubbleCounter = 0;

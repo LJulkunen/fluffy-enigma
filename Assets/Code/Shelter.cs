@@ -6,8 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class Shelter : MonoBehaviour
 {
-    SaveSerial save;
-
     //public GameObject textPlacementObject;
 
     public Dialogue dialogue;
@@ -22,8 +20,6 @@ public class Shelter : MonoBehaviour
 
     private void Start()
     {
-        save = FindObjectOfType<SaveSerial>();
-
         dialogue = GetComponent<Dialogue>();
         dialogueManager = GetComponent<DialogueManager>();
 
@@ -78,7 +74,7 @@ public class Shelter : MonoBehaviour
 
     void LoadGameScene()
     {
-        save.isIntroOver = 1;
+        SaveLoad.SaveData[(int)SaveLoad.Line.K_IntroOver] = 1;
         SceneManager.LoadScene("Game");
     }
 
