@@ -93,7 +93,6 @@ public static class SaveLoad
         #endregion
 
         return lines.Length;
-
     }
 
     public static void Delete()
