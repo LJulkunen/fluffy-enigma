@@ -70,6 +70,8 @@ public class SaveSerial : MonoBehaviour
     public int maxSapientLevel = 7;
     public int sapientLevel = 0;
 
+    public int isAloeIntroOver = 0;
+
     void Awake()
     {
         #region singleton
@@ -340,7 +342,12 @@ public class SaveSerial : MonoBehaviour
     {
         TimeSpan timeSpan = DateTime.UtcNow - Convert.ToDateTime(aloeWateredTime);
 
-        if (timeSpan.Days > 0)
+        if (timeSpan.Days > 11)
+        {
+            aloeWatered = 0;
+            aloeLevel = 0;
+        }
+        else if (timeSpan.Days > 0)
         {
             aloeWatered = 0;
         }

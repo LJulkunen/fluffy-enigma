@@ -171,6 +171,7 @@ MonoBehaviour:
   aloeLevel: 0
   maxSapientLevel: 7
   sapientLevel: 0
+  isAloeIntroOver: 0
 --- !u!4 &27253537
 Transform:
   m_ObjectHideFlags: 0
@@ -1142,7 +1143,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 56d201ae0c61aad49909a7621ffbc6ee, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6c31af8a580bb7c4da79e3f630dc7b6c, type: 3}
   m_Color: {r: 0.9, g: 0.9, b: 0.9, a: 1}
   m_FlipX: 0
   m_FlipY: 0

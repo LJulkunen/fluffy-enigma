@@ -1062,9 +1062,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - 'Should I feed my pet?
-
-    Tap fridge again to confrim.'
+  - "\tShould I feed my pet?\n\tTap fridge again to confrim."
 --- !u!1 &1583341378
 GameObject:
   m_ObjectHideFlags: 0
@@ -1150,10 +1148,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - 'Should I read?
-
-    Tap to confirm.'
-  - "The bunny seems... \noddly interested?"
+  - "\tShould I read?\n\tTap to confirm."
+  - "\tThe bunny seems... \n\toddly interested?"
 --- !u!1 &1625694126
 GameObject:
   m_ObjectHideFlags: 0

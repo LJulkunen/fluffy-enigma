@@ -536,7 +536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - " Should we return home?\n Press & hold for 2 seconds \n to confirm."
+  - "\tShould we return home?\n\tPress & hold for 2 seconds \n\tto confirm."
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1124,7 +1124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - " I'm ResetRusakko!\n Wanna reset? Hold 2\n seconds to confirm."
+  - "\tI'm ResetRusakko!\n\tWanna reset? Hold 2\n\tseconds to confirm."
 --- !u!95 &1130436347
 Animator:
   serializedVersion: 3

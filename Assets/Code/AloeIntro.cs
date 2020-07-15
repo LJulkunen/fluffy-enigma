@@ -69,6 +69,7 @@ public class AloeIntro : MonoBehaviour
 
     void LoadGameScene()
     {
+        save.isAloeIntroOver = 1;
         SceneManager.LoadScene("AloeCareGame");
     }
 

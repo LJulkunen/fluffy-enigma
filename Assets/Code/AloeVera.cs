@@ -158,7 +158,7 @@ public class AloeVera : ObjectType
         bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, color.a);
     }
 
-    public float exitCounter = 4.0f;
+    public float exitCounter = 1.5f;
 
     void DoTouch(Vector2 point)
     {
@@ -244,8 +244,6 @@ public class AloeVera : ObjectType
                     {
                         wateringCan.SetActive(wateringCan);
                         save.WaterAloe();
-                        aloeSprite.sprite = healedAloe;
-                        //save.Feed();
                     }
                     // Generic bubble object active but sprite and dialogue wrong. They are changed here.
                     else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite != fridgeSprite)
@@ -275,7 +273,12 @@ public class AloeVera : ObjectType
                 #endregion
                 break;
             case Object.Window:
-                //save.ResetSave();
+                exitCounter -= Time.deltaTime;
+                if (exitCounter <= 0)
+                {
+                    save.ResetSave();
+                    exitCounter = 1.5f;
+                }
                 break;
             case Object.ExitButton:
                 #region exitBubble
