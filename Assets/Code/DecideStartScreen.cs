@@ -5,10 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class DecideStartScreen : MonoBehaviour
 {
-
-    public SaveSerial save;
-
-    void Start()
+    public void LoadNextScene()
     {
         //save.ResetSave();
         if (SaveLoad.SaveData[(int)SaveLoad.Line.HungerLevel] == 0)
