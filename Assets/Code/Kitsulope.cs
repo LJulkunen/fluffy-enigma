@@ -201,6 +201,7 @@ public class Kitsulope : ObjectType
     void DoTouch(Vector2 point)
     {
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(point), Camera.main.transform.forward);
+        if (!hit) return;
         Object hitType = hit.transform.GetComponent<ObjectType>().type;
 
         Debug.Log(hitType);
