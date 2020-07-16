@@ -171,6 +171,7 @@ MonoBehaviour:
   aloeLevel: 0
   maxSapientLevel: 7
   sapientLevel: 0
+  isAloeIntroOver: 0
 --- !u!4 &27253537
 Transform:
   m_ObjectHideFlags: 0
@@ -1062,7 +1063,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - "\tShould I feed my pet?\n\tTap fridge again to confrim."
+  - "\tShould I feed my pet?\n\tTap fridge again to\n\tconfrim."
 --- !u!1 &1583341378
 GameObject:
   m_ObjectHideFlags: 0
