@@ -8,6 +8,7 @@ public class SaveSerial : MonoBehaviour
 {
     // static variables
     public static SaveSerial SAVE;
+    public const string STR_KITSU = "K_", STR_ALOE = "A_";
 
     // uncategorized variables
     public bool isThisForJustMyTesting;
@@ -37,7 +38,6 @@ public class SaveSerial : MonoBehaviour
      */
     public int aloeWatered = 0;
     public int aloeLevel = 0;
-    DateTime aloeWateredTime;
 
     public int maxSapientLevel = 7;
     public int sapientLevel = 0;
@@ -105,6 +105,7 @@ public class SaveSerial : MonoBehaviour
             SaveLoad.SaveData[(int)SaveLoad.Line.K_HungerLevel]--;
             UpdateSatisfaction();
         }
+
         if (affectionCounter <= 0)
         {
             affectionCounter = maxCounter;
@@ -196,7 +197,6 @@ public class SaveSerial : MonoBehaviour
 
         hungerCounter = maxCounter;
         SaveLoad.SaveData[(int)SaveLoad.Line.K_HungerTime] = DateTime.UtcNow.Ticks;
-        //Debug.Log("Hunger level is: " + SaveLoad.SaveData[(int)SaveLoad.Line.HungerLevel]);
 
         UpdateSatisfaction();
     }
@@ -210,7 +210,6 @@ public class SaveSerial : MonoBehaviour
 
         affectionCounter = maxCounter;
         SaveLoad.SaveData[(int)SaveLoad.Line.K_AffectionTime] = DateTime.UtcNow.Ticks;
-        //Debug.Log("Hunger level is: " + SaveLoad.SaveData[(int)SaveLoad.Line.HungerLevel]);
 
         UpdateSatisfaction();
     }
@@ -235,34 +234,53 @@ public class SaveSerial : MonoBehaviour
 
     public void WaterAloe()
     {
-        TimeSpan timeSpan = DateTime.UtcNow - Convert.ToDateTime(aloeWateredTime);
+        // V TODO V
+        //isWatering = true;
 
-        if (timeSpan.Days > 11)
-        {
-            aloeWatered = 0;
-            aloeLevel = 0;
-        }
-        else if (timeSpan.Days > 0)
-        {
-            aloeWatered = 0;
-        }
+        // V TODO V
+        //SaveLoad.SaveData[(int)SaveLoad.Line.A_AloeWateredLevel] =
+        //    UpdateAloeLevelValue(SaveLoad.SaveData[(int)SaveLoad.Line.A_AloeWateredLevel], valueToAdd: 1);
 
-        if (aloeWatered < 1 && aloeLevel < 3)
-        {
-            aloeWatered++;
-            aloeLevel++;
-            aloeWateredTime = DateTime.UtcNow;
-        }
+        // V TODO V
+        //aloeWateredCounter = maxCounter;
+        SaveLoad.SaveData[(int)SaveLoad.Line.A_AloeWateredTime] = DateTime.UtcNow.Ticks;
 
-        Debug.LogWarning("Aloe watered: " + aloeWatered + " at: " + aloeWateredTime);
-        SaveGame();
+        // V TODO V
+        //UpdateAloeSatisfaction();
+
+        // old stuff
+        {
+            /*
+            TimeSpan timeSpan = DateTime.UtcNow - Convert.ToDateTime(aloeWateredTime);
+
+            if (timeSpan.Days > 11)
+            {
+                aloeWatered = 0;
+                aloeLevel = 0;
+            }
+            else if (timeSpan.Days > 0)
+            {
+                aloeWatered = 0;
+            }
+
+            if (aloeWatered < 1 && aloeLevel < 3)
+            {
+                aloeWatered++;
+                aloeLevel++;
+                aloeWateredTime = DateTime.UtcNow;
+            }
+
+            Debug.LogWarning("Aloe watered: " + aloeWatered + " at: " + aloeWateredTime);
+            SaveGame();
+            */
+        }
     }
 
     public void Read()
     {
-        if (sapientLevel < 1)
+        if (SaveLoad.SaveData[(int)SaveLoad.Line.SapientLevel] < 1)
         {
-            sapientLevel++;
+            SaveLoad.SaveData[(int)SaveLoad.Line.SapientLevel]++;
         }
 
         SaveGame();
@@ -327,7 +345,7 @@ public class SaveSerial : MonoBehaviour
 
         for (int i = 0; i < SaveLoad.SaveDataSize; i++)
         {
-            if (((SaveLoad.Line)i).ToString().Contains("Level"))
+            if (((SaveLoad.Line)i).ToString().StartsWith(STR_KITSU) && ((SaveLoad.Line)i).ToString().Contains("Level"))
             {
                 _levelValues[_levelValueCounter] = SaveLoad.SaveData[i];
                 _levelValueCounter++;

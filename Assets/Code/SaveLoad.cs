@@ -19,7 +19,7 @@ public static class SaveLoad
             int count = 0;
             for (int i = 0; i < SaveDataSize; i++)
             {
-                if (((Line)i).ToString().Contains("Level"))
+                if (((Line)i).ToString().StartsWith(SaveSerial.STR_KITSU) && ((Line)i).ToString().Contains("Level"))
                     count++;
             }
             return count;
@@ -35,7 +35,7 @@ public static class SaveLoad
         K_AffectionTime,
         K_Satisfaction,
         K_IntroOver,
-        A_AloeWatered,
+        A_AloeWateredLevel,
         A_AloeLevel,
         A_AloeWateredTime,
         SapientLevel,
