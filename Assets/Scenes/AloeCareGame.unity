@@ -171,6 +171,7 @@ MonoBehaviour:
   aloeLevel: 0
   maxSapientLevel: 7
   sapientLevel: 0
+  isAloeIntroOver: 0
 --- !u!4 &27253537
 Transform:
   m_ObjectHideFlags: 0
@@ -183,7 +184,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &471360555
 GameObject:
@@ -434,7 +435,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &739563212
 GameObject:
@@ -762,7 +763,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - "\tShould I water my aloe?\n\tTap fridge again to confrim."
+  - "\tShould I water my aloe?\n\tTap fridge again to \n\tconfrim."
 --- !u!1 &1289090040
 GameObject:
   m_ObjectHideFlags: 0
@@ -842,7 +843,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1625694126
 GameObject:
@@ -861,7 +862,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1625694127
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1086,6 +1087,56 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1794631956
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1794631957}
+  - component: {fileID: 1794631958}
+  m_Layer: 0
+  m_Name: BeforeReset
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1794631957
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1794631956}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1794631958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1794631956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 340e5376436f19c46abe98e07a053f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sentences:
+  - "Oh, I'm having a clich\xE9 fever dream. How very original of me..."
+  - I'm assuming I'm just mildly ...or moderately anxious about taking on a responsibility
+    like this. My plant has never been this creepy before.
+  - I'm going to wake up and appreciate the fact that my plant is indeed mute. After
+    that I'm going to go meet my new bunny friend.
+  - You can restart the game by tapping now.
 --- !u!1 &2024066983
 GameObject:
   m_ObjectHideFlags: 0
@@ -1133,10 +1184,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - "\tHello! Your love has \n\tbrought me to lif... err... \n\tI mean... you know.
-    \n\tI can talk now."
-  - "\tOh, a clich\xE9 fewer dream. \n\tHow original...Tap me\n\tagain to restart
-    the game."
+  - "\tHello! Your love has \n\tbrought me to lif... err..."
+  - "\tI mean... you know. \n\tI can talk now."
+  - "\tYou know... \n\tI'd never leave you."
+  - "\tI just physically couldn't.\n\tBut I'm happy because \n\tyou water me."
 --- !u!70 &2024066986
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -1215,7 +1266,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2024066990
 MonoBehaviour:
@@ -1241,6 +1292,7 @@ MonoBehaviour:
   healedAloe: {fileID: 21300000, guid: 4d60ec0f664d3664692b5b94710defbf, type: 3}
   growingAloe: {fileID: 21300000, guid: 277866071bbef7245877dfbbfa9cba82, type: 3}
   grownAloe: {fileID: 21300000, guid: 9722abab94f82bf42968ce22131c143c, type: 3}
+  beforeReset: {fileID: 1794631956}
   xMin: -0.9
   xMax: 0.9
   speed: 0.1

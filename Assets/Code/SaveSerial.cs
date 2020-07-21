@@ -193,7 +193,7 @@ public class SaveSerial : MonoBehaviour
             Debug.LogError("No save data to delete.");*/
     }
 
-    void SaveGame()
+    public void SaveGame()
     {
         // populating array with correct values
         SaveLoad.SaveData[(int)SaveLoad.Line.Version] = version;
@@ -207,6 +207,7 @@ public class SaveSerial : MonoBehaviour
         SaveLoad.SaveData[(int)SaveLoad.Line.AloeLevel] = aloeLevel;
         SaveLoad.SaveData[(int)SaveLoad.Line.AloeWateredTime] = aloeWateredTime.Ticks;
         SaveLoad.SaveData[(int)SaveLoad.Line.SapientLevel] = sapientLevel;
+        SaveLoad.SaveData[(int)SaveLoad.Line.AloeIntroOver] = isAloeIntroOver;
         // saving correct values
         SaveLoad.Save(debugText);
 
@@ -245,6 +246,7 @@ public class SaveSerial : MonoBehaviour
         aloeLevel = (int) SaveLoad.SaveData[(int)SaveLoad.Line.AloeLevel];
         aloeWateredTime = DateTime.FromBinary(SaveLoad.SaveData[(int)SaveLoad.Line.AloeWateredTime]);
         sapientLevel = (int)SaveLoad.SaveData[(int)SaveLoad.Line.SapientLevel];
+        isAloeIntroOver = (int)SaveLoad.SaveData[(int)SaveLoad.Line.AloeIntroOver];
 
         Debug.Log("Game data loaded!");
         UpdateHungerLvl();

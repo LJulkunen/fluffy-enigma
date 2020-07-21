@@ -9,7 +9,7 @@ public static class SaveLoad
     // all saved data is turned into longs (64bit int)
     public static long[] SaveData { get; set; }
     // SaveData lenght
-    public const int SAVEDATA_LENGHT = 11;
+    public const int SAVEDATA_LENGHT = 12;
 
     public enum Line
     {
@@ -23,7 +23,8 @@ public static class SaveLoad
         AloeWatered,
         AloeLevel,
         AloeWateredTime,
-        SapientLevel
+        SapientLevel,
+        AloeIntroOver
     }
     
     // boolean values

@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Field.unity
     guid: c334ec79ddba63541ba47e1438d09e06
+  - enabled: 1
+    path: Assets/Scenes/BeforeRestart.unity
+    guid: 34875ea63db3164488b90a64d218cb0c
   m_configObjects: {}

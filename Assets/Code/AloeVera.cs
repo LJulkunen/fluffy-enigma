@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AloeVera : ObjectType
 {
@@ -20,6 +21,8 @@ public class AloeVera : ObjectType
     public Sprite healedAloe;
     public Sprite growingAloe;
     public Sprite grownAloe;
+
+    public GameObject beforeReset;
 
     #region MovementVariables
     [SerializeField]
@@ -85,6 +88,7 @@ public class AloeVera : ObjectType
 
     void Update()
     {
+
         BubbleCounter();
 
         if (Input.touchCount > 0)
@@ -193,8 +197,7 @@ public class AloeVera : ObjectType
                         }
                         else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == cornerSprite && dialogueManager.sentences.Count == 0)
                         {
-                            Debug.LogWarning("RESETTING FROM ALOE END!");
-                            save.ResetSave();
+                            SceneManager.LoadScene("BeforeRestart");
                         }
                         // Generic bubble object active but sprite and dialogue wrong. They are changed here.
                         else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite != cornerSprite)
