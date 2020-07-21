@@ -12,20 +12,6 @@ public static class SaveLoad
         get { return (int)Line.LineCount; }
     }
 
-    public static int LevelLineCount
-    {
-        get
-        {
-            int count = 0;
-            for (int i = 0; i < SaveDataSize; i++)
-            {
-                if (((Line)i).ToString().StartsWith(SaveSerial.STR_KITSU) && ((Line)i).ToString().Contains("Level"))
-                    count++;
-            }
-            return count;
-        }
-    }
-
     public enum Line
     {
         Version,            // 0

@@ -8,7 +8,6 @@ public class SaveSerial : MonoBehaviour
 {
     // static variables
     public static SaveSerial SAVE;
-    public const string STR_KITSU = "K_", STR_ALOE = "A_";
 
     // uncategorized variables
     public bool isThisForJustMyTesting;
@@ -18,10 +17,6 @@ public class SaveSerial : MonoBehaviour
 
     // generic default values
     public int defaultLevelValue = 3, levelMin = 0, levelMax = 4;
-
-    // for satisfaction level
-    int _levelValueCounter;
-    long[] _levelValues = new long[SaveLoad.LevelLineCount];
 
     // for counters
     int _remainingHours, _remainingMinutes, _remainingSeconds;
@@ -137,22 +132,23 @@ public class SaveSerial : MonoBehaviour
         // if start is zero sets all data to default
         for (int i = start; i < SaveLoad.SaveDataSize; i++)
         {
-            // add hanling as needed :)
-            if (i == (int)SaveLoad.Line.Version)
-                continue;
-
-            if (((SaveLoad.Line)i).ToString().Contains("Level"))
+            // set some values to 3
+            if ((int)SaveLoad.Line.K_HungerLevel == i ||
+                (int)SaveLoad.Line.K_AffectionLevel == i)
             {
                 SaveLoad.SaveData[i] = defaultLevelValue;
                 continue;
             }
-            if (((SaveLoad.Line)i).ToString().Contains("Time"))
+
+            // set some values to utc now
+            if ((int)SaveLoad.Line.K_HungerTime == i ||
+                (int)SaveLoad.Line.K_AffectionTime == i)
             {
                 SaveLoad.SaveData[i] = DateTime.UtcNow.Ticks;
                 continue;
             }
 
-            Debug.LogError("Missing handling for " + ((SaveLoad.Line)i).ToString() + " and is set to zero!");
+            Debug.LogWarning("Missing handling for " + ((SaveLoad.Line)i).ToString() + " and is set to zero!");
             SaveLoad.SaveData[i] = 0;
         }
         
@@ -304,17 +300,13 @@ public class SaveSerial : MonoBehaviour
 
     void UpdateSatisfaction()
     {
-        // set satisfaction to max instead of zero
-        // before it checked is 3 less than 0 XD
-        SaveLoad.SaveData[(int)SaveLoad.Line.K_Satisfaction] = levelMax;
-
-        LoadLevelValues();
-
-        // sets satisfaction values to lowest level value
-        foreach (int value in _levelValues)
+        if (SaveLoad.SaveData[(int)SaveLoad.Line.K_HungerLevel] < SaveLoad.SaveData[(int)SaveLoad.Line.K_AffectionLevel])
         {
-            if (value < SaveLoad.SaveData[(int)SaveLoad.Line.K_Satisfaction])
-                SaveLoad.SaveData[(int)SaveLoad.Line.K_Satisfaction] = value;
+            SaveLoad.SaveData[(int)SaveLoad.Line.K_Satisfaction] = SaveLoad.SaveData[(int)SaveLoad.Line.K_HungerLevel];
+        }
+        else
+        {
+            SaveLoad.SaveData[(int)SaveLoad.Line.K_Satisfaction] = SaveLoad.SaveData[(int)SaveLoad.Line.K_AffectionLevel];
         }
 
         {
@@ -339,21 +331,6 @@ public class SaveSerial : MonoBehaviour
         SaveGame();
     }
 
-    void LoadLevelValues()
-    {
-        _levelValueCounter = 0;
-
-        for (int i = 0; i < SaveLoad.SaveDataSize; i++)
-        {
-            if (((SaveLoad.Line)i).ToString().StartsWith(STR_KITSU) && ((SaveLoad.Line)i).ToString().Contains("Level"))
-            {
-                _levelValues[_levelValueCounter] = SaveLoad.SaveData[i];
-                _levelValueCounter++;
-                continue;
-            }
-        }
-    }
-
     long UpdateLevelValue(long value, int valueToAdd)
     {
         if (value < levelMin) return levelMin;
@@ -363,9 +340,6 @@ public class SaveSerial : MonoBehaviour
 
     public void Exit()
     {
-        if (Application.isPlaying && SceneManager.GetActiveScene().name.Contains("Game"))
-            SaveLoad.SaveData[(int)SaveLoad.Line.K_IntroOver] = 1;
-
         SaveGame();
         Application.Quit();
     }

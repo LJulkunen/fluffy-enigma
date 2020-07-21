@@ -84,9 +84,6 @@ public class Kitsulope : ObjectType
         BubbleCounter();
 
         #region animation logic
-        //
-        // every frame ???
-        // VVVVVVVVVVVVVVV
         if (!SaveSerial.SAVE.isFeeding || !SaveSerial.SAVE.isPetting)
         {
             rand = Random.Range(0.0f, 100.0f);
@@ -98,11 +95,7 @@ public class Kitsulope : ObjectType
         {
             isChilling = false;
         }
-        // AAAAAAAAAAAAAAA
-        // every frame ???
-        //
 
-        
         if (SaveSerial.SAVE.isPetting)
         {
             pettingAnimationLength -= Time.deltaTime;
@@ -289,7 +282,7 @@ public class Kitsulope : ObjectType
                 #endregion
                 break;
             case Object.WildRabbit:
-                #region resetRusakko
+                #region resetRusakko
                 if (_touchBegan || _touchHold)
                 {
                     if (TapAndHold(downBubble, rusakko.GetComponent<Dialogue>()))
