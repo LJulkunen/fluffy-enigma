@@ -57,11 +57,11 @@ public class SaveSerial : MonoBehaviour
     public TextMeshProUGUI debugText;
 
     /* TODO: [x] Save aloe stats.
-     *       [] Change sprite after a day if aloe watered enough.
-     *       [] 4 aloe levels. 0 being just got nibbled by kitsulope, 4 fully grown.
+     *       [x] Change sprite after a day if aloe watered enough.
+     *       [x] 4 aloe levels. 0 being just got nibbled by kitsulope, 4 fully grown.
      *       [x] WateredLevel just probably needs to be 0 or 1?
      *       [x] A high max counter for waterLevel dropping (a day probably).
-     *       [] Counter should work in the exact same way as it does with the actual pet.
+     *       [x] Counter should work in the exact same way as it does with the actual pet.
     */
     public int aloeWatered = 0;
     public int aloeLevel = 0;
@@ -88,7 +88,7 @@ public class SaveSerial : MonoBehaviour
         #endregion
 
         // initializes long array
-        SaveLoad.SaveData = new long[SaveLoad.SAVEDATA_LENGHT];
+        SaveLoad.SaveData = new long[SaveLoad.SaveDataSize];
 
         LoadGame();
         Debug.Log("Sapient level is: " + sapientLevel);
@@ -130,9 +130,10 @@ public class SaveSerial : MonoBehaviour
             SaveGame();
         }
 
-        // Make sure user is on Android platform
-        if (Application.platform == RuntimePlatform.Android)
-        {
+        if (Application.isPlaying) {
+            /*// Make sure user is on Android platform
+            if (Application.platform == RuntimePlatform.Android)
+            {*/
 
             // Check if Back was pressed this frame
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -264,7 +265,7 @@ public class SaveSerial : MonoBehaviour
                        File.Open(Application.persistentDataPath
                        + "/MySaveData.dat", FileMode.Open);
             // makes long array with zeros
-            SaveLoad.SaveData = new long[SaveLoad.SAVEDATA_LENGHT];
+            SaveLoad.SaveData = new long[SaveLoad.SaveDataSize];
             // populating array with correct values
             version = (int) SaveLoad.SaveData[SaveLoad.VERSION];
             hungerLvlToSave = (int) SaveLoad.SaveData[SaveLoad.HUNGER_LVL];

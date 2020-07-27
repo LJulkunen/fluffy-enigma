@@ -9,7 +9,10 @@ public static class SaveLoad
     // all saved data is turned into longs (64bit int)
     public static long[] SaveData { get; set; }
     // SaveData lenght
-    public const int SAVEDATA_LENGHT = 12;
+    public static int SaveDataSize
+    {
+        get { return (int)Line.LineCount; }
+    }
 
     public enum Line
     {
@@ -24,7 +27,8 @@ public static class SaveLoad
         AloeLevel,
         AloeWateredTime,
         SapientLevel,
-        AloeIntroOver
+        AloeIntroOver,
+        LineCount           // Always last !!!!
     }
     
     // boolean values
