@@ -574,7 +574,7 @@ public class SaveSerial : MonoBehaviour
 
     public void Exit()
     {
-        isIntroOver = 1;
+        //isIntroOver = 1;
         SaveGame();
         Application.Quit();
     }

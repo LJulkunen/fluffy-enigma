@@ -102,18 +102,6 @@ public class Kitsulope : ObjectType
 
     void Update()
     {
-        if (SaveSerial.SAVE.sapientLevel > 0)
-        {
-            if (telepathy == null)
-            {
-                return;
-            }
-            else
-            {
-                telepathy.SetActive(true);
-            }
-            
-        }
 
         BubbleCounter();
 
@@ -248,6 +236,8 @@ public class Kitsulope : ObjectType
                 bubbleCounter = 0;
                 bubbleObject.SetActive(false);
                 bubbleTextObject.SetActive(false);
+
+                telepathy.SetActive(false);
             }
         }
         else
@@ -306,6 +296,19 @@ public class Kitsulope : ObjectType
                     if (Tapped(cornerBubble, shelf.GetComponent<Dialogue>()))
                     {
                         SaveSerial.SAVE.Read();
+
+                        if (SaveSerial.SAVE.sapientLevel > 0)
+                        {
+                            if (telepathy == null)
+                            {
+                                return;
+                            }
+                            else
+                            {
+                                telepathy.SetActive(true);
+                            }
+
+                        }
                     }
                 }
                 #endregion
