@@ -295,7 +295,7 @@ MonoBehaviour:
   windowBubble: {fileID: 0}
   downBubble: {fileID: 21300000, guid: 2a14aa2b751eb5043a4fc55523fc9d35, type: 3}
   cornerBubble: {fileID: 21300000, guid: dd90c77816686c04b9aaacf924dcb9b0, type: 3}
-  telepathy: {fileID: 0}
+  telepathy: {fileID: 1689337070}
   telepathyBubble: {fileID: 0}
   telepathyRenderer: {fileID: 0}
   telepathyTextPlacement: {fileID: 0}

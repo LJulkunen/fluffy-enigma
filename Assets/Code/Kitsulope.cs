@@ -104,8 +104,15 @@ public class Kitsulope : ObjectType
     {
         if (SaveSerial.SAVE.sapientLevel > 0)
         {
-            telepathy.SetActive(true);
-            //telepathyTextPlacement.SetActive(true);
+            if (telepathy == null)
+            {
+                return;
+            }
+            else
+            {
+                telepathy.SetActive(true);
+            }
+            
         }
 
         BubbleCounter();
