@@ -171,6 +171,7 @@ MonoBehaviour:
   aloeLevel: 0
   maxSapientLevel: 7
   sapientLevel: 0
+  isAloeIntroOver: 0
 --- !u!4 &27253537
 Transform:
   m_ObjectHideFlags: 0

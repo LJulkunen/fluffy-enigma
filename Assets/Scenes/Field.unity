@@ -284,6 +284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  exitCounter: 2
   fridge: {fileID: 1197394779}
   window: {fileID: 0}
   shelf: {fileID: 0}
@@ -294,10 +295,14 @@ MonoBehaviour:
   windowBubble: {fileID: 0}
   downBubble: {fileID: 21300000, guid: 2a14aa2b751eb5043a4fc55523fc9d35, type: 3}
   cornerBubble: {fileID: 21300000, guid: dd90c77816686c04b9aaacf924dcb9b0, type: 3}
+  telepathy: {fileID: 0}
+  telepathyBubble: {fileID: 0}
+  telepathyRenderer: {fileID: 0}
+  telepathyTextPlacement: {fileID: 0}
+  telepathyText: {fileID: 0}
   xMin: -0.8
   xMax: 0.8
   speed: 2.6
-  dialogue: {fileID: 1197394784}
   bubbleObject: {fileID: 471360555}
   bubbleTextObject: {fileID: 1625694126}
   color: {r: 0, g: 0, b: 0, a: 0}
@@ -322,7 +327,6 @@ MonoBehaviour:
   fridgeClosed: {fileID: 0}
   fridgeOpen: {fileID: 0}
   newPos: {x: 0, y: 0, z: 0}
-  exitCounter: 2
 --- !u!114 &299115868
 MonoBehaviour:
   m_ObjectHideFlags: 0

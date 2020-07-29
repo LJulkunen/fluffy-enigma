@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class Kitsulope : ObjectType
 {
-    public float exitCounter = 4.0f;
+    public float exitCounter = 2.0f;
 
     // home
     public GameObject fridge;
@@ -21,6 +21,13 @@ public class Kitsulope : ObjectType
     public Sprite windowBubble;
     public Sprite downBubble;
     public Sprite cornerBubble;
+
+    // telepathy
+    public GameObject telepathy;
+    public Sprite telepathyBubble;
+    public SpriteRenderer telepathyRenderer;
+    public GameObject telepathyTextPlacement;
+    public TextMeshProUGUI telepathyText;
 
     #region MovementVariables
     [SerializeField]
@@ -89,10 +96,17 @@ public class Kitsulope : ObjectType
         color = bubbleSpriteRenderer.color;
 
         bubbleText = bubbleTextObject.GetComponent<TextMeshProUGUI>();
+
+        telepathyText = telepathyTextPlacement.GetComponent<TextMeshProUGUI>();
     }
 
     void Update()
     {
+        /*if (SaveSerial.SAVE.sapientLevel > 0)
+        {
+            telepathy.SetActive(true);
+            telepathyTextPlacement.SetActive(true);
+        }*/
         BubbleCounter();
 
         #region animation logic
@@ -247,8 +261,10 @@ public class Kitsulope : ObjectType
         {
             case Object.Kitsulope:
                 #region Kitsulope
+                
                 if (_touchBegan)
                 {
+
                     Debug.Log("You tapped.");
                     isPetNoticingYou = true;
                     animator.SetBool("IsPetting", true);
@@ -338,6 +354,7 @@ public class Kitsulope : ObjectType
 
     bool Tapped(Sprite bubbleSprite, Dialogue dialogue)
     {
+        
         // check bubble
         if (bubbleSpriteRenderer.sprite != bubbleSprite)
         {
