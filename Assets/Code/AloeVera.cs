@@ -173,6 +173,9 @@ public class AloeVera : ObjectType
         switch (hitType)
         {
             case Object.AloeVera:
+                break;
+            case Object.Fridge:
+                #region fridgeBubble
                 if (save.aloeLevel == 3)
                 {
                     if (Input.GetTouch(0).phase == TouchPhase.Began)
@@ -225,10 +228,7 @@ public class AloeVera : ObjectType
                         }
                     }
                 }
-                break;
-            case Object.Fridge:
-                #region fridgeBubble
-                if (Input.GetTouch(0).phase == TouchPhase.Began)
+                else if (save.aloeLevel < 3 && Input.GetTouch(0).phase == TouchPhase.Began)
                 {
                     dialogue = fridge.GetComponent<Dialogue>();
 

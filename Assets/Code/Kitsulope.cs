@@ -102,11 +102,12 @@ public class Kitsulope : ObjectType
 
     void Update()
     {
-        /*if (SaveSerial.SAVE.sapientLevel > 0)
+        if (SaveSerial.SAVE.sapientLevel > 0)
         {
             telepathy.SetActive(true);
-            telepathyTextPlacement.SetActive(true);
-        }*/
+            //telepathyTextPlacement.SetActive(true);
+        }
+
         BubbleCounter();
 
         #region animation logic
@@ -429,7 +430,7 @@ public class Kitsulope : ObjectType
         else
         {
             bubbleCounter = 0;
-            exitCounter = 4.0f;
+            exitCounter = 2.0f;
             bubbleObject.SetActive(true);
             bubbleTextObject.SetActive(true);
             dialogueManager.StartDialogue(dialogue);
