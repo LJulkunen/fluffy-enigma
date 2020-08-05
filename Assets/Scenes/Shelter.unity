@@ -167,6 +167,11 @@ MonoBehaviour:
   isIntroOver: 0
   version: 0
   debugText: {fileID: 0}
+  aloeWatered: 0
+  aloeLevel: 0
+  maxSapientLevel: 7
+  sapientLevel: 0
+  isAloeIntroOver: 0
 --- !u!4 &27253537
 Transform:
   m_ObjectHideFlags: 0
@@ -549,6 +554,8 @@ MonoBehaviour:
   - Well... I have experience with bunnies. I'll just have to brush up on my mythology
     a bit.
   - I sign the paperwork and return home with my new pet.
+  - I have proper food waiting in the fridge. I can't wait to find out how soft the
+    coat feels!
 --- !u!1 &739563212
 GameObject:
   m_ObjectHideFlags: 0
