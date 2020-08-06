@@ -170,7 +170,8 @@ public class SaveSerial : MonoBehaviour
         aloeLevel = 0;
         aloeWateredTime = DateTime.UtcNow;
         sapientLevel = 0;
-        
+        isAloeIntroOver = 0;
+
         SaveGame();
     }
 
