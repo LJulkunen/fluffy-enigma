@@ -291,24 +291,11 @@ public class Kitsulope : ObjectType
                 break;
             case Object.Shelf:
                 #region shelfBubble
-                if (_touchBegan)
+                if (_touchBegan || _touchHold)
                 {
-                    if (Tapped(cornerBubble, shelf.GetComponent<Dialogue>()))
+                    if (TapAndHold(cornerBubble, shelf.GetComponent<Dialogue>()))
                     {
-                        SaveSerial.SAVE.Read();
-
-                        if (SaveSerial.SAVE.sapientLevel > 0)
-                        {
-                            if (telepathy == null)
-                            {
-                                return;
-                            }
-                            else
-                            {
-                                telepathy.SetActive(true);
-                            }
-
-                        }
+                        SceneManager.LoadScene("ReadingCorner");
                     }
                 }
                 #endregion
