@@ -192,7 +192,7 @@ public class Kitsulope : ObjectType
         Vector3 position = transform.position;
 
         if (isChilling || SaveSerial.SAVE.isPetting || SaveSerial.SAVE.isFeeding
-            || SaveLoad.SaveData[(int)SaveLoad.Line.SatisfiedLevel] == 0)
+            || SaveLoad.SaveData[(int)SaveLoad.Line.SatisfiedLevel] == 0 || SceneManager.GetActiveScene().name == "ReadingCorner")
         {
             direction = 0;
         }
@@ -255,6 +255,8 @@ public class Kitsulope : ObjectType
         if (!hit) return;
         Object hitType = hit.transform.GetComponent<ObjectType>().type;
 
+        Debug.Log(hitType);
+
         switch (hitType)
         {
             case Object.Kitsulope:
@@ -299,6 +301,18 @@ public class Kitsulope : ObjectType
                     }
                 }
                 #endregion
+                break;
+            case Object.GetUpFromBeanBag:
+                if (_touchHold)
+                {
+                    Debug.Log("EXIT COUNTER: " + exitCounter);
+                    exitCounter -= Time.deltaTime;
+                    if (exitCounter <= 0)
+                    {
+                        SceneManager.LoadScene("Game");
+                        exitCounter = 2;
+                    }
+                }
                 break;
             case Object.Window:
                 #region toTheField?

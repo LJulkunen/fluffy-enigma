@@ -11,7 +11,8 @@ public class ObjectType : MonoBehaviour
         ExitButton,
         AloeVera,
         WildRabbit,
-        Bike
+        Bike,
+        GetUpFromBeanBag
     }
     public Object type;
 }
