@@ -36,6 +36,6 @@ EditorBuildSettings:
     path: Assets/Scenes/BeforeRestart.unity
     guid: 34875ea63db3164488b90a64d218cb0c
   - enabled: 1
-    path: Assets/Scenes/ASsfsdfds.unity
-    guid: 8d2946e117325384e916da53c45380fb
+    path: Assets/Scenes/ReadingCorner.unity
+    guid: 69b7b26484a023741a85dbdf7d124288
   m_configObjects: {}

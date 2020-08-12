@@ -112,6 +112,10 @@ public class Kitsulope : ObjectType
             if (rand > 99.6f)
             {
                 isChilling = true;
+                if (rand > 99.9)
+                {
+                    isYawning = true;
+                }
             }
         }
         else
@@ -192,7 +196,7 @@ public class Kitsulope : ObjectType
         Vector3 position = transform.position;
 
         if (isChilling || SaveSerial.SAVE.isPetting || SaveSerial.SAVE.isFeeding
-            || SaveLoad.SaveData[(int)SaveLoad.Line.SatisfiedLevel] == 0 || SceneManager.GetActiveScene().name == "ReadingCorner")
+            || SaveLoad.SaveData[(int)SaveLoad.Line.SatisfiedLevel] < 2 || SceneManager.GetActiveScene().name == "ReadingCorner")
         {
             direction = 0;
         }
