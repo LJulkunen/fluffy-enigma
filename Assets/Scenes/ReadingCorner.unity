@@ -410,6 +410,7 @@ MonoBehaviour:
   fridge: {fileID: 1197394779}
   window: {fileID: 787507188}
   shelf: {fileID: 1583341378}
+  beanBag: {fileID: 0}
   exitButton: {fileID: 2145421758}
   bike: {fileID: 0}
   rusakko: {fileID: 0}
