@@ -10,6 +10,7 @@ public class Kitsulope : ObjectType
     public GameObject fridge;
     public GameObject window;
     public GameObject shelf;
+    public GameObject beanBag;
     public GameObject exitButton;
 
     // outside
@@ -295,11 +296,11 @@ public class Kitsulope : ObjectType
                 }
                 #endregion
                 break;
-            case Object.Shelf:
-                #region shelfBubble
+            case Object.BeanBag:
+                #region beanBagBubble
                 if (_touchBegan || _touchHold)
                 {
-                    if (TapAndHold(cornerBubble, shelf.GetComponent<Dialogue>()))
+                    if (TapAndHold(cornerBubble, beanBag.GetComponent<Dialogue>()))
                     {
                         SceneManager.LoadScene("ReadingCorner");
                     }

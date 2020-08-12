@@ -12,7 +12,8 @@ public class ObjectType : MonoBehaviour
         AloeVera,
         WildRabbit,
         Bike,
-        GetUpFromBeanBag
+        GetUpFromBeanBag,
+        BeanBag
     }
     public Object type;
 }
