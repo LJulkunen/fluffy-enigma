@@ -296,6 +296,7 @@ MonoBehaviour:
   windowBubble: {fileID: 21300000, guid: 5ed177b2aaab3564386082d784c74eeb, type: 3}
   downBubble: {fileID: 21300000, guid: 2a14aa2b751eb5043a4fc55523fc9d35, type: 3}
   cornerBubble: {fileID: 21300000, guid: dd90c77816686c04b9aaacf924dcb9b0, type: 3}
+  shelfBubble: {fileID: 21300000, guid: ead230ce3b54f7241aa67f3a6b4124e0, type: 3}
   telepathy: {fileID: 1908261395}
   telepathyBubble: {fileID: 21300000, guid: 59ca990a6bf1e654c874c4b63ce04542, type: 3}
   telepathyRenderer: {fileID: 1908261397}
@@ -1155,7 +1156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sentences:
-  - "\tShould I chill on my \n\tbean bag? Hold shelf \n\tto confirm."
+  - "\tShould I use the\n\tbook shelf? Hold \n\tshelf to confirm."
 --- !u!1 &1625694126
 GameObject:
   m_ObjectHideFlags: 0

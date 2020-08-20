@@ -22,6 +22,7 @@ public class Kitsulope : ObjectType
     public Sprite windowBubble;
     public Sprite downBubble;
     public Sprite cornerBubble;
+    public Sprite shelfBubble;
 
     // telepathy
     public GameObject telepathy;
@@ -296,13 +297,24 @@ public class Kitsulope : ObjectType
                 }
                 #endregion
                 break;
+            case Object.Shelf:
+                #region shelf
+                if (_touchBegan || _touchHold)
+                {
+                    if (TapAndHold(shelfBubble, shelf.GetComponent<Dialogue>()))
+                    {
+                        SceneManager.LoadScene("ReadingCorner");
+                    }
+                }
+                #endregion
+                break;
             case Object.BeanBag:
                 #region beanBagBubble
                 if (_touchBegan || _touchHold)
                 {
                     if (TapAndHold(cornerBubble, beanBag.GetComponent<Dialogue>()))
                     {
-                        SceneManager.LoadScene("ReadingCorner");
+                        SceneManager.LoadScene("BeanBag");
                     }
                 }
                 #endregion
