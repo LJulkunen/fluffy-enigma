@@ -117,6 +117,7 @@ public class Kitsulope : ObjectType
                 if (rand > 99.9)
                 {
                     isYawning = true;
+                    chillingAnimationLength = maxYawningAnimationLength;
                 }
             }
         }
@@ -128,10 +129,12 @@ public class Kitsulope : ObjectType
         if (SaveSerial.SAVE.isPetting)
         {
             pettingAnimationLength -= Time.deltaTime;
-            if (pettingAnimationLength <= 0)
+            chillingAnimationLength = pettingAnimationLength;
+            if (chillingAnimationLength <= 0)
             {
                 SaveSerial.SAVE.isPetting = false;
                 pettingAnimationLength = maxPettingAnimationLength;
+                chillingAnimationLength = maxChillingAnimationLength;
             }
         }
 

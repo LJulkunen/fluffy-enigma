@@ -319,7 +319,7 @@ MonoBehaviour:
   maxFeedingAnimationLength: 3.5
   chillingAnimationLength: 5.5
   maxChillingAnimationLength: 2.5
-  yawningAnimationLength: 0
+  yawningAnimationLength: 2
   maxYawningAnimationLength: 2
   isChilling: 0
   isPetNoticingYou: 0

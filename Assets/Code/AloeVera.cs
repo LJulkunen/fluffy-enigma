@@ -24,6 +24,10 @@ public class AloeVera : ObjectType
 
     public GameObject beforeReset;
 
+    public GameObject dialogueBox;
+    public GameObject dialogueTextObject;
+    public TextMeshProUGUI dialogueText;
+
     #region MovementVariables
     [SerializeField]
     private float xMin = -0.9F;
@@ -62,6 +66,15 @@ public class AloeVera : ObjectType
         color = bubbleSpriteRenderer.color;
 
         bubbleText = bubbleTextObject.GetComponent<TextMeshProUGUI>();
+
+        dialogueText = dialogueTextObject.GetComponent<TextMeshProUGUI>();
+
+        // Probably useless?
+        /*if (dialogueBox.activeInHierarchy)
+        {
+            dialogueBox.SetActive(!dialogueBox);
+            dialogueTextObject.SetActive(!dialogueTextObject);
+        }*/
 
         Debug.Log("Aloe watered? " + save.aloeWatered + " Aloe level? :" + save.aloeLevel);
 
@@ -247,6 +260,11 @@ public class AloeVera : ObjectType
                     {
                         wateringCan.SetActive(wateringCan);
                         save.WaterAloe();
+                        if (!dialogueBox.activeInHierarchy)
+                        {
+                            dialogueBox.SetActive(dialogueBox);
+                            dialogueTextObject.SetActive(dialogueTextObject);
+                        }
                     }
                     // Generic bubble object active but sprite and dialogue wrong. They are changed here.
                     else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite != fridgeSprite)
