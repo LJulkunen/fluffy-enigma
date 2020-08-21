@@ -27,6 +27,7 @@ public class AloeVera : ObjectType
     public GameObject dialogueBox;
     public GameObject dialogueTextObject;
     public TextMeshProUGUI dialogueText;
+    public GameObject flashText;
 
     #region MovementVariables
     [SerializeField]
@@ -68,13 +69,6 @@ public class AloeVera : ObjectType
         bubbleText = bubbleTextObject.GetComponent<TextMeshProUGUI>();
 
         dialogueText = dialogueTextObject.GetComponent<TextMeshProUGUI>();
-
-        // Probably useless?
-        /*if (dialogueBox.activeInHierarchy)
-        {
-            dialogueBox.SetActive(!dialogueBox);
-            dialogueTextObject.SetActive(!dialogueTextObject);
-        }*/
 
         Debug.Log("Aloe watered? " + save.aloeWatered + " Aloe level? :" + save.aloeLevel);
 
@@ -180,6 +174,19 @@ public class AloeVera : ObjectType
     void DoTouch(Vector2 point)
     {
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(point), Vector2.down);
+
+        if (!hit & dialogueBox.activeInHierarchy && bubbleCounter <= 0)
+        {
+            dialogueBox.SetActive(!dialogueBox);
+            dialogueTextObject.SetActive(!dialogueTextObject);
+            flashText.SetActive(false);
+        } else if (dialogueBox.activeInHierarchy && bubbleCounter <= 0)
+        {
+            dialogueBox.SetActive(!dialogueBox);
+            dialogueTextObject.SetActive(!dialogueTextObject);
+            flashText.SetActive(false);
+        }
+
         Object hitType = hit.transform.GetComponent<ObjectType>().type;
 
         //Debug.Log(hitType);
@@ -264,6 +271,8 @@ public class AloeVera : ObjectType
                         {
                             dialogueBox.SetActive(dialogueBox);
                             dialogueTextObject.SetActive(dialogueTextObject);
+                            flashText.SetActive(true);
+                            InvokeRepeating("FlashTheText", 0f, 0.5f);
                         }
                     }
                     // Generic bubble object active but sprite and dialogue wrong. They are changed here.
@@ -363,6 +372,18 @@ public class AloeVera : ObjectType
             default:
                 Debug.LogWarning("Blep");
                 break;
+        }
+    }
+
+    void FlashTheText()
+    {
+        if (flashText.activeInHierarchy)
+        {
+            flashText.SetActive(false);
+        }
+        else
+        {
+            flashText.SetActive(true);
         }
     }
 }
