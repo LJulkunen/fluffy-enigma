@@ -115,6 +115,15 @@ public class AloeVera : ObjectType
             DoTouch(Input.mousePosition);
         }
 
+        if (!dialogueBox.activeInHierarchy && bubbleCounter < 0)
+        {
+            dialogueBox.SetActive(dialogueBox);
+            dialogueTextObject.SetActive(dialogueTextObject);
+            flashText.SetActive(true);
+            InvokeRepeating("FlashTheText", 0f, 0.5f);
+            bubbleCounter = 0;
+        }
+
         #region movement
         /*Vector3 position = transform.position;
         if (direction == 0 || (direction == -1 && position.x < xMin))
@@ -154,7 +163,7 @@ public class AloeVera : ObjectType
             if (color.a <= 0)
             {
                 color.a = 0;
-                bubbleCounter = 0;
+                bubbleCounter = -1;
                 bubbleObject.SetActive(!bubbleObject);
                 bubbleTextObject.SetActive(!bubbleTextObject);
                 wateringCan.SetActive(!wateringCan);
@@ -175,16 +184,21 @@ public class AloeVera : ObjectType
     {
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(point), Vector2.down);
 
-        if (!hit & dialogueBox.activeInHierarchy && bubbleCounter <= 0)
+        if (save.aloeLevel < 3) {
+            if (!hit & dialogueBox.activeInHierarchy && bubbleCounter <= 0)
+            {
+                dialogueBox.SetActive(!dialogueBox);
+                dialogueTextObject.SetActive(!dialogueTextObject);
+                flashText.SetActive(false);
+            } else if (dialogueBox.activeInHierarchy && bubbleCounter <= 0)
+            {
+                dialogueBox.SetActive(!dialogueBox);
+                dialogueTextObject.SetActive(!dialogueTextObject);
+                flashText.SetActive(false);
+            }
+        } else if(save.aloeLevel == 3 && !hit)
         {
-            dialogueBox.SetActive(!dialogueBox);
-            dialogueTextObject.SetActive(!dialogueTextObject);
-            flashText.SetActive(false);
-        } else if (dialogueBox.activeInHierarchy && bubbleCounter <= 0)
-        {
-            dialogueBox.SetActive(!dialogueBox);
-            dialogueTextObject.SetActive(!dialogueTextObject);
-            flashText.SetActive(false);
+            EndDialogueAloe();
         }
 
         Object hitType = hit.transform.GetComponent<ObjectType>().type;
@@ -200,52 +214,9 @@ public class AloeVera : ObjectType
                 {
                     if (Input.GetTouch(0).phase == TouchPhase.Began)
                     {
-                        dialogue = aloe.GetComponent<Dialogue>();
 
-                        // Bubble not active, gets activated. Doesn't do anything yet.
-                        if (!bubbleObject.activeInHierarchy)
-                        {
-                            bubbleCounter = 0;
-                            bubbleObject.SetActive(bubbleObject);
-                            bubbleSpriteRenderer.sprite = cornerSprite;
-                            bubbleTextObject.SetActive(bubbleTextObject);
-                            dialogueManager.StartDialogue(dialogue);
-                            color.a = 1;
-                        }
-
-                        //Bubble has been activated and is touched when opacity is full. Calls Feed method.
-                        else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == cornerSprite && dialogueManager.sentences.Count > 0)
-                        {
-                            dialogueManager.DisplayNextSentence();
-                        }
-                        else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == cornerSprite && dialogueManager.sentences.Count == 0)
-                        {
-                            SceneManager.LoadScene("BeforeRestart");
-                        }
-                        // Generic bubble object active but sprite and dialogue wrong. They are changed here.
-                        else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite != cornerSprite)
-                        {
-                            bubbleSpriteRenderer.sprite = cornerSprite;
-                            dialogue = aloe.GetComponent<Dialogue>();
-                            dialogueManager.StartDialogue(dialogue);
-                        }
-                        // Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
-                        else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite == cornerSprite)
-                        {
-                            bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
-                            bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
-                            bubbleCounter = 0;
-                        }
-                        // Generic bubble object active but sprite and dialogue wrong. They are changed here. Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
-                        else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite != cornerSprite)
-                        {
-                            bubbleSpriteRenderer.sprite = cornerSprite;
-                            dialogue = aloe.GetComponent<Dialogue>();
-                            dialogueManager.StartDialogue(dialogue);
-                            bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
-                            bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
-                            bubbleCounter = 0;
-                        }
+                        EndDialogueAloe();
+                        
                     }
                 }
                 else if (save.aloeLevel < 3 && Input.GetTouch(0).phase == TouchPhase.Began)
@@ -262,18 +233,11 @@ public class AloeVera : ObjectType
                         dialogueManager.StartDialogue(dialogue);
                         color.a = 1;
                     }
-                    // Fridge bubble has been activated and is touched when opacity is full. Calls Feed method.
+                    // Fridge bubble has been activated and is touched when opacity is full. Calls WaterAloe method.
                     else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == fridgeSprite)
                     {
                         wateringCan.SetActive(wateringCan);
                         save.WaterAloe();
-                        if (!dialogueBox.activeInHierarchy)
-                        {
-                            dialogueBox.SetActive(dialogueBox);
-                            dialogueTextObject.SetActive(dialogueTextObject);
-                            flashText.SetActive(true);
-                            InvokeRepeating("FlashTheText", 0f, 0.5f);
-                        }
                     }
                     // Generic bubble object active but sprite and dialogue wrong. They are changed here.
                     else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite != fridgeSprite)
@@ -372,6 +336,56 @@ public class AloeVera : ObjectType
             default:
                 Debug.LogWarning("Blep");
                 break;
+        }
+    }
+
+    void EndDialogueAloe()
+    {
+        dialogue = aloe.GetComponent<Dialogue>();
+
+        // Bubble not active, gets activated. Doesn't do anything yet.
+        if (!bubbleObject.activeInHierarchy)
+        {
+            bubbleCounter = 0;
+            bubbleObject.SetActive(bubbleObject);
+            bubbleSpriteRenderer.sprite = cornerSprite;
+            bubbleTextObject.SetActive(bubbleTextObject);
+            dialogueManager.StartDialogue(dialogue);
+            color.a = 1;
+        }
+
+        //Bubble has been activated and is touched when opacity is full.
+        else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == cornerSprite && dialogueManager.sentences.Count > 0)
+        {
+            dialogueManager.DisplayNextSentence();
+        }
+        else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite == cornerSprite && dialogueManager.sentences.Count == 0)
+        {
+            SceneManager.LoadScene("BeforeRestart");
+        }
+        // Generic bubble object active but sprite and dialogue wrong. They are changed here.
+        else if (bubbleObject.activeInHierarchy && bubbleSpriteRenderer.color.a == 1f && bubbleSpriteRenderer.sprite != cornerSprite)
+        {
+            bubbleSpriteRenderer.sprite = cornerSprite;
+            dialogue = aloe.GetComponent<Dialogue>();
+            dialogueManager.StartDialogue(dialogue);
+        }
+        // Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
+        else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite == cornerSprite)
+        {
+            bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
+            bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
+            bubbleCounter = 0;
+        }
+        // Generic bubble object active but sprite and dialogue wrong. They are changed here. Opacity is less than 1 but more than 0. Opacity is set back to 1 and counter to 0.
+        else if (bubbleSpriteRenderer.color.a < 1f && bubbleSpriteRenderer.color.a > 0 && bubbleSpriteRenderer.sprite != cornerSprite)
+        {
+            bubbleSpriteRenderer.sprite = cornerSprite;
+            dialogue = aloe.GetComponent<Dialogue>();
+            dialogueManager.StartDialogue(dialogue);
+            bubbleSpriteRenderer.color = new Color(bubbleSpriteRenderer.color.r, bubbleSpriteRenderer.color.g, bubbleSpriteRenderer.color.b, 1f);
+            bubbleText.color = new Color(bubbleText.color.r, bubbleText.color.g, bubbleText.color.b, 1f);
+            bubbleCounter = 0;
         }
     }
 
