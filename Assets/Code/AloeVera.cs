@@ -115,7 +115,7 @@ public class AloeVera : ObjectType
             DoTouch(Input.mousePosition);
         }
 
-        if (!dialogueBox.activeInHierarchy && bubbleCounter < 0)
+        if (save.aloeLevel < 3 && !dialogueBox.activeInHierarchy && bubbleCounter < 0)
         {
             dialogueBox.SetActive(dialogueBox);
             dialogueTextObject.SetActive(dialogueTextObject);
@@ -163,7 +163,7 @@ public class AloeVera : ObjectType
             if (color.a <= 0)
             {
                 color.a = 0;
-                bubbleCounter = -1;
+                bubbleCounter = -0.1f;
                 bubbleObject.SetActive(!bubbleObject);
                 bubbleTextObject.SetActive(!bubbleTextObject);
                 wateringCan.SetActive(!wateringCan);
