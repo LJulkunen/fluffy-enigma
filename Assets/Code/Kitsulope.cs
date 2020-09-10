@@ -6,12 +6,25 @@ public class Kitsulope : ObjectType
 {
     public float exitCounter = 2.0f;
 
-    // home
+    // living room
     public GameObject fridge;
     public GameObject window;
     public GameObject shelf;
     public GameObject beanBag;
     public GameObject exitButton;
+
+    // on beanbag
+    public GameObject shouldI;
+    public GameObject chatPrompt;
+    public GameObject getUpPrompt;
+    public GameObject mcTalking;
+    public GameObject thoughts;
+    public GameObject attention;
+    public GameObject hunger;
+    public SpriteRenderer mcTalkingRenderer;
+    public Sprite askAboutThoughts;
+    public Sprite askAboutAttention;
+    public Sprite askAboutHunger;
 
     // outside
     public GameObject bike;
@@ -100,6 +113,8 @@ public class Kitsulope : ObjectType
         bubbleText = bubbleTextObject.GetComponent<TextMeshProUGUI>();
 
         telepathyText = telepathyTextPlacement.GetComponent<TextMeshProUGUI>();
+
+        mcTalkingRenderer = mcTalking.GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -323,8 +338,15 @@ public class Kitsulope : ObjectType
                 }
                 #endregion
                 break;
-            case Object.GetUpFromBeanBag:
-                if (_touchHold)
+            case Object.Middle:
+                if (mcTalking.activeInHierarchy)
+                {
+                    if (_touchHold || _touchBegan)
+                    {
+                        mcTalkingRenderer.sprite = askAboutAttention;
+                    }
+                }
+                else if (_touchHold)
                 {
                     Debug.Log("EXIT COUNTER: " + exitCounter);
                     exitCounter -= Time.deltaTime;
@@ -334,6 +356,36 @@ public class Kitsulope : ObjectType
                         exitCounter = 2;
                     }
                 }
+                break;
+            case Object.ChatToPet:
+                #region chatPromptBubble
+                if (_touchBegan)
+                {
+                    shouldI.SetActive(false);
+                    chatPrompt.SetActive(false);
+                    getUpPrompt.SetActive(false);
+                    
+                    mcTalking.SetActive(true);
+                    thoughts.SetActive(true);
+                    hunger.SetActive(true);
+                }
+                #endregion
+                break;
+            case Object.AskAboutThoughts:
+                #region chatThoughtsBubble
+                if (_touchHold || _touchBegan)
+                {
+                    mcTalkingRenderer.sprite = askAboutThoughts;
+                }
+                #endregion
+                break;
+            case Object.AskAboutHunger:
+                #region chatHungerBubble
+                if (_touchHold || _touchBegan)
+                {
+                    mcTalkingRenderer.sprite = askAboutHunger;
+                }
+                #endregion
                 break;
             case Object.Window:
                 #region toTheField?

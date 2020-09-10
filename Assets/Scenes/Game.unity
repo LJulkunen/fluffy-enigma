@@ -290,6 +290,17 @@ MonoBehaviour:
   shelf: {fileID: 1583341378}
   beanBag: {fileID: 1729716481}
   exitButton: {fileID: 2145421758}
+  shouldI: {fileID: 0}
+  chatPrompt: {fileID: 0}
+  getUpPrompt: {fileID: 0}
+  mcTalking: {fileID: 0}
+  thoughts: {fileID: 0}
+  attention: {fileID: 0}
+  hunger: {fileID: 0}
+  mcTalkingRenderer: {fileID: 0}
+  askAboutThoughts: {fileID: 0}
+  askAboutAttention: {fileID: 0}
+  askAboutHunger: {fileID: 0}
   bike: {fileID: 0}
   rusakko: {fileID: 0}
   exitBubble: {fileID: 21300000, guid: a8a0afa3b750d0448967e0d4dfc55586, type: 3}
@@ -1487,7 +1498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1662a2fa011ed794db27019898319666, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 9
+  type: 13
 --- !u!1 &1908261395
 GameObject:
   m_ObjectHideFlags: 0
