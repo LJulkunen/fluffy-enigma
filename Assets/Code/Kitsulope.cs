@@ -201,7 +201,8 @@ public class Kitsulope : ObjectType
         Vector3 position = transform.position;
 
         if (isChilling || SaveSerial.SAVE.isPetting || SaveSerial.SAVE.isFeeding
-            || SaveLoad.SaveData[(int)SaveLoad.Line.SatisfiedLevel] < 2 || SceneManager.GetActiveScene().name == "ReadingCorner")
+            || SaveLoad.SaveData[(int)SaveLoad.Line.SatisfiedLevel] < 2 || SceneManager.GetActiveScene().name == "ReadingCorner"
+            || SceneManager.GetActiveScene().name == "BeanBag")
         {
             direction = 0;
         }
