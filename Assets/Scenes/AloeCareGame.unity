@@ -1637,6 +1637,7 @@ MonoBehaviour:
   dialogueTextObject: {fileID: 2027527555}
   dialogueText: {fileID: 2027527557}
   flashText: {fileID: 1862603125}
+  camera: {fileID: 519420031}
   xMin: -0.9
   xMax: 0.9
   speed: 0.1

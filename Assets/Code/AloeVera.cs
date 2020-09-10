@@ -29,6 +29,8 @@ public class AloeVera : ObjectType
     public TextMeshProUGUI dialogueText;
     public GameObject flashText;
 
+    public Camera camera;
+
     #region MovementVariables
     [SerializeField]
     private float xMin = -0.9F;
