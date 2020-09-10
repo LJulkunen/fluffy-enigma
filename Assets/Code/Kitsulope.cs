@@ -30,6 +30,9 @@ public class Kitsulope : ObjectType
     public Sprite selectedAskAboutAttention;
     bool anyDialogueSelected;
     public GameObject ohRightYouCantTalk;
+    public GameObject dialogueTextObject;
+    public TextMeshProUGUI dialogueText;
+    public Dialogue dialogue;
 
     // outside
     public GameObject bike;
@@ -120,6 +123,8 @@ public class Kitsulope : ObjectType
         telepathyText = telepathyTextPlacement.GetComponent<TextMeshProUGUI>();
 
         mcTalkingRenderer = mcTalking.GetComponent<SpriteRenderer>();
+
+        dialogueText = dialogueTextObject.GetComponent<TextMeshProUGUI>();
     }
 
     void Update()
@@ -291,6 +296,13 @@ public class Kitsulope : ObjectType
         {
             mcTalking.SetActive(false);
             ohRightYouCantTalk.SetActive(true);
+
+            // Figure this out later.
+            /*if (ohRightYouCantTalk.activeInHierarchy == true)
+            {
+                dialogueTextObject.SetActive(true);
+                dialogueManager.StartDialogue(dialogue);
+            }*/
         }
 
         switch (hitType)
