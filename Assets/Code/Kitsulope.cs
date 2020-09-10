@@ -25,6 +25,11 @@ public class Kitsulope : ObjectType
     public Sprite askAboutThoughts;
     public Sprite askAboutAttention;
     public Sprite askAboutHunger;
+    public Sprite selectedAskAboutHunger;
+    public Sprite selectedAskAboutThoughts;
+    public Sprite selectedAskAboutAttention;
+    bool anyDialogueSelected;
+    public GameObject ohRightYouCantTalk;
 
     // outside
     public GameObject bike;
@@ -282,6 +287,12 @@ public class Kitsulope : ObjectType
 
         Debug.Log(hitType);
 
+        if (anyDialogueSelected)
+        {
+            mcTalking.SetActive(false);
+            ohRightYouCantTalk.SetActive(true);
+        }
+
         switch (hitType)
         {
             case Object.Kitsulope:
@@ -341,9 +352,22 @@ public class Kitsulope : ObjectType
             case Object.Middle:
                 if (mcTalking.activeInHierarchy)
                 {
-                    if (_touchHold || _touchBegan)
+                    if (_touchHold || _touchBegan || _touchEnded)
                     {
-                        mcTalkingRenderer.sprite = askAboutAttention;
+                        if (mcTalkingRenderer.sprite == selectedAskAboutAttention)
+                        {
+                            anyDialogueSelected = true;
+                        }
+                        else if (mcTalkingRenderer.sprite == askAboutAttention && _touchEnded)
+                        {
+                            mcTalkingRenderer.sprite = selectedAskAboutAttention;
+                            anyDialogueSelected = false;
+                        }
+                        else
+                        {
+                            mcTalkingRenderer.sprite = askAboutAttention;
+                            anyDialogueSelected = false;
+                        }
                     }
                 }
                 else if (_touchHold)
@@ -373,17 +397,41 @@ public class Kitsulope : ObjectType
                 break;
             case Object.AskAboutThoughts:
                 #region chatThoughtsBubble
-                if (_touchHold || _touchBegan)
+                if (_touchHold || _touchBegan || _touchEnded)
                 {
-                    mcTalkingRenderer.sprite = askAboutThoughts;
+                    if (mcTalkingRenderer.sprite == selectedAskAboutThoughts) {
+                        anyDialogueSelected = true;
+                    }
+                    else if (mcTalkingRenderer.sprite == askAboutThoughts && _touchEnded)
+                    {
+                        mcTalkingRenderer.sprite = selectedAskAboutThoughts;
+                        anyDialogueSelected = false;
+                    }
+                    else
+                    {
+                        mcTalkingRenderer.sprite = askAboutThoughts;
+                        anyDialogueSelected = false;
+                    }
                 }
                 #endregion
                 break;
             case Object.AskAboutHunger:
                 #region chatHungerBubble
-                if (_touchHold || _touchBegan)
+                if (_touchHold || _touchBegan || _touchEnded)
                 {
-                    mcTalkingRenderer.sprite = askAboutHunger;
+                    if (mcTalkingRenderer.sprite == selectedAskAboutHunger)
+                    {
+                        anyDialogueSelected = true;
+                    }
+                    else if (mcTalkingRenderer.sprite == askAboutHunger && _touchEnded)
+                    {
+                        mcTalkingRenderer.sprite = selectedAskAboutHunger;
+                        anyDialogueSelected = false;
+                    }
+                    else {
+                        mcTalkingRenderer.sprite = askAboutHunger;
+                        anyDialogueSelected = false;
+                    }
                 }
                 #endregion
                 break;
