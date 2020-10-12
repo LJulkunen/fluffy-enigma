@@ -14,7 +14,7 @@ public class Kitsulope : ObjectType
     public GameObject exitButton;
 
     // on beanbag
-    public GameObject shouldI;
+    /*public GameObject shouldI;
     public GameObject chatPrompt;
     public GameObject getUpPrompt;
     public GameObject mcTalking;
@@ -32,7 +32,7 @@ public class Kitsulope : ObjectType
     public GameObject ohRightYouCantTalk;
     public GameObject dialogueTextObject;
     public TextMeshProUGUI dialogueText;
-    public Dialogue dialogue;
+    public Dialogue dialogue;*/
 
     // outside
     public GameObject bike;
@@ -122,9 +122,9 @@ public class Kitsulope : ObjectType
 
         telepathyText = telepathyTextPlacement.GetComponent<TextMeshProUGUI>();
 
-        mcTalkingRenderer = mcTalking.GetComponent<SpriteRenderer>();
+        /*mcTalkingRenderer = mcTalking.GetComponent<SpriteRenderer>();
 
-        dialogueText = dialogueTextObject.GetComponent<TextMeshProUGUI>();
+        dialogueText = dialogueTextObject.GetComponent<TextMeshProUGUI>();*/
     }
 
     void Update()
@@ -292,7 +292,7 @@ public class Kitsulope : ObjectType
 
         Debug.Log(hitType);
 
-        if (anyDialogueSelected)
+        /*if (anyDialogueSelected)
         {
             mcTalking.SetActive(false);
             ohRightYouCantTalk.SetActive(true);
@@ -302,8 +302,8 @@ public class Kitsulope : ObjectType
             {
                 dialogueTextObject.SetActive(true);
                 dialogueManager.StartDialogue(dialogue);
-            }*/
-        }
+            }
+        }*/
 
         switch (hitType)
         {
@@ -339,7 +339,7 @@ public class Kitsulope : ObjectType
                 }
                 #endregion
                 break;
-            case Object.Shelf:
+            /*case Object.Shelf:
                 #region shelf
                 if (_touchBegan || _touchHold)
                 {
@@ -351,7 +351,7 @@ public class Kitsulope : ObjectType
                 #endregion
                 break;
             case Object.BeanBag:
-                #region beanBagBubble
+                /*#region beanBagBubble
                 if (_touchBegan || _touchHold)
                 {
                     if (TapAndHold(cornerBubble, beanBag.GetComponent<Dialogue>()))
@@ -361,7 +361,7 @@ public class Kitsulope : ObjectType
                 }
                 #endregion
                 break;
-            case Object.Middle:
+            /*case Object.Middle:
                 if (mcTalking.activeInHierarchy)
                 {
                     if (_touchHold || _touchBegan || _touchEnded)
@@ -446,7 +446,7 @@ public class Kitsulope : ObjectType
                     }
                 }
                 #endregion
-                break;
+                break;*/
             case Object.Window:
                 #region toTheField?
                 if (_touchBegan || _touchHold)
